@@ -26,6 +26,11 @@ class RouteInfo(BaseModel):
     duration: int
     path_points: str 
     steps: List[RouteStep]
+    toll_distance: int = 0
+    toll_cost: float = 0.0
+    traffic_lights: int = 0
+    strategy: str = ""
+    restriction: int = 0
 
 class RoutePlanResponse(BaseModel):
     code: int = 200

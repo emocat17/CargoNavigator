@@ -59,7 +59,12 @@ async def plan_route(request: RoutePlanRequest):
             distance=int(path.get("distance", 0)),
             duration=int(path.get("duration", 0)),
             path_points=path_points_str,
-            steps=steps
+            steps=steps,
+            toll_distance=int(path.get("toll_distance", 0)),
+            toll_cost=float(path.get("tolls", 0)),
+            traffic_lights=int(path.get("traffic_lights", 0)),
+            strategy=path.get("strategy", ""),
+            restriction=int(path.get("restriction", 0))
         ))
         
     return RoutePlanResponse(data={"routes": routes})

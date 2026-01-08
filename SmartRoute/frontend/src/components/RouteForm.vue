@@ -106,8 +106,31 @@
                         <q-icon name="paid" color="orange" />
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label caption>收费路段</q-item-label>
-                        <q-item-label>{{ (routeResult.toll_distance / 1000).toFixed(1) }} km</q-item-label>
+                        <q-item-label caption>收费路段 / 费用</q-item-label>
+                        <q-item-label>
+                            {{ (routeResult.toll_distance / 1000).toFixed(1) }} km
+                            <span v-if="routeResult.toll_cost > 0"> / ¥{{ routeResult.toll_cost }}</span>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+
+                <q-item>
+                    <q-item-section avatar>
+                        <q-icon name="traffic" color="red" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label caption>红绿灯</q-item-label>
+                        <q-item-label>{{ routeResult.traffic_lights }} 个</q-item-label>
+                    </q-item-section>
+                </q-item>
+
+                <q-item v-if="routeResult.strategy">
+                    <q-item-section avatar>
+                        <q-icon name="alt_route" color="purple" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label caption>当前策略</q-item-label>
+                        <q-item-label>{{ routeResult.strategy }} <span v-if="routeResult.restriction" class="text-negative">(限行)</span></q-item-label>
                     </q-item-section>
                 </q-item>
             </q-list>

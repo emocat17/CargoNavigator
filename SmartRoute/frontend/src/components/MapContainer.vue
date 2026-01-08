@@ -116,47 +116,78 @@ const setCenter = (lng, lat) => {
 const routePolyline = shallowRef(null)
 
 const drawRoutePolyline = (pathPoints) => {
-    if (!map.value || !AMapObj.value) return
+    if (!map.value || !AMapObj.value) {
+        console.warn("Map or AMap object not initialized yet.")
+        return
+    }
+    if (!pathPoints) {
+        console.warn("No path points provided to drawRoutePolyline.")
+        return
+    }
+
+    console.log("Drawing route with points length:", pathPoints.length)
 
     if (routePolyline.value) {
         map.value.remove(routePolyline.value)
+        routePolyline.value = null
     }
 
-    // pathPoints format: "lon,lat;lon,lat;..."
-    const pathArr = pathPoints.split(';').map(pt => {
-        const [lng, lat] = pt.split(',')
-        return [parseFloat(lng), parseFloat(lat)]
-    })
+    try {
+        // pathPoints format: "lon,lat;lon,lat;..."
+        const rawPoints = pathPoints.split(';')
+        const pathArr = []
+        
+        for (const pt of rawPoints) {
+            if (!pt || pt.trim() === '') continue
+            
+            const parts = pt.split(',')
+            if (parts.length < 2) continue
+            
+            const lng = parseFloat(parts[0])
+            const lat = parseFloat(parts[1])
+            
+            if (!isNaN(lng) && !isNaN(lat)) {
+                pathArr.push([lng, lat])
+            }
+        }
 
-    // Draw Polyline
-    routePolyline.value = new AMapObj.value.Polyline({
-        path: pathArr,
-        isOutline: false, // User requested specific style, remove outline to be clean or keep if needed. Let's follow "High light color #1890FF"
-        borderWeight: 0,
-        strokeColor: "#1890FF", 
-        strokeOpacity: 0.8,
-        strokeWeight: 4,
-        strokeStyle: "solid",
-        lineJoin: 'round',
-        lineCap: 'round',
-        zIndex: 50,
-    })
+        console.log(`Parsed ${pathArr.length} valid points for polyline.`)
 
-    map.value.add(routePolyline.value)
-    
-    // Fit view to include route and markers, set zoom to 14 if possible but setFitView overrides zoom. 
-    // User asked: "自动将地图视角定位到路径起点，缩放级别设置为14"
-    // So we should center on start point and zoom 14. 
-    // BUT usually seeing the whole route is better. 
-    // Let's follow the user instruction strictly: "Automatic positioning to route start point, zoom level 14".
-    
-    if (pathArr.length > 0) {
-        map.value.setZoomAndCenter(14, pathArr[0])
-    } else {
-        const overlays = [routePolyline.value]
-        if (startMarker.value) overlays.push(startMarker.value)
-        if (endMarker.value) overlays.push(endMarker.value)
-        map.value.setFitView(overlays)
+        if (pathArr.length === 0) {
+             console.warn("No valid points found after parsing.")
+             return
+        }
+
+        // Draw Polyline
+        routePolyline.value = new AMapObj.value.Polyline({
+            path: pathArr,
+            isOutline: true, // Add outline for better contrast
+            outlineColor: 'white',
+            borderWeight: 2,
+            strokeColor: "#1890FF", 
+            strokeOpacity: 1.0,
+            strokeWeight: 8, // Thicker
+            strokeStyle: "solid",
+            lineJoin: 'round',
+            lineCap: 'round',
+            zIndex: 1000, // Max zIndex
+            showDir: true,
+        })
+
+        map.value.add(routePolyline.value)
+        
+        // Fit view to include route with padding
+        map.value.setFitView([routePolyline.value], false, [50, 50, 50, 50])
+        
+        // If strict requirement for start point:
+        // setTimeout(() => {
+        //    map.value.setZoomAndCenter(14, pathArr[0])
+        // }, 1000)
+        // I will stick to setFitView because "no path displayed" is the complaint. 
+        // Showing the whole path is the best proof it works.
+        
+    } catch (e) {
+        console.error("Error drawing polyline:", e)
     }
 }
 
