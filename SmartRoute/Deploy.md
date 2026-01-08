@@ -51,9 +51,9 @@ AMAP_API_KEY=your_amap_api_key_here
 
 ### 2.5 启动后端服务
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 9876
 ```
-启动成功后，访问 `http://localhost:8000/docs` 可查看 API 文档，访问 `http://localhost:8000/health` 可进行健康检查。
+启动成功后，访问 `http://localhost:9876/docs` 可查看 API 文档，访问 `http://localhost:9876/health` 可进行健康检查。
 
 ---
 
@@ -76,23 +76,23 @@ npm install
 npm run dev
 ```
 启动成功后，控制台会显示访问地址，默认为：
-`http://localhost:9876`
+`http://localhost:6789`
 
 ---
 
 ## 4. 自定义配置教程
 
 ### 4.1 自定义后端端口
-默认后端运行在 `8000` 端口。
+默认后端运行在 `9876` 端口。
 
 **修改启动命令:**
-在启动时通过 `--port` 参数指定新端口（例如 8080）：
+在启动时通过 `--port` 参数指定新端口（例如 8000）：
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8080
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 4.2 自定义前端端口
-默认前端运行在 `9876` 端口。
+默认前端运行在 `6789` 端口。
 
 **修改配置文件:**
 打开 `SmartRoute/frontend/vite.config.js` 文件，找到 `server` 配置项：
@@ -100,7 +100,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8080
 ```javascript
 export default defineConfig({
   server: {
-    port: 9876, // 修改此处的数字为您想要的端口，例如 3000
+    port: 6789, // 修改此处的数字为您想要的端口，例如 3000
     host: '0.0.0.0'
   },
   // ... 其他配置
@@ -124,7 +124,7 @@ AMAP_API_KEY=新的_API_KEY
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 生产环境建议修改为具体的域名或 IP，如 ["http://localhost:9876"]
+    allow_origins=["*"], # 生产环境建议修改为具体的域名或 IP，如 ["http://localhost:6789"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

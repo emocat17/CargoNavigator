@@ -14,8 +14,8 @@
 ### 2.2 端口约定
 | 服务 | 端口 | 说明 |
 | :--- | :--- | :--- |
-| **Frontend** | `9876` | Vue + Vite 开发服务器 (用户指定) |
-| **Backend** | `8000` | FastAPI 开发服务器 |
+| **Frontend** | `6789` | Vue + Vite 开发服务器 (用户指定) |
+| **Backend** | `9876` | FastAPI 开发服务器 |
 
 ## 3. 后端开发规范 (Backend)
 
@@ -45,7 +45,7 @@
 - **Build Tool**: Vite
 
 ### 4.2 配置要求
-- 开发服务器端口必须设置为 **9876**。
+- 开发服务器端口必须设置为 **6789**。
 - `vite.config.js` 中需显式配置 `server.port`。
 
 ### 4.3 目录规范
@@ -56,8 +56,8 @@
 ## 5. 测试流程
 
 ### 5.1 完整性自测
-1. **Backend Check**: 访问 `http://localhost:8000/health` 返回 `200 OK`。
-2. **Frontend Check**: 访问 `http://localhost:9876` 能加载主页。
+1. **Backend Check**: 访问 `http://localhost:9876/health` 返回 `200 OK`。
+2. **Frontend Check**: 访问 `http://localhost:6789` 能加载主页。
 3. **Integration Check**: 前端能成功调用后端接口并展示数据。
 
 ### 5.2 自动化/脚本测试

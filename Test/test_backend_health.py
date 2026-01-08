@@ -2,7 +2,7 @@ import httpx
 import sys
 
 def test_backend_health():
-    url = "http://localhost:8000/health"
+    url = "http://localhost:9876/health"
     print(f"Testing backend health at {url}...")
     try:
         response = httpx.get(url)

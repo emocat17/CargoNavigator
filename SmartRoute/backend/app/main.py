@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.routes import router as api_router
 
 app = FastAPI(title="SmartRoute API", description="API for Smart Truck Route Planning")
 
 # Configure CORS
 origins = [
     "http://localhost",
-    "http://localhost:8080", # Default Quasar dev port
-    "http://localhost:9000", # Default Quasar dev port
+    "http://localhost:6789", # Frontend port
+    "http://localhost:9876", # Backend port (for swagger)
     "*"
 ]
 
@@ -18,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():
