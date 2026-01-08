@@ -1,0 +1,13 @@
+zai-sdk
+numpy
+pandas
+openpyxl
+# DrissionPage # Removed: No longer used in API-based approach
+# crawl4ai # Removed: No longer used in API-based approach
+fastapi
+uvicorn
+requests
+pydantic
+# Crypto  # Removed to avoid conflict
+pycryptodome
+# playwright # Removed: No longer used in API-based approach

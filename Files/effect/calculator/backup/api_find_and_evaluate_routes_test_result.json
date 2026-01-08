@@ -1,0 +1,731 @@
+{
+  "start_junction": "北村",
+  "end_junction": "海沧",
+  "route_count": 2,
+  "route_evaluations": [
+    {
+      "path_string": "北村-G76-天宝-G76-陈巷-G76-海沧",
+      "path_details": [
+        {
+          "junction1": "北村",
+          "highway_code": "G76",
+          "junction2": "天宝"
+        },
+        {
+          "junction1": "天宝",
+          "highway_code": "G76",
+          "junction2": "陈巷"
+        },
+        {
+          "junction1": "陈巷",
+          "highway_code": "G76",
+          "junction2": "海沧"
+        }
+      ],
+      "is_passable": true,
+      "pos_moment_ratio_range": "1.25~1.50",
+      "neg_moment_ratio_range": "1.17~6.05",
+      "shear_ratio_range": "18.75~22.50",
+      "min_effect_ratio": 1.17,
+      "total_bridge_count": 32,
+      "section_count": 3,
+      "section_evaluations": [
+        {
+          "section": "北村-G76-天宝",
+          "is_passable": true,
+          "bridge_count": 14,
+          "bridge_evaluations": [
+            {
+              "station": "k99+47",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.83~2.75",
+              "neg_moment_ratio_range": "121.43~182.14",
+              "shear_ratio_range": "154.74~232.10",
+              "pos_moment_min": 1.83,
+              "neg_moment_min": 121.43,
+              "shear_min": 154.74
+            },
+            {
+              "station": "k65+42",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.37~5.05",
+              "neg_moment_ratio_range": "8.41~12.61",
+              "shear_ratio_range": "43.59~65.39",
+              "pos_moment_min": 3.37,
+              "neg_moment_min": 8.41,
+              "shear_min": 43.59
+            },
+            {
+              "station": "k200+64",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.39~5.08",
+              "neg_moment_ratio_range": "16.90~25.36",
+              "shear_ratio_range": "18.75~28.12",
+              "pos_moment_min": 3.39,
+              "neg_moment_min": 16.9,
+              "shear_min": 18.75
+            },
+            {
+              "station": "k74+79",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "4.92~7.39",
+              "neg_moment_ratio_range": "98.73~148.10",
+              "shear_ratio_range": "533.33~799.99",
+              "pos_moment_min": 4.92,
+              "neg_moment_min": 98.73,
+              "shear_min": 533.33
+            },
+            {
+              "station": "k79+37",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "9.18~13.77",
+              "neg_moment_ratio_range": "40.52~60.78",
+              "shear_ratio_range": "338.75~508.13",
+              "pos_moment_min": 9.18,
+              "neg_moment_min": 40.52,
+              "shear_min": 338.75
+            },
+            {
+              "station": "k76+24",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.25~1.88",
+              "neg_moment_ratio_range": "6.87~10.30",
+              "shear_ratio_range": "27.36~41.04",
+              "pos_moment_min": 1.25,
+              "neg_moment_min": 6.87,
+              "shear_min": 27.36
+            },
+            {
+              "station": "k115+73",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.16~9.24",
+              "neg_moment_ratio_range": "103.14~154.71",
+              "shear_ratio_range": "222.78~334.17",
+              "pos_moment_min": 6.16,
+              "neg_moment_min": 103.14,
+              "shear_min": 222.78
+            },
+            {
+              "station": "k82+2",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.61~2.41",
+              "neg_moment_ratio_range": "7.46~11.19",
+              "shear_ratio_range": "22.78~34.17",
+              "pos_moment_min": 1.61,
+              "neg_moment_min": 7.46,
+              "shear_min": 22.78
+            },
+            {
+              "station": "k157+38",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.97~2.96",
+              "neg_moment_ratio_range": "15.64~23.46",
+              "shear_ratio_range": "26.16~39.24",
+              "pos_moment_min": 1.97,
+              "neg_moment_min": 15.64,
+              "shear_min": 26.16
+            },
+            {
+              "station": "k60+45",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.72~2.59",
+              "neg_moment_ratio_range": "5.04~7.56",
+              "shear_ratio_range": "25.32~37.97",
+              "pos_moment_min": 1.72,
+              "neg_moment_min": 5.04,
+              "shear_min": 25.32
+            },
+            {
+              "station": "k76+15",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "4.05~6.08",
+              "neg_moment_ratio_range": "108.33~162.49",
+              "shear_ratio_range": "516.88~775.33",
+              "pos_moment_min": 4.05,
+              "neg_moment_min": 108.33,
+              "shear_min": 516.88
+            },
+            {
+              "station": "k117+16",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.71~10.07",
+              "neg_moment_ratio_range": "118.29~177.44",
+              "shear_ratio_range": "308.67~463.01",
+              "pos_moment_min": 6.71,
+              "neg_moment_min": 118.29,
+              "shear_min": 308.67
+            },
+            {
+              "station": "k76+47",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.43~5.15",
+              "neg_moment_ratio_range": "14.52~21.78",
+              "shear_ratio_range": "26.96~40.44",
+              "pos_moment_min": 3.43,
+              "neg_moment_min": 14.52,
+              "shear_min": 26.96
+            },
+            {
+              "station": "k65+11",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "5.86~8.78",
+              "neg_moment_ratio_range": "31.45~47.17",
+              "shear_ratio_range": "568.37~852.55",
+              "pos_moment_min": 5.86,
+              "neg_moment_min": 31.45,
+              "shear_min": 568.37
+            }
+          ],
+          "pos_moment_ratio_range": "1.25~11.02",
+          "neg_moment_ratio_range": "5.04~145.72",
+          "shear_ratio_range": "18.75~682.04",
+          "min_effect_ratio": 1.25
+        },
+        {
+          "section": "天宝-G76-陈巷",
+          "is_passable": true,
+          "bridge_count": 18,
+          "bridge_evaluations": [
+            {
+              "station": "k99+47",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.83~2.75",
+              "neg_moment_ratio_range": "121.43~182.14",
+              "shear_ratio_range": "154.74~232.10",
+              "pos_moment_min": 1.83,
+              "neg_moment_min": 121.43,
+              "shear_min": 154.74
+            },
+            {
+              "station": "k65+42",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.37~5.05",
+              "neg_moment_ratio_range": "8.41~12.61",
+              "shear_ratio_range": "43.59~65.39",
+              "pos_moment_min": 3.37,
+              "neg_moment_min": 8.41,
+              "shear_min": 43.59
+            },
+            {
+              "station": "k211+35",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "2.50~3.74",
+              "neg_moment_ratio_range": "1.17~1.76",
+              "shear_ratio_range": "35.74~53.61",
+              "pos_moment_min": 2.5,
+              "neg_moment_min": 1.17,
+              "shear_min": 35.74
+            },
+            {
+              "station": "k200+64",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.39~5.08",
+              "neg_moment_ratio_range": "16.90~25.36",
+              "shear_ratio_range": "18.75~28.12",
+              "pos_moment_min": 3.39,
+              "neg_moment_min": 16.9,
+              "shear_min": 18.75
+            },
+            {
+              "station": "k74+79",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "4.92~7.39",
+              "neg_moment_ratio_range": "98.73~148.10",
+              "shear_ratio_range": "533.33~799.99",
+              "pos_moment_min": 4.92,
+              "neg_moment_min": 98.73,
+              "shear_min": 533.33
+            },
+            {
+              "station": "k79+37",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "9.18~13.77",
+              "neg_moment_ratio_range": "40.52~60.78",
+              "shear_ratio_range": "338.75~508.13",
+              "pos_moment_min": 9.18,
+              "neg_moment_min": 40.52,
+              "shear_min": 338.75
+            },
+            {
+              "station": "k76+24",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.25~1.88",
+              "neg_moment_ratio_range": "6.87~10.30",
+              "shear_ratio_range": "27.36~41.04",
+              "pos_moment_min": 1.25,
+              "neg_moment_min": 6.87,
+              "shear_min": 27.36
+            },
+            {
+              "station": "k264+90",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.95~2.93",
+              "neg_moment_ratio_range": "121.35~182.02",
+              "shear_ratio_range": "249.02~373.53",
+              "pos_moment_min": 1.95,
+              "neg_moment_min": 121.35,
+              "shear_min": 249.02
+            },
+            {
+              "station": "k115+73",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.16~9.24",
+              "neg_moment_ratio_range": "103.14~154.71",
+              "shear_ratio_range": "222.78~334.17",
+              "pos_moment_min": 6.16,
+              "neg_moment_min": 103.14,
+              "shear_min": 222.78
+            },
+            {
+              "station": "k221+30",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "4.38~6.57",
+              "neg_moment_ratio_range": "30.64~45.96",
+              "shear_ratio_range": "495.69~743.53",
+              "pos_moment_min": 4.38,
+              "neg_moment_min": 30.64,
+              "shear_min": 495.69
+            },
+            {
+              "station": "k208+28",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "2.28~3.42",
+              "neg_moment_ratio_range": "4.65~6.98",
+              "shear_ratio_range": "28.00~41.99",
+              "pos_moment_min": 2.28,
+              "neg_moment_min": 4.65,
+              "shear_min": 28.0
+            },
+            {
+              "station": "k82+2",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.61~2.41",
+              "neg_moment_ratio_range": "7.46~11.19",
+              "shear_ratio_range": "22.78~34.17",
+              "pos_moment_min": 1.61,
+              "neg_moment_min": 7.46,
+              "shear_min": 22.78
+            },
+            {
+              "station": "k157+38",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.97~2.96",
+              "neg_moment_ratio_range": "15.64~23.46",
+              "shear_ratio_range": "26.16~39.24",
+              "pos_moment_min": 1.97,
+              "neg_moment_min": 15.64,
+              "shear_min": 26.16
+            },
+            {
+              "station": "k60+45",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.72~2.59",
+              "neg_moment_ratio_range": "5.04~7.56",
+              "shear_ratio_range": "25.32~37.97",
+              "pos_moment_min": 1.72,
+              "neg_moment_min": 5.04,
+              "shear_min": 25.32
+            },
+            {
+              "station": "k76+15",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "4.05~6.08",
+              "neg_moment_ratio_range": "108.33~162.49",
+              "shear_ratio_range": "516.88~775.33",
+              "pos_moment_min": 4.05,
+              "neg_moment_min": 108.33,
+              "shear_min": 516.88
+            },
+            {
+              "station": "k117+16",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.71~10.07",
+              "neg_moment_ratio_range": "118.29~177.44",
+              "shear_ratio_range": "308.67~463.01",
+              "pos_moment_min": 6.71,
+              "neg_moment_min": 118.29,
+              "shear_min": 308.67
+            },
+            {
+              "station": "k76+47",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "3.43~5.15",
+              "neg_moment_ratio_range": "14.52~21.78",
+              "shear_ratio_range": "26.96~40.44",
+              "pos_moment_min": 3.43,
+              "neg_moment_min": 14.52,
+              "shear_min": 26.96
+            },
+            {
+              "station": "k65+11",
+              "highway_code": "G76",
+              "is_passable": true,
+              "pos_moment_ratio_range": "5.86~8.78",
+              "neg_moment_ratio_range": "31.45~47.17",
+              "shear_ratio_range": "568.37~852.55",
+              "pos_moment_min": 5.86,
+              "neg_moment_min": 31.45,
+              "shear_min": 568.37
+            }
+          ],
+          "pos_moment_ratio_range": "1.25~11.02",
+          "neg_moment_ratio_range": "1.17~145.72",
+          "shear_ratio_range": "18.75~682.04",
+          "min_effect_ratio": 1.17
+        },
+        {
+          "section": "陈巷-G76-海沧",
+          "is_passable": true,
+          "bridge_count": 0,
+          "bridge_evaluations": [],
+          "error": "在路段 陈巷-海沧 上未找到桥梁",
+          "pos_moment_ratio_range": "0.0",
+          "neg_moment_ratio_range": "0.0",
+          "shear_ratio_range": "0.0"
+        }
+      ],
+      "route_provinces": "福建省",
+      "path_locations": [
+        {
+          "junction": "北村",
+          "location": [
+            116.621037,
+            25.365435
+          ]
+        },
+        {
+          "junction": "天宝",
+          "location": [
+            117.584281,
+            24.617575
+          ]
+        },
+        {
+          "junction": "陈巷",
+          "location": [
+            117.797566,
+            24.669254
+          ]
+        },
+        {
+          "junction": "海沧",
+          "location": [
+            117.913083,
+            24.552499
+          ]
+        }
+      ]
+    },
+    {
+      "path_string": "北村-G25-畔溪-G25-跃村-G70-前塘-S11-庄前-S53-渔溪-G15-港后-G15-海沧",
+      "path_details": [
+        {
+          "junction1": "北村",
+          "highway_code": "G25",
+          "junction2": "畔溪"
+        },
+        {
+          "junction1": "畔溪",
+          "highway_code": "G25",
+          "junction2": "跃村"
+        },
+        {
+          "junction1": "跃村",
+          "highway_code": "G70",
+          "junction2": "前塘"
+        },
+        {
+          "junction1": "前塘",
+          "highway_code": "S11",
+          "junction2": "庄前"
+        },
+        {
+          "junction1": "庄前",
+          "highway_code": "S53",
+          "junction2": "渔溪"
+        },
+        {
+          "junction1": "渔溪",
+          "highway_code": "G15",
+          "junction2": "港后"
+        },
+        {
+          "junction1": "港后",
+          "highway_code": "G15",
+          "junction2": "海沧"
+        }
+      ],
+      "is_passable": true,
+      "pos_moment_ratio_range": "1.49~2.51",
+      "neg_moment_ratio_range": "10.62~19.16",
+      "shear_ratio_range": "19.64~31.39",
+      "min_effect_ratio": 1.49,
+      "total_bridge_count": 8,
+      "section_count": 7,
+      "section_evaluations": [
+        {
+          "section": "北村-G25-畔溪",
+          "is_passable": true,
+          "bridge_count": 0,
+          "bridge_evaluations": [],
+          "error": "在路段 北村-畔溪 上未找到桥梁",
+          "pos_moment_ratio_range": "0.0",
+          "neg_moment_ratio_range": "0.0",
+          "shear_ratio_range": "0.0"
+        },
+        {
+          "section": "畔溪-G25-跃村",
+          "is_passable": true,
+          "bridge_count": 0,
+          "bridge_evaluations": [],
+          "error": "在路段 畔溪-跃村 上未找到桥梁",
+          "pos_moment_ratio_range": "0.0",
+          "neg_moment_ratio_range": "0.0",
+          "shear_ratio_range": "0.0"
+        },
+        {
+          "section": "跃村-G70-前塘",
+          "is_passable": true,
+          "bridge_count": 3,
+          "bridge_evaluations": [
+            {
+              "station": "k115+73",
+              "highway_code": "G70",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.16~9.24",
+              "neg_moment_ratio_range": "103.14~154.71",
+              "shear_ratio_range": "222.78~334.17",
+              "pos_moment_min": 6.16,
+              "neg_moment_min": 103.14,
+              "shear_min": 222.78
+            },
+            {
+              "station": "k157+38",
+              "highway_code": "G70",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.97~2.96",
+              "neg_moment_ratio_range": "15.64~23.46",
+              "shear_ratio_range": "26.16~39.24",
+              "pos_moment_min": 1.97,
+              "neg_moment_min": 15.64,
+              "shear_min": 26.16
+            },
+            {
+              "station": "k117+16",
+              "highway_code": "G70",
+              "is_passable": true,
+              "pos_moment_ratio_range": "6.71~10.07",
+              "neg_moment_ratio_range": "118.29~177.44",
+              "shear_ratio_range": "308.67~463.01",
+              "pos_moment_min": 6.71,
+              "neg_moment_min": 118.29,
+              "shear_min": 308.67
+            }
+          ],
+          "pos_moment_ratio_range": "1.97~8.05",
+          "neg_moment_ratio_range": "15.64~141.95",
+          "shear_ratio_range": "26.16~370.40",
+          "min_effect_ratio": 1.97
+        },
+        {
+          "section": "前塘-S11-庄前",
+          "is_passable": true,
+          "bridge_count": 0,
+          "bridge_evaluations": [],
+          "error": "在路段 前塘-庄前 上未找到桥梁",
+          "pos_moment_ratio_range": "0.0",
+          "neg_moment_ratio_range": "0.0",
+          "shear_ratio_range": "0.0"
+        },
+        {
+          "section": "庄前-S53-渔溪",
+          "is_passable": true,
+          "bridge_count": 0,
+          "bridge_evaluations": [],
+          "error": "在路段 庄前-渔溪 上未找到桥梁",
+          "pos_moment_ratio_range": "0.0",
+          "neg_moment_ratio_range": "0.0",
+          "shear_ratio_range": "0.0"
+        },
+        {
+          "section": "渔溪-G15-港后",
+          "is_passable": true,
+          "bridge_count": 2,
+          "bridge_evaluations": [
+            {
+              "station": "k2135+96",
+              "highway_code": "G15",
+              "is_passable": true,
+              "pos_moment_ratio_range": "11.07~16.60",
+              "neg_moment_ratio_range": "97.83~146.75",
+              "shear_ratio_range": "139.50~209.25",
+              "pos_moment_min": 11.07,
+              "neg_moment_min": 97.83,
+              "shear_min": 139.5
+            },
+            {
+              "station": "k2142+88",
+              "highway_code": "G15",
+              "is_passable": true,
+              "pos_moment_ratio_range": "1.49~2.23",
+              "neg_moment_ratio_range": "10.62~15.93",
+              "shear_ratio_range": "21.83~32.74",
+              "pos_moment_min": 1.49,
+              "neg_moment_min": 10.62,
+              "shear_min": 21.83
+            }
+          ],
+          "pos_moment_ratio_range": "1.49~13.28",
+          "neg_moment_ratio_range": "10.62~117.40",
+          "shear_ratio_range": "21.83~167.40",
+          "min_effect_ratio": 1.49
+        },
+        {
+          "section": "港后-G15-海沧",
+          "is_passable": true,
+          "bridge_count": 3,
+          "bridge_evaluations": [
+            {
+              "station": "k2315+38",
+              "highway_code": "G15",
+              "is_passable": true,
+              "pos_moment_ratio_range": "12.28~18.42",
+              "neg_moment_ratio_range": "23.77~35.65",
+              "shear_ratio_range": "499.53~749.29",
+              "pos_moment_min": 12.28,
+              "neg_moment_min": 23.77,
+              "shear_min": 499.53
+            },
+            {
+              "station": "k2157+12",
+              "highway_code": "G15",
+              "is_passable": true,
+              "pos_moment_ratio_range": "2.65~3.97",
+              "neg_moment_ratio_range": "17.96~26.94",
+              "shear_ratio_range": "687.50~1031.25",
+              "pos_moment_min": 2.65,
+              "neg_moment_min": 17.96,
+              "shear_min": 687.5
+            },
+            {
+              "station": "k2163+39",
+              "highway_code": "G15",
+              "is_passable": true,
+              "pos_moment_ratio_range": "2.09~3.14",
+              "neg_moment_ratio_range": "15.97~23.95",
+              "shear_ratio_range": "19.64~29.45",
+              "pos_moment_min": 2.09,
+              "neg_moment_min": 15.97,
+              "shear_min": 19.64
+            }
+          ],
+          "pos_moment_ratio_range": "2.09~14.74",
+          "neg_moment_ratio_range": "15.97~28.52",
+          "shear_ratio_range": "19.64~825.00",
+          "min_effect_ratio": 2.09
+        }
+      ],
+      "route_provinces": "福建省",
+      "path_locations": [
+        {
+          "junction": "北村",
+          "location": [
+            116.621037,
+            25.365435
+          ]
+        },
+        {
+          "junction": "畔溪",
+          "location": [
+            117.493453,
+            26.215936
+          ]
+        },
+        {
+          "junction": "跃村",
+          "location": [
+            118.121557,
+            26.514629
+          ]
+        },
+        {
+          "junction": "前塘",
+          "location": [
+            119.492037,
+            25.860513
+          ]
+        },
+        {
+          "junction": "庄前",
+          "location": [
+            119.347934,
+            25.552102
+          ]
+        },
+        {
+          "junction": "渔溪",
+          "location": [
+            119.279998,
+            25.570936
+          ]
+        },
+        {
+          "junction": "港后",
+          "location": [
+            119.210364,
+            25.47886
+          ]
+        },
+        {
+          "junction": "海沧",
+          "location": [
+            117.913083,
+            24.552499
+          ]
+        }
+      ]
+    }
+  ],
+  "loads_ton": [
+    10.0,
+    15.0,
+    12.0
+  ],
+  "spacings": [
+    3.5,
+    1.2
+  ],
+  "total_evaluated": 3,
+  "passable_count": 2
+}

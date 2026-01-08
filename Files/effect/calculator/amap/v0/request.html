@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>高德路径规划请求示例</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            /* 保证换行显示 */
+            word-wrap: break-word;
+            /* 长单词换行 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>高德路径规划请求示例 (无组件)</h1>
+    <p>请在浏览器控制台 (F12) 查看详细的日志输出。</p>
+    <div id="result">正在请求数据...</div>
+
+    <script>
+        // --- 请在这里替换成您自己的高德API Key ---
+        const AMAP_API_KEY = '61ded56e661c7338f95ccafd0c4642d5';
+
+        // 您输入的路径点数据
+        const path_locations = [
+            { "junction": "北村", "location": [116.621037, 25.365435] },
+            { "junction": "天宝", "location": [117.584281, 24.617575] },
+            { "junction": "陈巷", "location": [117.797566, 24.669254] },
+            { "junction": "海沧", "location": [117.913083, 24.552499] }
+        ];
+
+        /**
+         * 根据路径点数组，请求高德驾车路径规划API，并返回完整的路径经纬度点集。
+         * @param {Array<Object>} locations - 路径点数组，每个点包含 location: [lng, lat]。
+         * @returns {Promise<Array<Array<number>>>} - 返回一个Promise，解析为经纬度点集 [[lng, lat], ...]。
+         */
+        async function fetchRoutePolyline(locations) {
+            if (!locations || locations.length < 2) {
+                console.error("错误：至少需要两个点才能规划路径。");
+                return [];
+            }
+
+            // 1. 解析起点、终点和途经点
+            const origin = locations[0].location.join(',');
+            const destination = locations[locations.length - 1].location.join(',');
+
+            let waypoints = '';
+            if (locations.length > 2) {
+                // 提取中间所有点作为途经点
+                const waypointArray = locations.slice(1, -1).map(p => p.location.join(','));
+                waypoints = waypointArray.join('|');
+            }
+            console.log(`请求参数: 起点=${origin}, 终点=${destination}, 途经点=${waypoints || '无'}`);
+
+            // 2. 构建请求URL
+            const baseUrl = 'https://restapi.amap.com/v3/direction/driving';
+            const params = new URLSearchParams({
+                key: AMAP_API_KEY,
+                origin: origin,
+                destination: destination,
+                extensions: 'all', // 必须设置为 'all' 才能返回 polyline 字段
+                output: 'json'
+            });
+            if (waypoints) {
+                params.append('waypoints', waypoints);
+            }
+            const requestUrl = `${baseUrl}?${params.toString()}`;
+
+            // 3. 发起网络请求
+            try {
+                const response = await fetch(requestUrl);
+                if (!response.ok) {
+                    throw new Error(`网络请求失败: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+
+                // 4. 解析返回的数据
+                if (data.status === '1' && data.info === 'OK') {
+                    const route = data.routes[0];
+                    if (!route || !route.steps) {
+                        console.error("API返回数据中未找到路径步骤。");
+                        return [];
+                    }
+
+                    const allPathPoints = [];
+                    // 遍历每一步，提取polyline并合并
+                    for (const step of route.steps) {
+                        const polylineStr = step.polyline;
+                        if (polylineStr) {
+                            // polyline格式为 "lng1,lat1;lng2,lat2;..."
+                            const points = polylineStr.split(';').map(p => {
+                                const [lng, lat] = p.split(',').map(Number);
+                                return [lng, lat];
+                            });
+                            allPathPoints.push(...points);
+                        }
+                    }
+
+                    console.log(`成功获取路径，共 ${allPathPoints.length} 个坐标点。`);
+                    return allPathPoints;
+
+                } else {
+                    console.error("API请求失败:", data.info);
+                    return [];
+                }
+            } catch (error) {
+                console.error("请求过程中发生错误:", error);
+                return [];
+            }
+        }
+
+        // --- 执行函数并显示结果 ---
+        window.onload = async function () {
+            if (AMAP_API_KEY === 'YOUR_AMAP_API_KEY') {
+                const resultDiv = document.getElementById('result');
+                resultDiv.textContent = '错误：请先在代码中设置您的高德API Key (AMAP_API_KEY)。';
+                console.error('错误：请先在代码中设置您的高德API Key (AMAP_API_KEY)。');
+                return;
+            }
+
+            const pathPoints = await fetchRoutePolyline(path_locations);
+
+            const resultDiv = document.getElementById('result');
+            if (pathPoints.length > 0) {
+                // 在页面上显示结果
+                resultDiv.textContent = `成功获取路径点，共 ${pathPoints.length} 个。\n\n` +
+                    `前5个点示例：\n` +
+                    JSON.stringify(pathPoints.slice(0, 5), null, 2) +
+                    `\n\n完整数据请在浏览器控制台中查看。`;
+                // 在控制台输出完整结果，方便复制
+                console.log("完整的路径经纬度点集:");
+                console.log(pathPoints);
+            } else {
+                resultDiv.textContent = '未能获取到路径点，请检查控制台以了解错误详情。';
+            }
+        };
+
+    </script>
+</body>
+
+</html>
