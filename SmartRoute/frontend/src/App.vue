@@ -1,27 +1,192 @@
 <template>
   <q-layout view="hHh lpR fFf">
-
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="toggleDrawer" />
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-          </q-avatar>
           SmartRoute (大型货车智能选线)
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
+    <q-drawer show-if-above v-model="drawerOpen" side="left" bordered :width="420" class="bg-grey-1">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="planning" icon="directions" label="路径规划" />
+        <q-tab name="chat" icon="smart_toy" label="智能问答" />
+      </q-tabs>
+
+      <q-separator />
+
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="planning" class="q-pa-none">
+           <RouteForm 
+            ref="routeFormRef"
+            :loading="loading"
+            :selecting-start="selectingStart"
+            :selecting-end="selectingEnd"
+            :route-result="routeResult"
+            @plan-route="handlePlanRoute"
+            @toggle-select-start="toggleSelectStart"
+            @toggle-select-end="toggleSelectEnd"
+          />
+        </q-tab-panel>
+
+        <q-tab-panel name="chat">
+           <SmartQA />
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-drawer>
+
     <q-page-container>
-      <router-view />
-      <div class="q-pa-md">
-        <div class="text-h6">Welcome to SmartRoute</div>
-        <p>Frontend is running with Quasar!</p>
+      <div class="row relative-position" style="height: calc(100vh - 50px);">
+        <!-- Map Component (Always visible but z-index handled if needed, currently side-by-side) -->
+        <div class="col-12 full-height">
+          <MapContainer 
+            ref="mapRef"
+            apiKey="61ded56e661c7338f95ccafd0c4642d5"
+            securityCode=""
+            @map-click="handleMapClick"
+          />
+        </div>
       </div>
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import MapContainer from './components/MapContainer.vue'
+import RouteForm from './components/RouteForm.vue'
+import SmartQA from './components/SmartQA.vue'
+import axios from 'axios'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
+const mapRef = ref(null)
+const routeFormRef = ref(null)
+const loading = ref(false)
+const drawerOpen = ref(true)
+const tab = ref('planning')
+
+const selectingStart = ref(false)
+const selectingEnd = ref(false)
+const routeResult = ref(null)
+
+const toggleDrawer = () => {
+  drawerOpen.value = !drawerOpen.value
+}
+
+const toggleSelectStart = () => {
+    selectingStart.value = !selectingStart.value
+    selectingEnd.value = false // Mutually exclusive
+    if (selectingStart.value) {
+        $q.notify({ type: 'info', message: '请在地图上点击选择起点', position: 'top' })
+    }
+}
+
+const toggleSelectEnd = () => {
+    selectingEnd.value = !selectingEnd.value
+    selectingStart.value = false // Mutually exclusive
+    if (selectingEnd.value) {
+        $q.notify({ type: 'info', message: '请在地图上点击选择终点', position: 'top' })
+    }
+}
+
+const handleMapClick = (e) => {
+    // Only handle clicks if on planning tab and selecting
+    if (tab.value !== 'planning') return
+
+    const { lng, lat } = e
+    const coordStr = `${lng.toFixed(6)},${lat.toFixed(6)}`
+    
+    if (selectingStart.value) {
+        if (routeFormRef.value) routeFormRef.value.setAddress('start', coordStr)
+        if (mapRef.value) mapRef.value.updateMarker('start', lng, lat)
+        selectingStart.value = false
+        $q.notify({ type: 'positive', message: '起点已选择', position: 'top', timeout: 1000 })
+    } else if (selectingEnd.value) {
+        if (routeFormRef.value) routeFormRef.value.setAddress('end', coordStr)
+        if (mapRef.value) mapRef.value.updateMarker('end', lng, lat)
+        selectingEnd.value = false
+        $q.notify({ type: 'positive', message: '终点已选择', position: 'top', timeout: 1000 })
+    }
+}
+
+const handlePlanRoute = async (formData) => {
+  loading.value = true
+  // routeResult.value = null // Keep previous result visible on error? User asked "保持上次成功结果可见" on error.
+  // But on new request, maybe we should clear or just update? 
+  // User said: "当API请求失败时显示友好错误提示，并保持上次成功结果可见". So don't null it here immediately.
+  
+  try {
+    const response = await axios.post('http://localhost:9876/api/v1/routes/plan', {
+      origin: formData.origin,
+      destination: formData.destination,
+      strategy: formData.strategy,
+      vehicle: { 
+        length: 13.5,
+        width: 2.55,
+        height: 4.0,
+        weight: 49.0,
+        axis_weight: 10.0
+      }
+    })
+
+    if (response.data.code === 200) {
+      const routes = response.data.data.routes
+      if (routes && routes.length > 0) {
+        const route = routes[0]
+        routeResult.value = route // Update with new result
+        
+        $q.notify({
+          type: 'positive',
+          message: `规划成功！`
+        })
+        
+        // Draw path on map
+        if (mapRef.value) {
+          mapRef.value.drawPath(route.path_points)
+          
+          // Also update markers positions based on the result path
+          const pathArr = route.path_points.split(';')
+          if (pathArr.length > 0) {
+             const startPt = pathArr[0].split(',')
+             const endPt = pathArr[pathArr.length-1].split(',')
+             mapRef.value.updateMarker('start', parseFloat(startPt[0]), parseFloat(startPt[1]))
+             mapRef.value.updateMarker('end', parseFloat(endPt[0]), parseFloat(endPt[1]))
+          }
+        }
+      }
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: '规划失败: ' + response.data.msg
+      })
+    }
+  } catch (error) {
+    console.error(error)
+    $q.notify({
+      type: 'negative',
+      message: '请求失败: ' + (error.response?.data?.detail || error.message)
+    })
+  } finally {
+    loading.value = false
+  }
+}
 </script>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+</style>
