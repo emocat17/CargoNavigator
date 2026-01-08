@@ -1,9 +1,46 @@
 from fastapi import APIRouter, HTTPException
-from app.models.schemas import RoutePlanRequest, RoutePlanResponse, RouteInfo, RouteStep
+from app.models.schemas import RoutePlanRequest, RoutePlanResponse, RouteInfo, RouteStep, TMC
 from app.services.amap_service import AmapService
 import re
+from datetime import datetime, timedelta
 
 router = APIRouter()
+
+# Constants for Cost Estimation
+FUEL_PRICE = 7.8  # CNY/L (Avg Diesel Price)
+FUEL_CONSUMPTION_100KM = 35  # L/100km (Heavy Truck)
+
+def calculate_fuel_cost(distance_m: int, traffic_lights: int) -> float:
+    """
+    Calculate estimated fuel cost based on distance and traffic lights.
+    """
+    dist_km = distance_m / 1000
+    # Base fuel
+    fuel_needed = (dist_km / 100) * FUEL_CONSUMPTION_100KM
+    # Traffic light penalty (approx 0.3L per stop/start)
+    fuel_needed += traffic_lights * 0.3
+    
+    return round(fuel_needed * FUEL_PRICE, 2)
+
+def check_night_driving(duration_sec: int) -> bool:
+    """
+    Check if the trip overlaps with Night Driving hours (02:00 - 05:00).
+    """
+    start_time = datetime.now()
+    end_time = start_time + timedelta(seconds=duration_sec)
+    
+    # Check simple overlap
+    current = start_time
+    while current < end_time:
+        if 2 <= current.hour < 5:
+            return True
+        current += timedelta(minutes=30) # Check granularity: 30 mins
+    
+    # Check end time specifically
+    if 2 <= end_time.hour < 5:
+        return True
+        
+    return False
 
 def is_coordinate(text: str) -> bool:
     # Simple regex to check if string is "lon,lat"
@@ -51,11 +88,16 @@ async def plan_route(request: RoutePlanRequest):
             # New Tracking Lists
             passed_cities_set = [] # Use list to preserve order, check duplication manually
             _toll_details_temp = [] # Temp list for aggregation [{'name': 'G15', 'cost': 10.5}]
+            
+            # Tunnel Stats
+            tunnel_count = 0
+            tunnel_distance = 0
 
             for step in path.get("steps", []):
                 polyline = step.get("polyline", "")
                 step_distance = int(step.get("distance", 0))
                 road_name = step.get("road", "")
+                instruction = step.get("instruction", "")
                 
                 # Extract Cities
                 cities = step.get("cities", [])
@@ -89,49 +131,77 @@ async def plan_route(request: RoutePlanRequest):
                 if isinstance(assistant_action, list):
                     assistant_action = ";".join([str(a) for a in assistant_action])
                 
+                # Check for Tunnel
+                # Heuristic: "隧道" in road name OR assistant_action contains "进入隧道" OR instruction contains "隧道"
+                is_tunnel = "隧道" in road_name or "隧道" in assistant_action or "隧道" in instruction
+                if is_tunnel:
+                    tunnel_count += 1
+                    tunnel_distance += step_distance
+
                 # Populate new Step fields
                 tmcs_data = []
                 tmcs_list = step.get("tmcs", [])
+                step_traffic_status = "未知"
+                
+                # Determine Step Traffic Status (Worst case)
+                has_congestion = False
+                has_slow = False
+                has_clear = False
+
                 if tmcs_list:
                     for tmc in tmcs_list:
+                        status = str(tmc.get("status", "未知"))
+                        tmc_dist = int(tmc.get("distance", 0))
+                        
+                        # Update Global Stats
+                        if status in traffic_stats:
+                            traffic_stats[status] += tmc_dist
+                        else:
+                            traffic_stats["未知"] += tmc_dist
+                            
+                        # Update Step Status Flags
+                        if status == "拥堵":
+                            has_congestion = True
+                        elif status == "缓行":
+                            has_slow = True
+                        elif status == "畅通":
+                            has_clear = True
+                            
                         try:
                             tmcs_data.append(TMC(
-                                distance=int(tmc.get("distance", 0)),
-                                status=str(tmc.get("status", "未知")),
+                                distance=tmc_dist,
+                                status=status,
                                 polyline=str(tmc.get("polyline", ""))
                             ))
                         except Exception as e:
                             print(f"Error parsing TMC: {e}, Data: {tmc}")
+                else:
+                    # Fallback if no tmcs
+                    traffic_stats["未知"] += step_distance
+                
+                if has_congestion:
+                    step_traffic_status = "拥堵"
+                elif has_slow:
+                    step_traffic_status = "缓行"
+                elif has_clear:
+                    step_traffic_status = "畅通"
 
                 steps.append(RouteStep(
-                    instruction=step.get("instruction", ""),
+                    instruction=instruction,
                     distance=step_distance,
                     duration=int(step.get("duration", 0)),
                     polyline=polyline,
                     road=road_name,
                     action=action,
                     assistant_action=assistant_action,
-                    tmcs=tmcs_data
+                    tmcs=tmcs_data,
+                    traffic_status=step_traffic_status
                 ))
                 full_polyline.append(polyline)
                 
                 # Road Stats
                 if road_name:
                     road_stats[road_name] = road_stats.get(road_name, 0) + step_distance
-                    
-                # Traffic Stats from tmcs
-                tmcs = step.get("tmcs", [])
-                if tmcs:
-                    for tmc in tmcs:
-                        status = tmc.get("status", "未知")
-                        tmc_dist = int(tmc.get("distance", 0))
-                        if status in traffic_stats:
-                            traffic_stats[status] += tmc_dist
-                        else:
-                            traffic_stats["未知"] += tmc_dist
-                else:
-                    # Fallback if no tmcs, assume unknown for this step
-                    traffic_stats["未知"] += step_distance
                 
             path_points_str = ";".join(full_polyline)
             
@@ -154,7 +224,16 @@ async def plan_route(request: RoutePlanRequest):
                             traffic_parts.append(f"{status} {percent}%")
             
             traffic_condition = ", ".join(traffic_parts) if traffic_parts else "路况未知"
-                
+            
+            # Calculate P2 Metrics (Cost & Tags)
+            est_fuel = calculate_fuel_cost(total_distance, int(path.get("traffic_lights", 0)))
+            total_tolls = float(path.get("tolls", 0))
+            total_cost_val = est_fuel + total_tolls
+            
+            route_tags = []
+            if check_night_driving(int(path.get("duration", 0))):
+                route_tags.append("夜间行车")
+
             routes.append(RouteInfo(
                 id=str(idx + 1),
                 distance=total_distance,
@@ -169,7 +248,12 @@ async def plan_route(request: RoutePlanRequest):
                 traffic_condition=traffic_condition,
                 major_roads=major_roads,
                 passed_cities=passed_cities_set,
-                toll_roads_details=toll_roads_details
+                toll_roads_details=toll_roads_details,
+                tunnel_count=tunnel_count,
+                tunnel_distance=tunnel_distance,
+                estimated_fuel_cost=est_fuel,
+                total_cost=total_cost_val,
+                tags=route_tags
             ))
             
         return RoutePlanResponse(data={"routes": routes})

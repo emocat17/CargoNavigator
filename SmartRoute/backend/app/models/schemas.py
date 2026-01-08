@@ -28,6 +28,7 @@ class RouteStep(BaseModel):
     action: str = ""
     assistant_action: str = ""
     tmcs: List[TMC] = []
+    traffic_status: str = "未知" # 畅通, 缓行, 拥堵, 未知
 
 class RouteInfo(BaseModel):
     id: str
@@ -44,6 +45,12 @@ class RouteInfo(BaseModel):
     major_roads: List[str] = []
     passed_cities: List[str] = []
     toll_roads_details: List[str] = []
+    tunnel_count: int = 0
+    tunnel_distance: int = 0
+    estimated_fuel_cost: float = 0.0
+    total_cost: float = 0.0
+    tags: List[str] = []
+
 
 class RoutePlanResponse(BaseModel):
     code: int = 200
