@@ -8,16 +8,18 @@
          <div class="col">
             <q-input
                 filled
-                dense
                 v-model="form.origin"
                 label="起点"
                 hint="输入地址或点击地图图标选点"
                 :rules="[val => !!val || '请输入起点']"
+                input-style="font-size: 1.25rem"
+                label-style="font-size: 1.1rem"
             >
                 <template v-slot:append>
                     <q-icon 
                         name="place" 
                         class="cursor-pointer" 
+                        size="md"
                         :color="selectingStart ? 'primary' : ''"
                         @click="$emit('toggle-select-start')"
                     >
@@ -33,16 +35,18 @@
          <div class="col">
             <q-input
                 filled
-                dense
                 v-model="form.destination"
                 label="终点"
                 hint="输入地址或点击地图图标选点"
                 :rules="[val => !!val || '请输入终点']"
+                input-style="font-size: 1.25rem"
+                label-style="font-size: 1.1rem"
             >
                 <template v-slot:append>
                     <q-icon 
                         name="place" 
                         class="cursor-pointer" 
+                        size="md"
                         :color="selectingEnd ? 'primary' : ''"
                         @click="$emit('toggle-select-end')"
                     >
@@ -55,13 +59,23 @@
 
       <q-select
         filled
-        dense
         v-model="form.strategy"
         :options="strategyOptions"
         label="选路策略"
         emit-value
         map-options
-      />
+        input-style="font-size: 1.25rem"
+        label-style="font-size: 1.1rem"
+        popup-content-style="font-size: 1.1rem"
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label style="font-size: 1.1rem">{{ scope.opt.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
 
       <div class="row justify-end">
         <q-btn 
@@ -69,7 +83,8 @@
             type="submit" 
             color="primary" 
             :loading="loading" 
-            class="full-width"
+            class="full-width text-subtitle1"
+            size="lg"
             icon="directions"
         />
       </div>

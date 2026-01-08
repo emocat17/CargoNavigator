@@ -51,7 +51,7 @@
         side="right" 
         bordered 
         overlay
-        :width="400" 
+        :width="500" 
         class="bg-white shadow-3"
     >
         <RouteResultPanel 

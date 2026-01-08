@@ -29,18 +29,16 @@
     <!-- 途经城市 -->
     <div v-if="routeResult.passed_cities && routeResult.passed_cities.length" class="q-mb-sm">
         <q-expansion-item
-            dense
-            dense-toggle
             expand-separator
             icon="location_city"
             label="途经城市"
-            header-class="text-primary bg-grey-1"
+            header-class="text-primary bg-grey-1 text-subtitle1"
             default-opened
         >
             <q-card>
                 <q-card-section class="q-pa-sm">
                     <div class="row q-gutter-xs">
-                        <q-chip v-for="city in routeResult.passed_cities" :key="city" size="sm" color="blue-1" text-color="primary" class="q-ma-none q-mr-xs q-mb-xs">
+                        <q-chip v-for="city in routeResult.passed_cities" :key="city" size="md" color="blue-1" text-color="primary" class="q-ma-none q-mr-xs q-mb-xs">
                             {{ city }}
                         </q-chip>
                     </div>
@@ -52,22 +50,20 @@
     <!-- 收费详情 -->
     <div v-if="routeResult.toll_roads_details && routeResult.toll_roads_details.length" class="q-mb-sm">
         <q-expansion-item
-            dense
-            dense-toggle
             expand-separator
             icon="toll"
             label="收费详情"
-            header-class="text-orange-9 bg-orange-1"
+            header-class="text-orange-9 bg-orange-1 text-subtitle1"
         >
             <q-card>
                 <q-card-section class="q-pa-xs">
-                    <q-list dense separator>
-                        <q-item v-for="(toll, idx) in routeResult.toll_roads_details" :key="idx" dense class="q-py-xs">
+                    <q-list separator>
+                        <q-item v-for="(toll, idx) in routeResult.toll_roads_details" :key="idx" class="q-py-xs">
                             <q-item-section avatar style="min-width: 24px">
-                                <q-icon name="paid" size="xs" color="orange" />
+                                <q-icon name="paid" size="sm" color="orange" />
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label class="text-caption text-grey-9">{{ toll }}</q-item-label>
+                                <q-item-label class="text-body2 text-grey-9">{{ toll }}</q-item-label>
                             </q-item-section>
                         </q-item>
                     </q-list>
@@ -76,42 +72,42 @@
         </q-expansion-item>
     </div>
 
-    <div class="text-subtitle2 q-mb-xs q-pl-xs text-grey-7">导航详情</div>
+    <div class="text-subtitle1 q-mb-xs q-pl-xs text-grey-7">导航详情</div>
 
     <q-scroll-area style="height: calc(100vh - 250px);" class="bg-white rounded-borders border-grey-3">
         <q-list separator>
             <q-item class="bg-grey-2">
                 <q-item-section avatar>
-                    <q-icon name="my_location" color="blue" />
+                    <q-icon name="my_location" color="blue" size="md" />
                 </q-item-section>
                 <q-item-section>
-                    <q-item-label class="text-weight-bold">起点</q-item-label>
+                    <q-item-label class="text-weight-bold text-subtitle1">起点</q-item-label>
                 </q-item-section>
             </q-item>
 
             <q-item v-for="(step, index) in routeResult.steps" :key="index" class="q-py-md">
                 <q-item-section avatar top>
-                    <q-icon :name="getActionIcon(step.action)" color="grey-8" size="sm" />
+                    <q-icon :name="getActionIcon(step.action)" color="grey-8" size="md" />
                 </q-item-section>
                 
                 <q-item-section>
-                    <q-item-label class="text-body1">{{ step.instruction }}</q-item-label>
-                    <q-item-label caption v-if="step.road" class="text-primary text-weight-medium q-mt-xs">
+                    <q-item-label class="text-subtitle1">{{ step.instruction }}</q-item-label>
+                    <q-item-label caption v-if="step.road" class="text-primary text-weight-medium q-mt-xs text-body2">
                         {{ step.road }}
                     </q-item-label>
                 </q-item-section>
                 
                 <q-item-section side top>
-                    <q-item-label caption>{{ step.distance }}米</q-item-label>
+                    <q-item-label caption class="text-body2">{{ step.distance }}米</q-item-label>
                 </q-item-section>
             </q-item>
             
             <q-item class="bg-grey-2">
                 <q-item-section avatar>
-                    <q-icon name="place" color="red" />
+                    <q-icon name="place" color="red" size="md" />
                 </q-item-section>
                 <q-item-section>
-                    <q-item-label class="text-weight-bold">终点</q-item-label>
+                    <q-item-label class="text-weight-bold text-subtitle1">终点</q-item-label>
                 </q-item-section>
             </q-item>
         </q-list>
