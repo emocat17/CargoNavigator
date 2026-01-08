@@ -13,9 +13,27 @@
 | **T7** | 路径规划页面 | ✅ 完成 | Trae | `RouteForm.vue`, `App.vue` |
 | **T8** | 前端-接口对接与联调 | ✅ 完成 | Trae | 完整联调通过 |
 | **T10** | 路线详情优化 | ✅ 完成 | Trae | 后端字段扩展 + 前端详情展示 |
+| **T11** | 地图配置优化 | ✅ 完成 | Trae | `.env` 环境变量配置, `MAP_CONFIGURATION.md` |
+| **T12** | 动态路况可视化 | ✅ 完成 | Trae | `MapContainer.vue` 多色绘制 |
 | **T9** | 智能问答模块 (SmartQA) | ⏳ 待办 | Trae | `SmartQA.vue` (目前仅占位) |
 
 ## 详细验收记录
+
+### T12: 动态路况可视化
+- **完成时间**: 2026-01-08
+- **前端**: `MapContainer.vue` 升级 `drawPath` 方法，支持根据 `tmcs` (实时路况) 数据绘制多色路线 (畅通:绿, 缓行:黄, 拥堵:红)。
+- **修复**: 修复了 `MapContainer.vue` 中 `drawPath` 方法未定义导致的页面空白 (ReferenceError) 问题。
+- **后端**: `routes.py` 和 `schemas.py` 升级，解析并透传 `tmcs` 数据结构。
+- **注意**: 若后端 API 报错 `USERKEY_PLAT_NOMATCH`，请检查后端 API Key 是否为 Web 服务类型。
+
+### T11: 地图配置优化
+- **完成时间**: 2026-01-08
+- **问题分析**: 解决浏览器控制台出现大量 `vdata02.amap.com` canceled 请求的问题，以及潜在的 Key 类型不匹配问题。
+- **解决方案**:
+  - 创建 `SmartRoute/frontend/.env` 文件，将 API Key 移入环境变量。
+  - 新增 `VITE_AMAP_SECURITY_CODE` 支持，允许用户配置 JS API 安全密钥。
+  - 优化 `MapContainer.vue`，支持动态加载安全密钥，移除冗余插件。
+- **文档**: 新增 `docs/SmartRoute/MAP_CONFIGURATION.md` 说明配置方法和常见问题。
 
 ### T10: 路线详情优化
 - **完成时间**: 2026-01-08
@@ -72,6 +90,7 @@
   - 自动化测试 `Test/test_route_full_attributes.py` 通过。
 
 ## 待办事项 (TODO)
-1. **智能问答模块**: 实现 `SmartQA.vue` 的实际对话逻辑。
-2. **多策略对比**: 目前仅显示当前策略结果，未来可扩展为同时显示多条路线对比。
-3. **异常处理优化**: 针对 API Key 失效或网络中断的更友好提示。
+1. **后端 API Key 修复**: 确保后端使用 "Web服务" 类型的 Key，避免 `USERKEY_PLAT_NOMATCH`。
+2. **智能问答模块**: 实现 `SmartQA.vue` 的实际对话逻辑 (当前暂缓)。
+3. **多策略对比**: 扩展为同时显示多条路线对比。
+4. **异常处理优化**: 针对 API Key 失效或网络中断的更友好提示。

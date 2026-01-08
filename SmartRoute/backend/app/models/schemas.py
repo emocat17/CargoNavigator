@@ -14,6 +14,11 @@ class RoutePlanRequest(BaseModel):
     vehicle: Optional[VehicleInfo] = None
     strategy: int = Field(0, description="选路策略")
 
+class TMC(BaseModel):
+    distance: int
+    status: str
+    polyline: str
+
 class RouteStep(BaseModel):
     instruction: str
     distance: int
@@ -22,6 +27,7 @@ class RouteStep(BaseModel):
     road: str = ""
     action: str = ""
     assistant_action: str = ""
+    tmcs: List[TMC] = []
 
 class RouteInfo(BaseModel):
     id: str

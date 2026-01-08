@@ -12,17 +12,18 @@ const emit = defineEmits(['map-click'])
 const props = defineProps({
   apiKey: {
     type: String,
-    default: 'YOUR_AMAP_JS_API_KEY' // 替换为您的 JS API Key
+    default: 'YOUR_AMAP_JS_API_KEY'
   },
   securityCode: {
     type: String,
-    default: 'YOUR_AMAP_SECURITY_CODE' // 替换为您的安全密钥
+    default: 'YOUR_AMAP_SECURITY_CODE'
   }
 })
 
 // Map instance
 const map = shallowRef(null)
 const AMapObj = shallowRef(null) // AMap object reference
+const routePolylines = shallowRef([]) // Store multiple polylines for traffic segments
 
 onMounted(() => {
   initMap()
@@ -35,15 +36,17 @@ onUnmounted(() => {
 })
 
 const initMap = () => {
-  // 设置安全密钥
-  window._AMapSecurityConfig = {
-    securityJsCode: props.securityCode,
+  // 设置安全密钥 (必须在 Loader 加载前设置)
+  if (props.securityCode) {
+      window._AMapSecurityConfig = {
+        securityJsCode: props.securityCode,
+      }
   }
 
   AMapLoader.load({
     key: props.apiKey,
     version: "2.0",
-    plugins: ['AMap.Driving', 'AMap.TruckDriving', 'AMap.Polyline', 'AMap.Marker', 'AMap.Pixel'],
+    plugins: [], 
   })
     .then((AMap) => {
       AMapObj.value = AMap
@@ -113,87 +116,139 @@ const setCenter = (lng, lat) => {
   }
 }
 
-const routePolyline = shallowRef(null)
+const drawPath = (pathPoints, steps) => {
+  if (!map.value || !AMapObj.value) {
+    console.warn("Map or AMap object not initialized yet.")
+    return
+  }
+  
+  // Clear existing polylines
+  if (routePolylines.value.length > 0) {
+    map.value.remove(routePolylines.value)
+    routePolylines.value = []
+  }
 
-const drawRoutePolyline = (pathPoints) => {
-    if (!map.value || !AMapObj.value) {
-        console.warn("Map or AMap object not initialized yet.")
-        return
+  const polylinesToDraw = []
+
+  // Helper to parse coordinate string
+  const parsePath = (pathStr) => {
+    if (!pathStr) return []
+    const pathArr = []
+    const rawPoints = pathStr.split(';')
+    for (const pt of rawPoints) {
+      if (!pt || pt.trim() === '') continue
+      const parts = pt.split(',')
+      if (parts.length < 2) continue
+      const lng = parseFloat(parts[0])
+      const lat = parseFloat(parts[1])
+      if (!isNaN(lng) && !isNaN(lat)) {
+        pathArr.push([lng, lat])
+      }
     }
-    if (!pathPoints) {
-        console.warn("No path points provided to drawRoutePolyline.")
-        return
-    }
+    return pathArr
+  }
 
-    console.log("Drawing route with points length:", pathPoints.length)
+  // Color map
+  const statusColors = {
+    "畅通": "#00B578", // Green
+    "缓行": "#FFAA00", // Yellow
+    "拥堵": "#FF4D4F", // Red
+    "严重拥堵": "#990000", // Dark Red
+    "未知": "#1890FF"  // Blue
+  }
 
-    if (routePolyline.value) {
-        map.value.remove(routePolyline.value)
-        routePolyline.value = null
-    }
+  let hasTrafficData = false
 
-    try {
-        // pathPoints format: "lon,lat;lon,lat;..."
-        const rawPoints = pathPoints.split(';')
-        const pathArr = []
-        
-        for (const pt of rawPoints) {
-            if (!pt || pt.trim() === '') continue
+  if (steps && steps.length > 0) {
+    // Check if we actually have TMC data
+    const hasTmc = steps.some(step => step.tmcs && step.tmcs.length > 0)
+    
+    if (hasTmc) {
+      hasTrafficData = true
+      console.log("Drawing route with traffic data...")
+      
+      for (const step of steps) {
+        if (step.tmcs && step.tmcs.length > 0) {
+          for (const tmc of step.tmcs) {
+            const pathArr = parsePath(tmc.polyline)
+            if (pathArr.length === 0) continue
+
+            const color = statusColors[tmc.status] || statusColors["未知"]
             
-            const parts = pt.split(',')
-            if (parts.length < 2) continue
-            
-            const lng = parseFloat(parts[0])
-            const lat = parseFloat(parts[1])
-            
-            if (!isNaN(lng) && !isNaN(lat)) {
-                pathArr.push([lng, lat])
-            }
+            const polyline = new AMapObj.value.Polyline({
+              path: pathArr,
+              isOutline: true,
+              outlineColor: 'white',
+              borderWeight: 1,
+              strokeColor: color,
+              strokeOpacity: 1.0,
+              strokeWeight: 8,
+              strokeStyle: "solid",
+              lineJoin: 'round',
+              lineCap: 'round',
+              zIndex: 1000,
+              showDir: true,
+            })
+            polylinesToDraw.push(polyline)
+          }
+        } else {
+          // Fallback for steps without TMCs (use step polyline)
+          const pathArr = parsePath(step.polyline)
+          if (pathArr.length > 0) {
+            const polyline = new AMapObj.value.Polyline({
+              path: pathArr,
+              isOutline: true,
+              outlineColor: 'white',
+              borderWeight: 1,
+              strokeColor: statusColors["未知"],
+              strokeOpacity: 1.0,
+              strokeWeight: 8,
+              strokeStyle: "solid",
+              lineJoin: 'round',
+              lineCap: 'round',
+              zIndex: 1000,
+              showDir: true,
+            })
+            polylinesToDraw.push(polyline)
+          }
         }
-
-        console.log(`Parsed ${pathArr.length} valid points for polyline.`)
-
-        if (pathArr.length === 0) {
-             console.warn("No valid points found after parsing.")
-             return
-        }
-
-        // Draw Polyline
-        routePolyline.value = new AMapObj.value.Polyline({
-            path: pathArr,
-            isOutline: true, // Add outline for better contrast
-            outlineColor: 'white',
-            borderWeight: 2,
-            strokeColor: "#1890FF", 
-            strokeOpacity: 1.0,
-            strokeWeight: 8, // Thicker
-            strokeStyle: "solid",
-            lineJoin: 'round',
-            lineCap: 'round',
-            zIndex: 1000, // Max zIndex
-            showDir: true,
-        })
-
-        map.value.add(routePolyline.value)
-        
-        // Fit view to include route with padding
-        map.value.setFitView([routePolyline.value], false, [50, 50, 50, 50])
-        
-        // If strict requirement for start point:
-        // setTimeout(() => {
-        //    map.value.setZoomAndCenter(14, pathArr[0])
-        // }, 1000)
-        // I will stick to setFitView because "no path displayed" is the complaint. 
-        // Showing the whole path is the best proof it works.
-        
-    } catch (e) {
-        console.error("Error drawing polyline:", e)
+      }
     }
+  }
+
+  if (!hasTrafficData) {
+    console.log("Drawing route without traffic data (fallback)...")
+    // Fallback to full path
+    const pathArr = parsePath(pathPoints)
+    if (pathArr.length > 0) {
+      const polyline = new AMapObj.value.Polyline({
+        path: pathArr,
+        isOutline: true,
+        outlineColor: 'white',
+        borderWeight: 2,
+        strokeColor: "#1890FF",
+        strokeOpacity: 1.0,
+        strokeWeight: 8,
+        strokeStyle: "solid",
+        lineJoin: 'round',
+        lineCap: 'round',
+        zIndex: 1000,
+        showDir: true,
+      })
+      polylinesToDraw.push(polyline)
+    }
+  }
+
+  if (polylinesToDraw.length > 0) {
+    map.value.add(polylinesToDraw)
+    routePolylines.value = polylinesToDraw
+    map.value.setFitView(polylinesToDraw, false, [50, 50, 50, 50])
+  }
 }
 
 defineExpose({
   setCenter,
-  drawPath: drawRoutePolyline,
+  drawPath,
   updateMarker
 })
 </script>

@@ -51,8 +51,8 @@
         <div class="col-12 full-height">
           <MapContainer 
             ref="mapRef"
-            apiKey="61ded56e661c7338f95ccafd0c4642d5"
-            securityCode=""
+            :apiKey="amapKey"
+            :securityCode="amapSecurityCode"
             @map-click="handleMapClick"
           />
         </div>
@@ -75,6 +75,9 @@ const routeFormRef = ref(null)
 const loading = ref(false)
 const drawerOpen = ref(true)
 const tab = ref('planning')
+
+const amapKey = import.meta.env.VITE_AMAP_KEY
+const amapSecurityCode = import.meta.env.VITE_AMAP_SECURITY_CODE
 
 const selectingStart = ref(false)
 const selectingEnd = ref(false)
@@ -153,7 +156,7 @@ const handlePlanRoute = async (formData) => {
         
         // Draw path on map
         if (mapRef.value) {
-          mapRef.value.drawPath(route.path_points)
+          mapRef.value.drawPath(route.path_points, route.steps)
           
           // Also update markers positions based on the result path
           const pathArr = route.path_points.split(';')
