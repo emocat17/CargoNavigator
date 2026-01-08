@@ -133,6 +133,51 @@
                         <q-item-label>{{ routeResult.strategy }} <span v-if="routeResult.restriction" class="text-negative">(限行)</span></q-item-label>
                     </q-item-section>
                 </q-item>
+
+                <!-- New Fields -->
+                <q-item v-if="routeResult.traffic_condition">
+                    <q-item-section avatar>
+                        <q-icon name="assessment" color="info" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label caption>路况概览</q-item-label>
+                        <q-item-label>{{ routeResult.traffic_condition }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+
+                <q-item v-if="routeResult.major_roads && routeResult.major_roads.length">
+                    <q-item-section avatar>
+                        <q-icon name="add_road" color="secondary" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label caption>主要途经</q-item-label>
+                        <q-item-label>{{ routeResult.major_roads.join(', ') }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+
+                <q-expansion-item
+                    v-if="routeResult.steps && routeResult.steps.length"
+                    icon="list"
+                    label="导航详情"
+                    caption="查看具体行车路线"
+                    header-class="text-primary"
+                >
+                    <q-list dense separator class="bg-grey-1">
+                        <q-item v-for="(step, index) in routeResult.steps" :key="index">
+                            <q-item-section avatar style="min-width: 30px;">
+                                <q-badge color="grey" :label="index + 1" />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ step.instruction }}</q-item-label>
+                                <q-item-label caption>
+                                    <span v-if="step.road" class="text-weight-bold text-primary">{{ step.road }}</span>
+                                    <span v-if="step.road"> - </span>
+                                    <span>{{ step.distance }}米</span>
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-expansion-item>
             </q-list>
         </div>
     </q-slide-transition>

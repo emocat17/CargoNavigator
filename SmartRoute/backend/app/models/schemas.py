@@ -19,6 +19,9 @@ class RouteStep(BaseModel):
     distance: int
     duration: int
     polyline: str
+    road: str = ""
+    action: str = ""
+    assistant_action: str = ""
 
 class RouteInfo(BaseModel):
     id: str
@@ -31,6 +34,8 @@ class RouteInfo(BaseModel):
     traffic_lights: int = 0
     strategy: str = ""
     restriction: int = 0
+    traffic_condition: str = "未知"
+    major_roads: List[str] = []
 
 class RoutePlanResponse(BaseModel):
     code: int = 200
