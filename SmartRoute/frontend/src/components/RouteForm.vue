@@ -77,108 +77,70 @@
 
     <!-- Result Display -->
     <q-slide-transition>
-        <div v-if="routeResult" class="q-mt-lg">
-            <q-separator class="q-mb-md" />
-            <div class="text-subtitle1 q-mb-sm text-weight-bold">规划结果</div>
-            <q-list bordered separator class="rounded-borders">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="straighten" color="primary" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>总距离</q-item-label>
-                        <q-item-label>{{ (routeResult.distance / 1000).toFixed(1) }} km</q-item-label>
-                    </q-item-section>
-                </q-item>
-                
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="schedule" color="primary" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>预计耗时</q-item-label>
-                        <q-item-label>{{ formatDuration(routeResult.duration) }}</q-item-label>
-                    </q-item-section>
-                </q-item>
+        <div v-if="routeResult" class="q-mt-lg relative-position">
+            
+            <!-- Header Card -->
+            <q-card flat bordered class="bg-blue-1 text-primary q-mb-sm">
+                <q-card-section class="q-pa-sm">
+                    <div v-if="routeResult.major_roads && routeResult.major_roads.length" class="text-subtitle1 text-weight-bold ellipsis-2-lines q-mb-xs text-black">
+                        {{ routeResult.major_roads.join(' > ') }}
+                    </div>
+                    <div class="row items-center q-gutter-x-sm text-body2">
+                         <div class="text-weight-bold text-primary">{{ formatDuration(routeResult.duration) }}</div>
+                         <div class="text-grey-8">({{ (routeResult.distance / 1000).toFixed(1) }}公里)</div>
+                         <div class="text-grey-6">|</div>
+                         <div class="text-primary">{{ routeResult.strategy }}</div>
+                    </div>
+                    <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7">
+                        <div v-if="routeResult.traffic_lights"><q-icon name="traffic" /> {{ routeResult.traffic_lights }}红绿灯</div>
+                        <div v-if="routeResult.toll_cost"><q-icon name="paid" /> ¥{{ routeResult.toll_cost }}</div>
+                        <div v-if="routeResult.traffic_condition"><q-icon name="assessment" /> {{ routeResult.traffic_condition }}</div>
+                    </div>
+                </q-card-section>
+            </q-card>
 
-                <q-item v-if="routeResult.toll_distance > 0">
-                    <q-item-section avatar>
-                        <q-icon name="paid" color="orange" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>收费路段 / 费用</q-item-label>
-                        <q-item-label>
-                            {{ (routeResult.toll_distance / 1000).toFixed(1) }} km
-                            <span v-if="routeResult.toll_cost > 0"> / ¥{{ routeResult.toll_cost }}</span>
-                        </q-item-label>
-                    </q-item-section>
-                </q-item>
+            <!-- Navigation List Header -->
+            <div class="text-subtitle2 q-mb-xs q-pl-xs text-grey-7">导航详情</div>
 
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="traffic" color="red" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>红绿灯</q-item-label>
-                        <q-item-label>{{ routeResult.traffic_lights }} 个</q-item-label>
-                    </q-item-section>
-                </q-item>
+            <!-- Scrollable Steps List -->
+            <q-scroll-area style="height: 400px; max-height: 50vh;" class="bg-white rounded-borders border-grey-3">
+                <q-list separator>
+                    <q-item class="bg-grey-2">
+                        <q-item-section avatar>
+                            <q-icon name="my_location" color="blue" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label class="text-weight-bold">起点</q-item-label>
+                        </q-item-section>
+                    </q-item>
 
-                <q-item v-if="routeResult.strategy">
-                    <q-item-section avatar>
-                        <q-icon name="alt_route" color="purple" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>当前策略</q-item-label>
-                        <q-item-label>{{ routeResult.strategy }} <span v-if="routeResult.restriction" class="text-negative">(限行)</span></q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <!-- New Fields -->
-                <q-item v-if="routeResult.traffic_condition">
-                    <q-item-section avatar>
-                        <q-icon name="assessment" color="info" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>路况概览</q-item-label>
-                        <q-item-label>{{ routeResult.traffic_condition }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-item v-if="routeResult.major_roads && routeResult.major_roads.length">
-                    <q-item-section avatar>
-                        <q-icon name="add_road" color="secondary" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>主要途经</q-item-label>
-                        <q-item-label>{{ routeResult.major_roads.join(', ') }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-expansion-item
-                    v-if="routeResult.steps && routeResult.steps.length"
-                    icon="list"
-                    label="导航详情"
-                    caption="查看具体行车路线"
-                    header-class="text-primary"
-                >
-                    <q-list dense separator class="bg-grey-1">
-                        <q-item v-for="(step, index) in routeResult.steps" :key="index">
-                            <q-item-section avatar style="min-width: 30px;">
-                                <q-badge color="grey" :label="index + 1" />
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label>{{ step.instruction }}</q-item-label>
-                                <q-item-label caption>
-                                    <span v-if="step.road" class="text-weight-bold text-primary">{{ step.road }}</span>
-                                    <span v-if="step.road"> - </span>
-                                    <span>{{ step.distance }}米</span>
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </q-expansion-item>
-            </q-list>
+                    <q-item v-for="(step, index) in routeResult.steps" :key="index" class="q-py-md">
+                        <q-item-section avatar top>
+                            <q-icon :name="getActionIcon(step.action)" color="grey-8" size="sm" />
+                        </q-item-section>
+                        
+                        <q-item-section>
+                            <q-item-label class="text-body1">{{ step.instruction }}</q-item-label>
+                            <q-item-label caption v-if="step.road" class="text-primary text-weight-medium q-mt-xs">
+                                {{ step.road }}
+                            </q-item-label>
+                        </q-item-section>
+                        
+                        <q-item-section side top>
+                            <q-item-label caption>{{ step.distance }}米</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    
+                    <q-item class="bg-grey-2">
+                        <q-item-section avatar>
+                            <q-icon name="place" color="red" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label class="text-weight-bold">终点</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-scroll-area>
         </div>
     </q-slide-transition>
   </div>
@@ -207,13 +169,6 @@ const strategyOptions = [
   { label: '费用优先', value: 1 },
   { label: '距离优先', value: 2 }
 ]
-
-const formatDuration = (seconds) => {
-    const h = Math.floor(seconds / 3600)
-    const m = Math.floor((seconds % 3600) / 60)
-    if (h > 0) return `${h}小时${m}分钟`
-    return `${m}分钟`
-}
 
 const onSubmit = () => {
   emit('plan-route', { ...form })

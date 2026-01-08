@@ -42,6 +42,8 @@ class RouteInfo(BaseModel):
     restriction: int = 0
     traffic_condition: str = "未知"
     major_roads: List[str] = []
+    passed_cities: List[str] = []
+    toll_roads_details: List[str] = []
 
 class RoutePlanResponse(BaseModel):
     code: int = 200

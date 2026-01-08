@@ -45,6 +45,22 @@
       </q-tab-panels>
     </q-drawer>
 
+    <!-- Right Drawer for Route Result -->
+    <q-drawer 
+        v-model="rightDrawerOpen" 
+        side="right" 
+        bordered 
+        overlay
+        :width="400" 
+        class="bg-white shadow-3"
+    >
+        <RouteResultPanel 
+            v-if="routeResult" 
+            :route-result="routeResult" 
+            @close="rightDrawerOpen = false"
+        />
+    </q-drawer>
+
     <q-page-container>
       <div class="row relative-position" style="height: calc(100vh - 50px);">
         <!-- Map Component (Always visible but z-index handled if needed, currently side-by-side) -->
@@ -65,6 +81,7 @@
 import { ref } from 'vue'
 import MapContainer from './components/MapContainer.vue'
 import RouteForm from './components/RouteForm.vue'
+import RouteResultPanel from './components/RouteResultPanel.vue'
 import SmartQA from './components/SmartQA.vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
@@ -74,6 +91,7 @@ const mapRef = ref(null)
 const routeFormRef = ref(null)
 const loading = ref(false)
 const drawerOpen = ref(true)
+const rightDrawerOpen = ref(false)
 const tab = ref('planning')
 
 const amapKey = import.meta.env.VITE_AMAP_KEY
@@ -148,6 +166,7 @@ const handlePlanRoute = async (formData) => {
       if (routes && routes.length > 0) {
         const route = routes[0]
         routeResult.value = route // Update with new result
+        rightDrawerOpen.value = true // Open right drawer
         
         $q.notify({
           type: 'positive',

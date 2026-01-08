@@ -48,11 +48,38 @@ async def plan_route(request: RoutePlanRequest):
             road_stats = {} # road_name: distance
             total_distance = int(path.get("distance", 0))
             
+            # New Tracking Lists
+            passed_cities_set = [] # Use list to preserve order, check duplication manually
+            _toll_details_temp = [] # Temp list for aggregation [{'name': 'G15', 'cost': 10.5}]
+
             for step in path.get("steps", []):
                 polyline = step.get("polyline", "")
                 step_distance = int(step.get("distance", 0))
                 road_name = step.get("road", "")
                 
+                # Extract Cities
+                cities = step.get("cities", [])
+                for city in cities:
+                    city_name = city.get("name", "")
+                    districts = city.get("districts", [])
+                    district_name = districts[0].get("name", "") if districts else ""
+                    
+                    full_name = f"{city_name}"
+                    if district_name:
+                        full_name += f"({district_name})"
+                    
+                    if full_name and (not passed_cities_set or passed_cities_set[-1] != full_name):
+                        passed_cities_set.append(full_name)
+
+                # Extract Toll Roads
+                toll_road_name = step.get("toll_road", "")
+                step_tolls = float(step.get("tolls", 0))
+                if toll_road_name and step_tolls > 0:
+                     if _toll_details_temp and _toll_details_temp[-1]['name'] == toll_road_name:
+                         _toll_details_temp[-1]['cost'] += step_tolls
+                     else:
+                         _toll_details_temp.append({'name': toll_road_name, 'cost': step_tolls})
+
                 # Handle potential list values for actions
                 action = step.get("action", "")
                 if isinstance(action, list):
@@ -64,17 +91,17 @@ async def plan_route(request: RoutePlanRequest):
                 
                 # Populate new Step fields
                 tmcs_data = []
-                # tmcs_list = step.get("tmcs", [])
-                # if tmcs_list:
-                #     for tmc in tmcs_list:
-                #         try:
-                #             tmcs_data.append(TMC(
-                #                 distance=int(tmc.get("distance", 0)),
-                #                 status=str(tmc.get("status", "未知")),
-                #                 polyline=str(tmc.get("polyline", ""))
-                #             ))
-                #         except Exception as e:
-                #             print(f"Error parsing TMC: {e}, Data: {tmc}")
+                tmcs_list = step.get("tmcs", [])
+                if tmcs_list:
+                    for tmc in tmcs_list:
+                        try:
+                            tmcs_data.append(TMC(
+                                distance=int(tmc.get("distance", 0)),
+                                status=str(tmc.get("status", "未知")),
+                                polyline=str(tmc.get("polyline", ""))
+                            ))
+                        except Exception as e:
+                            print(f"Error parsing TMC: {e}, Data: {tmc}")
 
                 steps.append(RouteStep(
                     instruction=step.get("instruction", ""),
@@ -108,6 +135,9 @@ async def plan_route(request: RoutePlanRequest):
                 
             path_points_str = ";".join(full_polyline)
             
+            # Convert Toll Details Temp to List[str]
+            toll_roads_details = [f"{item['name']}: ¥{item['cost']:.2f}" for item in _toll_details_temp]
+
             # Calculate Major Roads (Top 3 by distance)
             sorted_roads = sorted(road_stats.items(), key=lambda x: x[1], reverse=True)
             major_roads = [r[0] for r in sorted_roads[:3]]
@@ -137,7 +167,9 @@ async def plan_route(request: RoutePlanRequest):
                 strategy=path.get("strategy", ""),
                 restriction=int(path.get("restriction", 0)),
                 traffic_condition=traffic_condition,
-                major_roads=major_roads
+                major_roads=major_roads,
+                passed_cities=passed_cities_set,
+                toll_roads_details=toll_roads_details
             ))
             
         return RoutePlanResponse(data={"routes": routes})
