@@ -57,6 +57,47 @@
          </div>
       </div>
 
+      <!-- Waypoints Input -->
+      <div v-if="waypoints.length > 0" class="q-mb-sm">
+        <div class="text-subtitle2 q-mb-xs text-grey-8">途经点</div>
+        <div v-for="(wp, index) in waypoints" :key="index" class="row items-center q-mb-sm q-col-gutter-sm">
+            <div class="col">
+                <q-input
+                    filled
+                    dense
+                    v-model="waypoints[index]"
+                    :label="`途经点 ${index + 1}`"
+                    placeholder="输入地址或经纬度"
+                >
+                     <template v-slot:prepend>
+                        <q-icon name="add_location_alt" size="sm" />
+                    </template>
+                    <template v-slot:append>
+                        <q-icon 
+                            name="place" 
+                            class="cursor-pointer" 
+                            size="md"
+                            :color="selectingWaypointIndex === index ? 'primary' : ''"
+                            @click="$emit('toggle-select-waypoint', index)"
+                        >
+                            <q-tooltip>在地图上选点</q-tooltip>
+                        </q-icon>
+                    </template>
+                </q-input>
+            </div>
+            <div class="col-auto">
+                <q-btn flat round dense color="negative" icon="remove_circle_outline" @click="removeWaypoint(index)">
+                    <q-tooltip>移除此途经点</q-tooltip>
+                </q-btn>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Add Waypoint Button -->
+      <div class="row q-mb-md">
+          <q-btn flat dense color="primary" icon="add" label="添加途经点" @click="addWaypoint" size="sm" />
+      </div>
+
       <!-- Departure Time Input -->
       <div class="row items-start q-col-gutter-sm">
          <div class="col">
@@ -169,15 +210,18 @@ const props = defineProps({
   loading: Boolean,
   selectingStart: Boolean,
   selectingEnd: Boolean,
+  selectingWaypointIndex: {
+      type: Number,
+      default: -1
+  },
   routeResult: Object
 })
 
-const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end'])
+const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end', 'toggle-select-waypoint', 'remove-waypoint'])
 
-// const showVehicleManager = ref(false)
 const showQualificationManager = ref(false)
 const routeCount = ref(3)
-// const selectedVehicle = ref(null)
+const waypoints = ref([])
 
 const applicationData = reactive({
     total_size_arr_str: '', 
@@ -219,16 +263,38 @@ const strategyOptions = [
   { label: '距离优先', value: 2 }
 ]
 
+const addWaypoint = () => {
+    if (waypoints.value.length >= 16) {
+        $q.notify({ type: 'warning', message: '最多支持 16 个途经点' })
+        return
+    }
+    waypoints.value.push('')
+}
+
+const removeWaypoint = (index) => {
+    waypoints.value.splice(index, 1)
+    emit('remove-waypoint', index)
+}
+
 // const onVehicleSelect = (vehicle) => {
 //    selectedVehicle.value = vehicle
 // }
 
+const parseArrayStr = (str) => {
+    if (!str) return []
+    return str.replace(/，/g, ',').split(',').map(s => s.trim()).filter(s => s !== '')
+}
+
 const onSubmit = () => {
-  const payload = { ...form, route_count: routeCount.value }
+  const payload = { 
+      ...form, 
+      route_count: routeCount.value,
+      waypoints: waypoints.value.filter(wp => wp && wp.trim())
+  }
   
   if (hasValidVehicleData.value) {
       // Parse dimensions from string "L,W,H"
-      const dims = applicationData.total_size_arr_str.split(',').map(Number)
+      const dims = parseArrayStr(applicationData.total_size_arr_str).map(Number)
       const length = dims[0] || 0
       const width = dims[1] || 0
       const height = dims[2] || 0
@@ -241,8 +307,8 @@ const onSubmit = () => {
           axis_count: applicationData.axle_count || 0,
           // Default axis weight if not available
           axis_weight: 10,
-          load_weights: applicationData.axis_weights_str ? applicationData.axis_weights_str.split(',').map(Number) : [],
-          axis_distances: applicationData.axis_distances_str ? applicationData.axis_distances_str.split(',').map(Number) : []
+          load_weights: applicationData.axis_weights_str ? parseArrayStr(applicationData.axis_weights_str).map(Number) : [],
+          axis_distances: applicationData.axis_distances_str ? parseArrayStr(applicationData.axis_distances_str).map(Number) : []
       }
   } else {
       // Fallback or Alert?
@@ -255,6 +321,12 @@ const onSubmit = () => {
 const setAddress = (type, val) => {
     if (type === 'start') form.origin = val
     if (type === 'end') form.destination = val
+    if (type.startsWith('waypoint-')) {
+        const idx = parseInt(type.split('-')[1])
+        if (!isNaN(idx) && idx >= 0 && idx < waypoints.value.length) {
+            waypoints.value[idx] = val
+        }
+    }
 }
 
 defineExpose({ setAddress })

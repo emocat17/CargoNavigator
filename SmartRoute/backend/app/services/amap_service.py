@@ -40,11 +40,13 @@ class AmapService:
     async def plan_route_driving(
         origin: str, 
         destination: str, 
-        strategy: int = 0
+        strategy: int = 0,
+        waypoints: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Plan driving route using Amap Direction API v3.
         origin/destination: "lon,lat"
+        waypoints: "lon,lat;lon,lat" (Max 16 waypoints)
         """
         url = f"{AmapService.BASE_URL}/v3/direction/driving"
         params = {
@@ -55,6 +57,9 @@ class AmapService:
             "output": "json",
             "extensions": "all"
         }
+        
+        if waypoints:
+            params["waypoints"] = waypoints
         
         try:
             async with httpx.AsyncClient() as client:

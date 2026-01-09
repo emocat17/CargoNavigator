@@ -32,9 +32,12 @@
             :loading="loading"
             :selecting-start="selectingStart"
             :selecting-end="selectingEnd"
+            :selecting-waypoint-index="selectingWaypointIndex"
             @plan-route="handlePlanRoute"
             @toggle-select-start="toggleSelectStart"
             @toggle-select-end="toggleSelectEnd"
+            @toggle-select-waypoint="toggleSelectWaypoint"
+            @remove-waypoint="handleRemoveWaypoint"
           />
         </q-tab-panel>
 
@@ -101,6 +104,7 @@ const amapSecurityCode = import.meta.env.VITE_AMAP_SECURITY_CODE
 
 const selectingStart = ref(false)
 const selectingEnd = ref(false)
+const selectingWaypointIndex = ref(-1)
 const routes = shallowRef([])
 const selectedRouteIndex = ref(0)
 const currentVehicle = ref(null)
@@ -112,6 +116,7 @@ const toggleDrawer = () => {
 const toggleSelectStart = () => {
     selectingStart.value = !selectingStart.value
     selectingEnd.value = false // Mutually exclusive
+    selectingWaypointIndex.value = -1
     if (selectingStart.value) {
         $q.notify({ type: 'info', message: '请在地图上点击选择起点', position: 'top' })
     }
@@ -120,8 +125,24 @@ const toggleSelectStart = () => {
 const toggleSelectEnd = () => {
     selectingEnd.value = !selectingEnd.value
     selectingStart.value = false // Mutually exclusive
+    selectingWaypointIndex.value = -1
     if (selectingEnd.value) {
         $q.notify({ type: 'info', message: '请在地图上点击选择终点', position: 'top' })
+    }
+}
+
+const toggleSelectWaypoint = (index) => {
+    if (selectingWaypointIndex.value === index) {
+        selectingWaypointIndex.value = -1
+        return
+    }
+    
+    selectingWaypointIndex.value = index
+    selectingStart.value = false
+    selectingEnd.value = false
+    
+    if (selectingWaypointIndex.value > -1) {
+        $q.notify({ type: 'info', message: `请在地图上点击选择途经点 ${index + 1}`, position: 'top' })
     }
 }
 
@@ -142,6 +163,18 @@ const handleMapClick = (e) => {
         if (mapRef.value) mapRef.value.updateMarker('end', lng, lat)
         selectingEnd.value = false
         $q.notify({ type: 'positive', message: '终点已选择', position: 'top', timeout: 1000 })
+    } else if (selectingWaypointIndex.value > -1) {
+        const idx = selectingWaypointIndex.value
+        if (routeFormRef.value) routeFormRef.value.setAddress(`waypoint-${idx}`, coordStr)
+        if (mapRef.value) mapRef.value.updateMarker('waypoint', lng, lat, idx)
+        selectingWaypointIndex.value = -1
+        $q.notify({ type: 'positive', message: `途经点 ${idx + 1} 已选择`, position: 'top', timeout: 1000 })
+    }
+}
+
+const handleRemoveWaypoint = (index) => {
+    if (mapRef.value) {
+        mapRef.value.removeMarker('waypoint', index)
     }
 }
 
@@ -164,7 +197,8 @@ const handlePlanRoute = async (formData) => {
       // strategy: formData.strategy, // Backend ignores strategy now
       vehicle: currentVehicle.value,
       departure_time: formData.departure_time,
-      route_count: formData.route_count
+      route_count: formData.route_count,
+      waypoints: formData.waypoints
     })
 
     if (response.data.code === 200) {

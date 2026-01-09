@@ -71,8 +71,9 @@ const initMap = () => {
 // Markers
 const startMarker = shallowRef(null)
 const endMarker = shallowRef(null)
+const waypointMarkers = new Map()
 
-const updateMarker = (type, lng, lat) => {
+const updateMarker = (type, lng, lat, index = -1) => {
   if (!map.value || !AMapObj.value) return
   
   const position = [lng, lat]
@@ -99,14 +100,64 @@ const updateMarker = (type, lng, lat) => {
       })
       map.value.add(endMarker.value)
     }
+  } else if (type === 'waypoint' && index > -1) {
+    if (waypointMarkers.has(index)) {
+        waypointMarkers.get(index).setPosition(position)
+    } else {
+        const marker = new AMapObj.value.Marker({
+            position: position,
+            title: `途经点 ${index + 1}`,
+            label: { content: `${index + 1}`, direction: 'top' }
+        })
+        map.value.add(marker)
+        waypointMarkers.set(index, marker)
+    }
   }
   
-  // Fit view to include markers if both exist
-  if (startMarker.value && endMarker.value) {
-    map.value.setFitView([startMarker.value, endMarker.value])
+  // Fit view to include all markers
+  const markersToFit = []
+  if (startMarker.value) markersToFit.push(startMarker.value)
+  if (endMarker.value) markersToFit.push(endMarker.value)
+  waypointMarkers.forEach(m => markersToFit.push(m))
+  
+  if (markersToFit.length > 0) {
+    map.value.setFitView(markersToFit)
   } else {
      map.value.setCenter(position)
   }
+}
+
+const removeMarker = (type, index) => {
+    if (type === 'waypoint') {
+        if (waypointMarkers.has(index)) {
+            const marker = waypointMarkers.get(index)
+            if (map.value) map.value.remove(marker)
+            waypointMarkers.delete(index)
+        }
+        
+        // Re-index subsequent markers
+        const newMap = new Map()
+        // Convert to array to sort keys to process safely? Map iteration order is insertion order usually, but safer to just iterate and build new map
+        // Actually, we need to iterate all current markers and shift those > index
+        
+        // We need to be careful not to overwrite.
+        // Create a temporary list of entries to update
+        const updates = []
+        waypointMarkers.forEach((marker, key) => {
+            if (key > index) {
+                updates.push({ oldKey: key, marker: marker })
+            }
+        })
+        
+        // Apply updates
+        updates.sort((a, b) => a.oldKey - b.oldKey).forEach(({ oldKey, marker }) => {
+            waypointMarkers.delete(oldKey)
+            const newKey = oldKey - 1
+            marker.setLabel({ content: `${newKey + 1}`, direction: 'top' })
+            marker.setTitle(`途经点 ${newKey + 1}`)
+            waypointMarkers.set(newKey, marker)
+        })
+    }
 }
 
 // Expose methods for parent component
@@ -262,7 +313,8 @@ const drawPath = (pathPoints, steps) => {
 defineExpose({
   setCenter,
   drawPath,
-  updateMarker
+  updateMarker,
+  removeMarker
 })
 </script>
 

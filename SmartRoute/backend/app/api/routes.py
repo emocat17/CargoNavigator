@@ -435,6 +435,25 @@ async def plan_route(request: RoutePlanRequest):
             dep_time = datetime.fromisoformat(request.departure_time)
         except:
             pass
+            
+    # Process Waypoints
+    waypoints_str = None
+    if request.waypoints:
+        processed_waypoints = []
+        for wp in request.waypoints:
+            if not wp.strip():
+                continue
+            if is_coordinate(wp):
+                processed_waypoints.append(wp)
+            else:
+                coords = await AmapService.get_geo_code(wp)
+                if coords:
+                    processed_waypoints.append(f"{coords[0]},{coords[1]}")
+                else:
+                    print(f"Warning: Could not geocode waypoint '{wp}'")
+        
+        if processed_waypoints:
+            waypoints_str = ";".join(processed_waypoints)
 
     # 2. Call Amap API Concurrently (Multi-Strategy)
     # Strategies: 0(Speed), 1(Cost), 2(Distance), 9(Congestion)
@@ -446,7 +465,7 @@ async def plan_route(request: RoutePlanRequest):
     }
     strategies = [0, 1, 2, 9]
     
-    tasks = [AmapService.plan_route_driving(origin, destination, s) for s in strategies]
+    tasks = [AmapService.plan_route_driving(origin, destination, s, waypoints=waypoints_str) for s in strategies]
     results = await asyncio.gather(*tasks, return_exceptions=True)
     
     all_routes = []
