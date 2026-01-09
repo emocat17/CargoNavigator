@@ -32,7 +32,6 @@
             :loading="loading"
             :selecting-start="selectingStart"
             :selecting-end="selectingEnd"
-            :route-result="routeResult"
             @plan-route="handlePlanRoute"
             @toggle-select-start="toggleSelectStart"
             @toggle-select-end="toggleSelectEnd"
@@ -55,9 +54,12 @@
         class="bg-white shadow-3"
     >
         <RouteResultPanel 
-            v-if="routeResult" 
-            :route-result="routeResult" 
+            v-if="routes && routes.length > 0" 
+            :routes="routes"
+            :vehicle="currentVehicle"
+            :selected-index="selectedRouteIndex" 
             @close="rightDrawerOpen = false"
+            @select-route="handleSelectRoute"
         />
     </q-drawer>
 
@@ -99,7 +101,9 @@ const amapSecurityCode = import.meta.env.VITE_AMAP_SECURITY_CODE
 
 const selectingStart = ref(false)
 const selectingEnd = ref(false)
-const routeResult = ref(null)
+const routes = ref([])
+const selectedRouteIndex = ref(0)
+const currentVehicle = ref(null)
 
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value
@@ -143,37 +147,38 @@ const handleMapClick = (e) => {
 
 const handlePlanRoute = async (formData) => {
   loading.value = true
-  // routeResult.value = null // Keep previous result visible on error? User asked "保持上次成功结果可见" on error.
-  // But on new request, maybe we should clear or just update? 
-  // User said: "当API请求失败时显示友好错误提示，并保持上次成功结果可见". So don't null it here immediately.
   
+  // Update current vehicle info
+  currentVehicle.value = formData.vehicle || {
+    length: 13.5,
+    width: 2.55,
+    height: 4.0,
+    weight: 49.0,
+    axis_weight: 10.0
+  }
+
   try {
     const response = await axios.post('http://localhost:9876/api/v1/routes/plan', {
       origin: formData.origin,
       destination: formData.destination,
-      strategy: formData.strategy,
-      vehicle: { 
-        length: 13.5,
-        width: 2.55,
-        height: 4.0,
-        weight: 49.0,
-        axis_weight: 10.0
-      }
+      // strategy: formData.strategy, // Backend ignores strategy now
+      vehicle: currentVehicle.value
     })
 
     if (response.data.code === 200) {
-      const routes = response.data.data.routes
-      if (routes && routes.length > 0) {
-        const route = routes[0]
-        routeResult.value = route // Update with new result
+      const newRoutes = response.data.data.routes
+      if (newRoutes && newRoutes.length > 0) {
+        routes.value = newRoutes
+        selectedRouteIndex.value = 0
         rightDrawerOpen.value = true // Open right drawer
         
         $q.notify({
           type: 'positive',
-          message: `规划成功！`
+          message: `规划成功！共找到 ${newRoutes.length} 条路线`
         })
         
-        // Draw path on map
+        // Draw first route on map
+        const route = newRoutes[0]
         if (mapRef.value) {
           mapRef.value.drawPath(route.path_points, route.steps)
           
@@ -197,11 +202,19 @@ const handlePlanRoute = async (formData) => {
     console.error(error)
     $q.notify({
       type: 'negative',
-      message: '请求失败: ' + (error.response?.data?.detail || error.message)
+      message: '请求出错，请检查网络或后端服务'
     })
   } finally {
     loading.value = false
   }
+}
+
+const handleSelectRoute = (index) => {
+    selectedRouteIndex.value = index
+    const route = routes.value[index]
+    if (mapRef.value && route) {
+        mapRef.value.drawPath(route.path_points, route.steps)
+    }
 }
 </script>
 

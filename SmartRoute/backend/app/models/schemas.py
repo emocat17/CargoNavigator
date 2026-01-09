@@ -13,6 +13,7 @@ class RoutePlanRequest(BaseModel):
     destination: str = Field(..., description="终点 (地址或经纬度)")
     vehicle: Optional[VehicleInfo] = None
     strategy: int = Field(0, description="选路策略")
+    departure_time: Optional[str] = Field(None, description="预计出发时间 (ISO format)")
 
 class TMC(BaseModel):
     distance: int
