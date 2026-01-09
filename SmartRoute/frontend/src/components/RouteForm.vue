@@ -57,6 +57,34 @@
          </div>
       </div>
 
+      <!-- Departure Time Input -->
+      <div class="row items-start q-col-gutter-sm">
+         <div class="col">
+            <q-input 
+                filled 
+                v-model="form.departure_time" 
+                label="预计出发时间 (选填)" 
+                hint="若为空则默认当前时间出发" 
+                clearable
+            >
+                <template v-slot:prepend>
+                    <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <div class="row no-wrap">
+                                <q-date v-model="form.departure_time" mask="YYYY-MM-DD HH:mm" />
+                                <q-separator vertical />
+                                <q-time v-model="form.departure_time" mask="YYYY-MM-DD HH:mm" format24h />
+                            </div>
+                            <div class="row items-center justify-end q-pa-sm bg-white">
+                                <q-btn v-close-popup label="确定" color="primary" flat />
+                            </div>
+                        </q-popup-proxy>
+                    </q-icon>
+                </template>
+            </q-input>
+         </div>
+      </div>
+
       <!-- Vehicle Selection -->
       <div class="q-my-sm">
           <div class="text-subtitle1 q-mb-xs">车辆配置</div>
@@ -116,7 +144,8 @@ const selectedVehicle = ref(null)
 const form = reactive({
   origin: '福建省三明厦钨新能源',
   destination: '福建省平潭跨境电商园',
-  strategy: 0
+  strategy: 0,
+  departure_time: null
 })
 
 const strategyOptions = [

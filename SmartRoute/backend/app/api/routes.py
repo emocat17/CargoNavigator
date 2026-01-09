@@ -23,11 +23,13 @@ def calculate_fuel_cost(distance_m: int, traffic_lights: int) -> float:
     
     return round(fuel_needed * FUEL_PRICE, 2)
 
-def check_night_driving(duration_sec: int) -> bool:
+def check_night_driving(duration_sec: int, start_time: datetime = None) -> bool:
     """
     Check if the trip overlaps with Night Driving hours (02:00 - 05:00).
     """
-    start_time = datetime.now()
+    if start_time is None:
+        start_time = datetime.now()
+
     end_time = start_time + timedelta(seconds=duration_sec)
     
     # Check simple overlap
@@ -47,7 +49,7 @@ def is_coordinate(text: str) -> bool:
     # Simple regex to check if string is "lon,lat"
     return bool(re.match(r"^\d+(\.\d+)?,\d+(\.\d+)?$", text))
 
-def process_route_data(amap_res: dict, strategy_label: str) -> list[RouteInfo]:
+def process_route_data(amap_res: dict, strategy_label: str, departure_time: datetime = None) -> list[RouteInfo]:
     routes = []
     route_data = amap_res.get("route", {})
     paths = route_data.get("paths", [])
@@ -206,7 +208,7 @@ def process_route_data(amap_res: dict, strategy_label: str) -> list[RouteInfo]:
         total_cost_val = est_fuel + total_tolls
         
         route_tags = [strategy_label]
-        if check_night_driving(int(path.get("duration", 0))):
+        if check_night_driving(int(path.get("duration", 0)), departure_time):
             route_tags.append("夜间行车")
 
         routes.append(RouteInfo(
@@ -249,7 +251,16 @@ async def plan_route(request: RoutePlanRequest):
         if not coords:
             raise HTTPException(status_code=400, detail=f"无法解析终点地址: {destination}")
         destination = f"{coords[0]},{coords[1]}"
-        
+    
+    # Parse Departure Time
+    dep_time = None
+    if request.departure_time:
+        try:
+            dep_time = datetime.fromisoformat(request.departure_time)
+        except ValueError:
+            print(f"Invalid departure_time format: {request.departure_time}")
+            # Keep dep_time as None (current time)
+
     # 2. Call Amap API Concurrently (Multi-Strategy)
     # Strategies: 0(Speed), 1(Cost), 2(Distance), 9(Congestion)
     strategy_map = {
@@ -273,7 +284,7 @@ async def plan_route(request: RoutePlanRequest):
         if isinstance(res, dict) and res.get("status") == "1":
             strategy_label = strategy_map.get(strategies[i], "未知策略")
             try:
-                processed_routes = process_route_data(res, strategy_label)
+                processed_routes = process_route_data(res, strategy_label, dep_time)
                 all_routes.extend(processed_routes)
             except Exception as e:
                 print(f"Error processing strategy {strategies[i]}: {e}")
