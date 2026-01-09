@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
 from app.api.vehicle_routes import router as vehicle_router
+from app.api.application_routes import router as application_router
 from app.database import engine, Base
 from app.models import sql_models # Import models to register them
 
@@ -28,6 +29,7 @@ app.add_middleware(
 
 app.include_router(api_router, prefix="/api/v1")
 app.include_router(vehicle_router, prefix="/api/v1")
+app.include_router(application_router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():

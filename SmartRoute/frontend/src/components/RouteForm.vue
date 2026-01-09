@@ -85,44 +85,28 @@
          </div>
       </div>
 
-      <!-- Vehicle Selection -->
+      <!-- Task & Vehicle Configuration (Unified) -->
       <div class="q-my-sm">
-          <div class="text-subtitle1 q-mb-xs">车辆配置</div>
-          <q-card flat bordered class="bg-grey-1">
-              <q-card-section class="row items-center q-pa-sm">
-                  <div v-if="selectedVehicle" class="col">
-                      <div class="text-subtitle2">{{ selectedVehicle.name }}</div>
-                      <div class="text-caption text-grey-8">
-                          {{ selectedVehicle.length }}x{{ selectedVehicle.width }}x{{ selectedVehicle.height }}m | {{ selectedVehicle.total_weight }}吨 | {{ selectedVehicle.axis_count }}轴
-                      </div>
-                  </div>
-                  <div v-else class="col text-grey-7">
-                      请选择运输车辆以获取精准路线
-                  </div>
-                  <div class="col-auto">
-                      <q-btn flat round color="primary" icon="edit_note" @click="showVehicleManager = true">
-                          <q-tooltip>管理车辆档案</q-tooltip>
-                      </q-btn>
-                  </div>
-              </q-card-section>
-          </q-card>
-      </div>
-
-      <!-- Qualification Info Entry -->
-      <div class="q-my-sm">
-          <div class="text-subtitle1 q-mb-xs">通行资质预审信息</div>
+          <div class="text-subtitle1 q-mb-xs">运输任务与车辆配置</div>
           <q-card flat bordered class="bg-blue-1">
-              <q-card-section class="row items-center q-pa-sm">
-                  <div class="col text-grey-9">
-                      <div class="text-subtitle2">大件运输申请信息录入</div>
-                      <div class="text-caption">
-                          完善业户、货物及运输计划信息，用于资质预审
+              <q-card-section class="q-pa-sm">
+                  <div class="row items-center">
+                      <div class="col">
+                          <div class="text-subtitle2">任务详情配置</div>
+                          <div class="text-caption text-grey-9">
+                              <span v-if="hasValidVehicleData">
+                                  车辆: {{ applicationData.total_size_arr_str }}米 | {{ applicationData.total_weight }}吨 | {{ applicationData.axle_count }}轴
+                              </span>
+                              <span v-else>
+                                  请配置车辆及货物信息以获取精准路线
+                              </span>
+                          </div>
                       </div>
-                  </div>
-                  <div class="col-auto">
-                      <q-btn flat round color="primary" icon="assignment" @click="showQualificationManager = true">
-                          <q-tooltip>录入申请信息</q-tooltip>
-                      </q-btn>
+                      <div class="col-auto">
+                          <q-btn flat round color="primary" icon="edit_document" @click="showQualificationManager = true">
+                              <q-tooltip>编辑任务详情</q-tooltip>
+                          </q-btn>
+                      </div>
                   </div>
               </q-card-section>
           </q-card>
@@ -141,15 +125,22 @@
       </div>
     </q-form>
     
-    <VehicleProfileManager v-model="showVehicleManager" @select="onVehicleSelect" />
-    <QualificationManager v-model="showQualificationManager" :sync-source="{ vehicle: selectedVehicle, route: form }" />
+    <!-- VehicleProfileManager is removed/hidden as requested -->
+    <!-- <VehicleProfileManager v-model="showVehicleManager" @select="onVehicleSelect" /> -->
+    
+    <QualificationManager 
+        v-model="showQualificationManager" 
+        :sync-source="{ vehicle: null, route: form }"
+        :initial-data="applicationData"
+        @save="onApplicationSave"
+    />
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import VehicleProfileManager from './VehicleProfileManager.vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import QualificationManager from './QualificationManager.vue'
+// import VehicleProfileManager from './VehicleProfileManager.vue'
 
 const props = defineProps({
   loading: Boolean,
@@ -160,9 +151,36 @@ const props = defineProps({
 
 const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end'])
 
-const showVehicleManager = ref(false)
+// const showVehicleManager = ref(false)
 const showQualificationManager = ref(false)
-const selectedVehicle = ref(null)
+// const selectedVehicle = ref(null)
+
+const applicationData = reactive({
+    total_size_arr_str: '', 
+    total_weight: null,
+    axle_count: null,
+    axis_weights_str: '',
+    axis_distances_str: ''
+    // ... other fields if needed for display
+})
+
+const hasValidVehicleData = computed(() => {
+    return applicationData.total_size_arr_str && applicationData.total_weight
+})
+
+// Load initial data from localStorage to show summary immediately
+onMounted(() => {
+    const saved = localStorage.getItem('qualification_form_data')
+    if (saved) {
+        try {
+            Object.assign(applicationData, JSON.parse(saved))
+        } catch (e) {}
+    }
+})
+
+const onApplicationSave = (data) => {
+    Object.assign(applicationData, data)
+}
 
 const form = reactive({
   origin: '福建省三明厦钨新能源',
@@ -177,25 +195,36 @@ const strategyOptions = [
   { label: '距离优先', value: 2 }
 ]
 
-const onVehicleSelect = (vehicle) => {
-    selectedVehicle.value = vehicle
-}
+// const onVehicleSelect = (vehicle) => {
+//    selectedVehicle.value = vehicle
+// }
 
 const onSubmit = () => {
   const payload = { ...form }
-  if (selectedVehicle.value) {
+  
+  if (hasValidVehicleData.value) {
+      // Parse dimensions from string "L,W,H"
+      const dims = applicationData.total_size_arr_str.split(',').map(Number)
+      const length = dims[0] || 0
+      const width = dims[1] || 0
+      const height = dims[2] || 0
+      
       payload.vehicle = {
-          length: selectedVehicle.value.length,
-          width: selectedVehicle.value.width,
-          height: selectedVehicle.value.height,
-          weight: selectedVehicle.value.total_weight,
-          axis_weight: 10, // Default or calculate from axis_weights? Using simple placeholder for now or derive max.
-          // Note: Backend VehicleInfo expects specific fields. 
-          // axis_weight in Amap API is usually "heaviest axle load".
-          // We can calculate max(axis_weights) here.
-          axis_weight: Math.max(...(selectedVehicle.value.axis_weights || [0]))
+          length: length,
+          width: width,
+          height: height,
+          weight: applicationData.total_weight,
+          axis_count: applicationData.axle_count || 0,
+          // Default axis weight if not available
+          axis_weight: 10,
+          load_weights: applicationData.axis_weights_str ? applicationData.axis_weights_str.split(',').map(Number) : [],
+          axis_distances: applicationData.axis_distances_str ? applicationData.axis_distances_str.split(',').map(Number) : []
       }
+  } else {
+      // Fallback or Alert?
+      // For now, let backend handle missing vehicle or use defaults if allowed
   }
+  
   emit('plan-route', payload)
 }
 

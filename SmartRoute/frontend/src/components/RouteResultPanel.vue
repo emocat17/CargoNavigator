@@ -89,15 +89,25 @@
                             {{ selectedRoute.major_roads.join(' > ') }}
                         </div>
 
-                        <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7 wrap">
-                            <div v-if="selectedRoute.total_cost" class="row items-center text-teal-9 text-weight-bold">
-                                <q-icon name="payments" class="q-mr-xs"/> 预估总费用 ¥{{ selectedRoute.total_cost.toFixed(0) }} 
-                                <q-tooltip content-class="bg-teal text-white">
-                                    含油费估算 ¥{{ selectedRoute.estimated_fuel_cost }} + 路费 ¥{{ selectedRoute.toll_cost }}
-                                </q-tooltip>
+                        <div v-if="selectedRoute.total_cost" class="column q-mt-sm">
+                            <div class="row items-center text-teal-9 text-weight-bold text-subtitle1">
+                                <q-icon name="payments" class="q-mr-xs"/> 预估总费用 ¥{{ selectedRoute.total_cost.toFixed(0) }}
                             </div>
+                            <div class="row items-center text-caption text-grey-8 q-ml-sm q-mt-xs">
+                                <q-chip size="sm" color="orange-1" text-color="orange-9" icon="local_gas_station">
+                                    油费 ¥{{ selectedRoute.estimated_fuel_cost }}
+                                    <q-tooltip>
+                                        基于重卡平均油耗 (35L/100km) × 油价 (7.8元/L) 估算
+                                    </q-tooltip>
+                                </q-chip>
+                                <q-chip size="sm" color="blue-1" text-color="blue-9" icon="paid">
+                                    路费 ¥{{ selectedRoute.toll_cost }}
+                                </q-chip>
+                            </div>
+                        </div>
+
+                        <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7 wrap">
                             <div v-if="selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
-                            <div v-if="selectedRoute.toll_cost" class="row items-center"><q-icon name="paid" class="q-mr-xs"/> 仅路费 ¥{{ selectedRoute.toll_cost }}</div>
                             <div v-if="selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
                             <!-- New Tunnel Info -->
                             <div v-if="selectedRoute.tunnel_count > 0" class="row items-center text-brown-8 text-weight-medium">
