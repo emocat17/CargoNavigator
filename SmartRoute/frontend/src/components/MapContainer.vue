@@ -165,18 +165,16 @@ const drawPath = (pathPoints, steps) => {
     
     if (hasTmc) {
       hasTrafficData = true
-      console.log("Drawing route with traffic data...")
+      // console.log("Drawing route with traffic data...")
       
-      for (const step of steps) {
-        if (step.tmcs && step.tmcs.length > 0) {
-          for (const tmc of step.tmcs) {
-            const pathArr = parsePath(tmc.polyline)
-            if (pathArr.length === 0) continue
+      let currentPath = []
+      let currentStatus = null
 
-            const color = statusColors[tmc.status] || statusColors["未知"]
-            
+      const flushPath = () => {
+          if (currentPath.length > 0 && currentStatus) {
+            const color = statusColors[currentStatus] || statusColors["未知"]
             const polyline = new AMapObj.value.Polyline({
-              path: pathArr,
+              path: currentPath,
               isOutline: true,
               outlineColor: 'white',
               borderWeight: 1,
@@ -191,28 +189,43 @@ const drawPath = (pathPoints, steps) => {
             })
             polylinesToDraw.push(polyline)
           }
-        } else {
-          // Fallback for steps without TMCs (use step polyline)
-          const pathArr = parsePath(step.polyline)
-          if (pathArr.length > 0) {
-            const polyline = new AMapObj.value.Polyline({
-              path: pathArr,
-              isOutline: true,
-              outlineColor: 'white',
-              borderWeight: 1,
-              strokeColor: statusColors["未知"],
-              strokeOpacity: 1.0,
-              strokeWeight: 8,
-              strokeStyle: "solid",
-              lineJoin: 'round',
-              lineCap: 'round',
-              zIndex: 1000,
-              showDir: true,
-            })
-            polylinesToDraw.push(polyline)
-          }
-        }
       }
+
+      for (const step of steps) {
+        if (step.tmcs && step.tmcs.length > 0) {
+          for (const tmc of step.tmcs) {
+            const pathArr = parsePath(tmc.polyline)
+            if (pathArr.length === 0) continue
+
+            // If status changes, flush and start new
+            if (tmc.status !== currentStatus) {
+                flushPath()
+                currentStatus = tmc.status
+                currentPath = pathArr
+            } else {
+                 // Same status, append points
+                 // Optimization: Use push spread to avoid O(N^2) array copying
+                 currentPath.push(...pathArr)
+             }
+           }
+         } else {
+             // Step without TMCs - treat as "未知" or just break continuity?
+             // Usually we treat it as a segment.
+             const pathArr = parsePath(step.polyline)
+             if (pathArr.length > 0) {
+                 if (currentStatus !== "未知") {
+                     flushPath()
+                     currentStatus = "未知"
+                     currentPath = pathArr
+                 } else {
+                     currentPath.push(...pathArr)
+                 }
+             }
+         }
+      }
+      // Flush remaining
+      flushPath()
+
     }
   }
 

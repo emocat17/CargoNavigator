@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import MapContainer from './components/MapContainer.vue'
 import RouteForm from './components/RouteForm.vue'
 import RouteResultPanel from './components/RouteResultPanel.vue'
@@ -101,7 +101,7 @@ const amapSecurityCode = import.meta.env.VITE_AMAP_SECURITY_CODE
 
 const selectingStart = ref(false)
 const selectingEnd = ref(false)
-const routes = ref([])
+const routes = shallowRef([])
 const selectedRouteIndex = ref(0)
 const currentVehicle = ref(null)
 
