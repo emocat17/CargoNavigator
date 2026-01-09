@@ -302,6 +302,41 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             
         path_points_str = ";".join(full_polyline)
         
+        # Global City Deduplication (Unique Values + Specificity Upgrade)
+        cleaned_cities = []
+        for city in passed_cities_set:
+            base = city.split('(')[0]
+            should_add = True
+            
+            # Check against existing result to ensure uniqueness and handle upgrades
+            for i, existing in enumerate(cleaned_cities):
+                existing_base = existing.split('(')[0]
+                
+                # 1. Exact Match -> Ignore
+                if existing == city:
+                    should_add = False
+                    break
+                
+                # 2. Same Base Logic
+                if existing_base == base:
+                    current_has_district = '(' in city
+                    existing_has_district = '(' in existing
+                    
+                    if current_has_district and not existing_has_district:
+                        # Upgrade Generic to Specific (e.g. Sanming -> Sanming(Youxi))
+                        cleaned_cities[i] = city
+                        should_add = False
+                        break
+                        
+                    elif not current_has_district and existing_has_district:
+                        # Ignore Generic if Specific exists (e.g. Sanming(Youxi) -> Sanming)
+                        should_add = False
+                        break
+            
+            if should_add:
+                cleaned_cities.append(city)
+        passed_cities_set = cleaned_cities
+        
         # Convert Toll Details Temp to List[str]
         toll_roads_details = [f"{item['name']}: ¥{item['cost']:.2f}" for item in _toll_details_temp]
 
