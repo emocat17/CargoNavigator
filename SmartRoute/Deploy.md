@@ -13,7 +13,7 @@
 
 ## 2. 后端部署 (Backend)
 
-后端基于 FastAPI 框架开发。
+后端基于 FastAPI 框架开发，使用 SQLite 数据库。
 
 ### 2.1 进入后端目录
 ```bash
@@ -41,19 +41,21 @@ pip install -r requirements.txt
 ```
 
 ### 2.4 配置环境变量
-在 `SmartRoute/backend` 目录下创建一个 `.env` 文件（如果不存在），并配置高德地图 API Key：
+在 `SmartRoute/backend` 目录下创建一个 `.env` 文件（可复制 `.env.example`），并配置高德地图 API Key：
 
 ```ini
 # .env 文件内容
-AMAP_API_KEY=your_amap_api_key_here
+AMAP_API_KEY=your_backend_web_service_api_key
+DATABASE_URL=sqlite:///./data/cargo_navigator.db
 ```
-> **注意**: 请将 `your_amap_api_key_here` 替换为您申请的真实高德地图 Web 服务 Key。
+> **注意**: 后端使用的是高德地图 **Web 服务** Key，与前端使用的 JS API Key 不同。
 
 ### 2.5 启动后端服务
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 9876
+uvicorn app.main:app --reload --host 0.0.0.0 --port 9876
 ```
-启动成功后，访问 `http://localhost:9876/docs` 可查看 API 文档，访问 `http://localhost:9876/health` 可进行健康检查。
+启动成功后，访问 `http://localhost:9876/docs` 可查看 API 文档。
+数据库文件将自动生成在 `backend/data/` 目录下。
 
 ---
 
@@ -71,7 +73,21 @@ cd SmartRoute/frontend
 npm install
 ```
 
-### 3.3 启动开发服务器
+### 3.3 配置环境变量
+在 `SmartRoute/frontend` 目录下创建一个 `.env` 文件（可复制 `.env.example`）：
+
+```ini
+# 高德地图 JS API Key (Web端(JSAPI))
+VITE_AMAP_KEY=your_frontend_js_api_key
+
+# 高德地图安全密钥 (与 JS API Key 绑定)
+VITE_AMAP_SECURITY_CODE=your_security_code
+
+# 是否启用数据导出功能 (true/false)
+VITE_ENABLE_DATA_EXPORT=true
+```
+
+### 3.4 启动开发服务器
 ```bash
 npm run dev
 ```
@@ -88,8 +104,9 @@ npm run dev
 **修改启动命令:**
 在启动时通过 `--port` 参数指定新端口（例如 8000）：
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+> **注意**: 修改后端端口后，需要同步修改前端 `src/api/*.js` 中的请求 Base URL。
 
 ### 4.2 自定义前端端口
 默认前端运行在 `6789` 端口。
@@ -100,7 +117,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```javascript
 export default defineConfig({
   server: {
-    port: 6789, // 修改此处的数字为您想要的端口，例如 3000
+    port: 6789, // 修改此处的数字为您想要的端口
     host: '0.0.0.0'
   },
   // ... 其他配置
@@ -108,25 +125,37 @@ export default defineConfig({
 ```
 修改保存后，重新运行 `npm run dev` 即可生效。
 
-### 4.3 自定义高德地图 Key
-如果需要更换高德地图 Key，请修改后端目录下的 `.env` 文件：
-
-```ini
-AMAP_API_KEY=新的_API_KEY
-```
-修改后需要重启后端服务才能生效。
-
-### 4.4 跨域配置 (CORS)
-如果修改了前端或后端的端口，导致跨域问题，请检查后端 `main.py` 中的 CORS 配置：
+### 4.3 跨域配置 (CORS)
+如果修改了前端或后端的端口，导致跨域问题，请检查后端 `app/main.py` 中的 CORS 配置：
 
 ```python
-# SmartRoute/backend/main.py
+# SmartRoute/backend/app/main.py
+
+origins = [
+    "http://localhost",
+    "http://localhost:6789", # 前端端口
+    "http://localhost:9876", # 后端端口
+    "*"                      # 允许所有来源 (生产环境请修改)
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 生产环境建议修改为具体的域名或 IP，如 ["http://localhost:6789"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,
+    # ...
 )
+```
+
+## 5. 生产环境构建
+
+### 前端构建
+```bash
+cd SmartRoute/frontend
+npm run build
+```
+构建产物位于 `frontend/dist` 目录，可使用 Nginx 等 Web 服务器进行托管。
+
+### 后端部署
+建议使用 Gunicorn (Linux/macOS) 或 Uvicorn (Windows) 配合 Supervisor 或 Systemd 进行进程管理。
+```bash
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app
 ```
