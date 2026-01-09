@@ -49,7 +49,80 @@ def is_coordinate(text: str) -> bool:
     # Simple regex to check if string is "lon,lat"
     return bool(re.match(r"^\d+(\.\d+)?,\d+(\.\d+)?$", text))
 
-def process_route_data(amap_res: dict, strategy_label: str, departure_time: datetime = None) -> list[RouteInfo]:
+def deduplicate_redundant_points(points: list[str]) -> list[str]:
+    """
+    Advanced deduplication for route description.
+    Handles:
+    1. "沿" prefix redundancy.
+    2. Repeated road names separated by points (hubs/tolls).
+    3. Main Road vs Auxiliary Road redundancy.
+    """
+    if not points:
+        return []
+    
+    cleaned = []
+    last_road = None
+    
+    # Keywords that identify a "Point" (Node) rather than a "Road" (Edge)
+    point_keywords = ["枢纽", "互通", "收费站", "服务区", "立交", "出入口", "出口", "入口"]
+    
+    for p in points:
+        # 1. Clean "沿" prefix for comparison
+        core_p = p[1:] if p.startswith("沿") else p
+        
+        # 2. Basic "沿" Redundancy Check with immediate previous
+        if cleaned:
+            prev = cleaned[-1]
+            prev_core = prev[1:] if prev.startswith("沿") else prev
+            
+            # If current is just "沿" version of previous or vice versa
+            if core_p == prev_core:
+                # Prefer the one without "沿" if possible, or just keep previous?
+                # User prefers concise: "吉口互通" over "沿吉口互通"
+                if p.startswith("沿") and not prev.startswith("沿"):
+                    continue # Skip "沿X" if "X" exists
+                if not p.startswith("沿") and prev.startswith("沿"):
+                    cleaned[-1] = p # Replace "沿X" with "X"
+                    # Update last_road if we are replacing the road
+                    if not any(kw in p for kw in point_keywords):
+                        last_road = p
+                    continue
+                continue # Exact duplicate
+            
+            # Containment Check (e.g. "沿G1517...途径..." vs "G1517...")
+            # If prev is long "沿...途径..." and contains current (shorter/cleaner)
+            if prev.startswith("沿") and core_p in prev:
+                 cleaned[-1] = p
+                 # Update last_road if we are replacing the road
+                 if not any(kw in core_p for kw in point_keywords):
+                     last_road = core_p
+                 continue
+            # If current is long "沿...途径..." and contains prev
+            if p.startswith("沿") and prev_core in p:
+                 continue
+
+        # 3. Road vs Point Logic
+        is_point = any(kw in core_p for kw in point_keywords)
+        
+        if not is_point:
+            # It is treated as a Road (or generic location)
+            if last_road:
+                # Check for Exact Repetition (e.g. G1517 ... G1517)
+                if core_p == last_road:
+                    continue
+                
+                # Check for Auxiliary Road (e.g. XX大道 -> XX大道辅路)
+                if "辅路" in core_p and core_p.startswith(last_road):
+                    continue
+            
+            # Update last_road (Only update if it's a road/path)
+            last_road = core_p
+        
+        cleaned.append(p)
+            
+    return cleaned
+
+def process_route_data(amap_res: dict, strategy_label: str, departure_time: datetime = None, origin_label: str = "起点", destination_label: str = "终点") -> list[RouteInfo]:
     routes = []
     route_data = amap_res.get("route", {})
     paths = route_data.get("paths", [])
@@ -70,12 +143,60 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
         # Tunnel Stats
         tunnel_count = 0
         tunnel_distance = 0
+        
+        # Key Points Description Logic
+        key_points = [origin_label]
+        last_road = ""
+        
+        # Keywords to extract as points
+        point_keywords = ["枢纽", "收费站", "服务区", "互通", "界"]
 
         for step in path.get("steps", []):
             polyline = step.get("polyline", "")
             step_distance = int(step.get("distance", 0))
             road_name = step.get("road", "")
             instruction = step.get("instruction", "")
+            
+            # 1. Extract Points from Instructions
+            # Logic: If instruction contains keyword, extract the keyword phrase
+            # Simplification: Find the keyword and the 2 chars before/after, or use regex
+            # Better approach: Check if assistant_action has meaningful content
+            assistant_action = step.get("assistant_action", "")
+            if isinstance(assistant_action, list):
+                assistant_action = ";".join([str(a) for a in assistant_action])
+                
+            # Check for Key Points in assistant_action or instruction
+            current_point = ""
+            
+            # Helper to find keyword in text
+            def find_keyword(text):
+                for kw in point_keywords:
+                    if kw in text:
+                        # Try to extract the full name e.g. "东寨枢纽"
+                        # Simple regex: [\u4e00-\u9fa5A-Za-z0-9]+kw
+                        match = re.search(r'([\u4e00-\u9fa5A-Za-z0-9]+' + kw + ')', text)
+                        if match:
+                            return match.group(1)
+                return None
+
+            # Priority 1: Assistant Action (usually "到达XX枢纽")
+            extracted = find_keyword(assistant_action)
+            if not extracted:
+                # Priority 2: Instruction (usually "从XX枢纽出口离开")
+                extracted = find_keyword(instruction)
+            
+            if extracted:
+                # Avoid duplicates (e.g. adjacent steps mentioning same hub)
+                if key_points[-1] != extracted:
+                     key_points.append(extracted)
+            
+            # 2. Extract Road Names
+            if road_name and road_name != last_road:
+                # Add road if it's not the same as the last added item (which might be a point or road)
+                # Filter out Tunnels from description
+                if "隧道" not in road_name and key_points[-1] != road_name:
+                    key_points.append(road_name)
+                last_road = road_name
             
             # Extract Cities
             cities = step.get("cities", [])
@@ -105,9 +226,7 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             if isinstance(action, list):
                 action = ";".join([str(a) for a in action])
                 
-            assistant_action = step.get("assistant_action", "")
-            if isinstance(assistant_action, list):
-                assistant_action = ";".join([str(a) for a in assistant_action])
+            # assistant_action already processed above
             
             # Check for Tunnel
             # Heuristic: "隧道" in road name OR assistant_action contains "进入隧道" OR instruction contains "隧道"
@@ -210,6 +329,15 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
         route_tags = [strategy_label]
         if check_night_driving(int(path.get("duration", 0)), departure_time):
             route_tags.append("夜间行车")
+            
+        # Finalize Key Points
+        if key_points[-1] != destination_label:
+            key_points.append(destination_label)
+        
+        # Deduplicate redundant points
+        key_points = deduplicate_redundant_points(key_points)
+        
+        route_description = "--".join(key_points)
 
         routes.append(RouteInfo(
             id=str(idx + 1), # ID will be regenerated later
@@ -230,12 +358,17 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             tunnel_distance=tunnel_distance,
             estimated_fuel_cost=est_fuel,
             total_cost=total_cost_val,
-            tags=route_tags
+            tags=route_tags,
+            route_description=route_description
         ))
     return routes
 
 @router.post("/routes/plan", response_model=RoutePlanResponse)
 async def plan_route(request: RoutePlanRequest):
+    # Preserve original labels for description
+    origin_label = request.origin
+    destination_label = request.destination
+
     origin = request.origin
     destination = request.destination
     
@@ -245,12 +378,18 @@ async def plan_route(request: RoutePlanRequest):
         if not coords:
             raise HTTPException(status_code=400, detail=f"无法解析起点地址: {origin}")
         origin = f"{coords[0]},{coords[1]}"
+    else:
+        # If input is coordinate, keep it as label or try to use generic name?
+        # User requested "Replace with user input". If user input is coord, we use coord.
+        pass 
         
     if not is_coordinate(destination):
         coords = await AmapService.get_geo_code(destination)
         if not coords:
             raise HTTPException(status_code=400, detail=f"无法解析终点地址: {destination}")
         destination = f"{coords[0]},{coords[1]}"
+    else:
+        pass
     
     # Parse Departure Time
     dep_time = None
@@ -284,7 +423,13 @@ async def plan_route(request: RoutePlanRequest):
         if isinstance(res, dict) and res.get("status") == "1":
             strategy_label = strategy_map.get(strategies[i], "未知策略")
             try:
-                processed_routes = process_route_data(res, strategy_label, dep_time)
+                processed_routes = process_route_data(
+                    res, 
+                    strategy_label, 
+                    dep_time,
+                    origin_label=origin_label,
+                    destination_label=destination_label
+                )
                 all_routes.extend(processed_routes)
             except Exception as e:
                 print(f"Error processing strategy {strategies[i]}: {e}")

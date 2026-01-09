@@ -80,22 +80,28 @@
                 <!-- Detailed Stats Card -->
                 <q-card flat bordered class="bg-blue-1 text-primary q-mb-sm">
                     <q-card-section class="q-pa-sm">
-                        <div v-if="selectedRoute.major_roads && selectedRoute.major_roads.length" class="text-subtitle1 text-weight-bold ellipsis-2-lines q-mb-xs text-black">
+                        <!-- Route Description / Key Points -->
+                        <div v-if="selectedRoute.route_description" class="text-subtitle2 text-weight-bold text-black q-mb-xs">
+                            <q-icon name="map" class="q-mr-xs text-primary"/>
+                            {{ selectedRoute.route_description }}
+                        </div>
+                        <div v-else-if="selectedRoute.major_roads && selectedRoute.major_roads.length" class="text-subtitle1 text-weight-bold ellipsis-2-lines q-mb-xs text-black">
                             {{ selectedRoute.major_roads.join(' > ') }}
                         </div>
+
                         <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7 wrap">
                             <div v-if="selectedRoute.total_cost" class="row items-center text-teal-9 text-weight-bold">
-                                <q-icon name="payments" class="q-mr-xs"/> 总成本 ¥{{ selectedRoute.total_cost.toFixed(0) }} 
+                                <q-icon name="payments" class="q-mr-xs"/> 预估总费用 ¥{{ selectedRoute.total_cost.toFixed(0) }} 
                                 <q-tooltip content-class="bg-teal text-white">
                                     含油费估算 ¥{{ selectedRoute.estimated_fuel_cost }} + 路费 ¥{{ selectedRoute.toll_cost }}
                                 </q-tooltip>
                             </div>
                             <div v-if="selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
-                            <div v-if="selectedRoute.toll_cost" class="row items-center"><q-icon name="paid" class="q-mr-xs"/> 路费 ¥{{ selectedRoute.toll_cost }}</div>
+                            <div v-if="selectedRoute.toll_cost" class="row items-center"><q-icon name="paid" class="q-mr-xs"/> 仅路费 ¥{{ selectedRoute.toll_cost }}</div>
                             <div v-if="selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
                             <!-- New Tunnel Info -->
                             <div v-if="selectedRoute.tunnel_count > 0" class="row items-center text-brown-8 text-weight-medium">
-                                <q-icon name="landscape" class="q-mr-xs" /> 隧道{{ selectedRoute.tunnel_count }}个 ({{ (selectedRoute.tunnel_distance / 1000).toFixed(1) }}km)
+                                <q-icon name="landscape" class="q-mr-xs" /> 隧道{{ selectedRoute.tunnel_count }}个 (隧道总长 {{ (selectedRoute.tunnel_distance / 1000).toFixed(1) }}km)
                             </div>
                         </div>
                     </q-card-section>

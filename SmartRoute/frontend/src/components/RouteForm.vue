@@ -108,6 +108,26 @@
           </q-card>
       </div>
 
+      <!-- Qualification Info Entry -->
+      <div class="q-my-sm">
+          <div class="text-subtitle1 q-mb-xs">通行资质预审信息</div>
+          <q-card flat bordered class="bg-blue-1">
+              <q-card-section class="row items-center q-pa-sm">
+                  <div class="col text-grey-9">
+                      <div class="text-subtitle2">大件运输申请信息录入</div>
+                      <div class="text-caption">
+                          完善业户、货物及运输计划信息，用于资质预审
+                      </div>
+                  </div>
+                  <div class="col-auto">
+                      <q-btn flat round color="primary" icon="assignment" @click="showQualificationManager = true">
+                          <q-tooltip>录入申请信息</q-tooltip>
+                      </q-btn>
+                  </div>
+              </q-card-section>
+          </q-card>
+      </div>
+
       <div class="row justify-end">
         <q-btn 
             label="开始规划" 
@@ -122,12 +142,14 @@
     </q-form>
     
     <VehicleProfileManager v-model="showVehicleManager" @select="onVehicleSelect" />
+    <QualificationManager v-model="showQualificationManager" :sync-source="{ vehicle: selectedVehicle, route: form }" />
   </div>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue'
 import VehicleProfileManager from './VehicleProfileManager.vue'
+import QualificationManager from './QualificationManager.vue'
 
 const props = defineProps({
   loading: Boolean,
@@ -139,6 +161,7 @@ const props = defineProps({
 const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end'])
 
 const showVehicleManager = ref(false)
+const showQualificationManager = ref(false)
 const selectedVehicle = ref(null)
 
 const form = reactive({

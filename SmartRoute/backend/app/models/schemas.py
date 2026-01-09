@@ -51,7 +51,7 @@ class RouteInfo(BaseModel):
     estimated_fuel_cost: float = 0.0
     total_cost: float = 0.0
     tags: List[str] = []
-
+    route_description: str = Field("", description="路线关键点描述 (如: 起点--G15--XX枢纽--终点)")
 
 class RoutePlanResponse(BaseModel):
     code: int = 200
