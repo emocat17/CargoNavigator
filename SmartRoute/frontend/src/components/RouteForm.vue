@@ -57,6 +57,29 @@
          </div>
       </div>
 
+      <!-- Vehicle Selection -->
+      <div class="q-my-sm">
+          <div class="text-subtitle1 q-mb-xs">车辆配置</div>
+          <q-card flat bordered class="bg-grey-1">
+              <q-card-section class="row items-center q-pa-sm">
+                  <div v-if="selectedVehicle" class="col">
+                      <div class="text-subtitle2">{{ selectedVehicle.name }}</div>
+                      <div class="text-caption text-grey-8">
+                          {{ selectedVehicle.length }}x{{ selectedVehicle.width }}x{{ selectedVehicle.height }}m | {{ selectedVehicle.total_weight }}吨 | {{ selectedVehicle.axis_count }}轴
+                      </div>
+                  </div>
+                  <div v-else class="col text-grey-7">
+                      请选择运输车辆以获取精准路线
+                  </div>
+                  <div class="col-auto">
+                      <q-btn flat round color="primary" icon="edit_note" @click="showVehicleManager = true">
+                          <q-tooltip>管理车辆档案</q-tooltip>
+                      </q-btn>
+                  </div>
+              </q-card-section>
+          </q-card>
+      </div>
+
       <q-select
         filled
         v-model="form.strategy"
@@ -158,11 +181,14 @@
             </q-scroll-area>
         </div>
     </q-slide-transition>
+    
+    <VehicleProfileManager v-model="showVehicleManager" @select="onVehicleSelect" />
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import VehicleProfileManager from './VehicleProfileManager.vue'
 
 const props = defineProps({
   loading: Boolean,
@@ -172,6 +198,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end'])
+
+const showVehicleManager = ref(false)
+const selectedVehicle = ref(null)
 
 const form = reactive({
   origin: '福建省三明厦钨新能源',
@@ -185,8 +214,26 @@ const strategyOptions = [
   { label: '距离优先', value: 2 }
 ]
 
+const onVehicleSelect = (vehicle) => {
+    selectedVehicle.value = vehicle
+}
+
 const onSubmit = () => {
-  emit('plan-route', { ...form })
+  const payload = { ...form }
+  if (selectedVehicle.value) {
+      payload.vehicle = {
+          length: selectedVehicle.value.length,
+          width: selectedVehicle.value.width,
+          height: selectedVehicle.value.height,
+          weight: selectedVehicle.value.total_weight,
+          axis_weight: 10, // Default or calculate from axis_weights? Using simple placeholder for now or derive max.
+          // Note: Backend VehicleInfo expects specific fields. 
+          // axis_weight in Amap API is usually "heaviest axle load".
+          // We can calculate max(axis_weights) here.
+          axis_weight: Math.max(...(selectedVehicle.value.axis_weights || [0]))
+      }
+  }
+  emit('plan-route', payload)
 }
 
 const setAddress = (type, val) => {
