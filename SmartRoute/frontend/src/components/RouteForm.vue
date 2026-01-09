@@ -112,16 +112,39 @@
           </q-card>
       </div>
 
-      <div class="row justify-end">
+      <!-- Route Count Selector -->
+      <div class="row q-col-gutter-sm q-mt-xs">
+        <div class="col-12">
+          <div class="text-caption text-grey-8 q-mb-xs">期望路线方案数 ({{ routeCount }})</div>
+          <q-slider
+            v-model="routeCount"
+            :min="1"
+            :max="5"
+            :step="1"
+            label
+            label-always
+            color="primary"
+            markers
+          />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="row q-mt-md">
         <q-btn 
-            label="开始规划" 
-            type="submit" 
+            unelevated
             color="primary" 
-            :loading="loading" 
-            class="full-width text-subtitle1"
+            label="开始规划" 
+            class="full-width" 
             size="lg"
-            icon="directions"
-        />
+            :loading="loading"
+            @click="onSubmit"
+        >
+            <template v-slot:loading>
+                <q-spinner-dots class="on-left" />
+                计算中...
+            </template>
+        </q-btn>
       </div>
     </q-form>
     
@@ -153,6 +176,7 @@ const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-en
 
 // const showVehicleManager = ref(false)
 const showQualificationManager = ref(false)
+const routeCount = ref(3)
 // const selectedVehicle = ref(null)
 
 const applicationData = reactive({
@@ -200,7 +224,7 @@ const strategyOptions = [
 // }
 
 const onSubmit = () => {
-  const payload = { ...form }
+  const payload = { ...form, route_count: routeCount.value }
   
   if (hasValidVehicleData.value) {
       // Parse dimensions from string "L,W,H"

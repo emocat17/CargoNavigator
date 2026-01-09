@@ -75,7 +75,7 @@ Test/*.txt
 Test/frontend_snapshot*.txt
 
 # SmartRoute Specific
-SmartRoute/backend/.env
+# SmartRoute/backend/.env
 SmartRoute/backend/venv/
 SmartRoute/frontend/dist/
 SmartRoute/frontend/.quasar/

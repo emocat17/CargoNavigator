@@ -393,12 +393,13 @@ async def plan_route(request: RoutePlanRequest):
     
     # Parse Departure Time
     dep_time = None
+    target_count = request.route_count
+
     if request.departure_time:
         try:
             dep_time = datetime.fromisoformat(request.departure_time)
-        except ValueError:
-            print(f"Invalid departure_time format: {request.departure_time}")
-            # Keep dep_time as None (current time)
+        except:
+            pass
 
     # 2. Call Amap API Concurrently (Multi-Strategy)
     # Strategies: 0(Speed), 1(Cost), 2(Distance), 9(Congestion)
@@ -460,6 +461,12 @@ async def plan_route(request: RoutePlanRequest):
                     existing.tags.insert(0, new_tag) # Insert at start
                     # Update strategy string to reflect multi-strategy
                     existing.strategy += f"/{r.strategy}"
+    
+    # Limit to requested count
+    # Sort by a simple heuristic? For now, just slice.
+    # Usually "Speed" (Strategy 0) comes first, which is often the best.
+    if len(unique_routes) > target_count:
+        unique_routes = unique_routes[:target_count]
 
     return RoutePlanResponse(data={"routes": unique_routes})
 

@@ -163,7 +163,8 @@ const handlePlanRoute = async (formData) => {
       destination: formData.destination,
       // strategy: formData.strategy, // Backend ignores strategy now
       vehicle: currentVehicle.value,
-      departure_time: formData.departure_time
+      departure_time: formData.departure_time,
+      route_count: formData.route_count
     })
 
     if (response.data.code === 200) {
