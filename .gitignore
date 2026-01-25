@@ -79,3 +79,4 @@ Test/frontend_snapshot*.txt
 SmartRoute/backend/venv/
 SmartRoute/frontend/dist/
 SmartRoute/frontend/.quasar/
+.trae/rules/rule.md
