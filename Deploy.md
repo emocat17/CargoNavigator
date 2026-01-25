@@ -2,6 +2,18 @@
 
 本文档详细说明了 SmartRoute 系统的源码部署、启动步骤以及自定义配置方法。
 
+```bash
+```bash
+cd backend
+uvicorn app.main:app --reload --host 0.0.0.0 --port 9876
+
+
+cd frontend
+npm install
+npm run dev
+```
+
+```
 ## 1. 环境准备
 
 在开始部署之前，请确保您的开发环境满足以下要求：
