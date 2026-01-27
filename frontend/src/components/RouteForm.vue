@@ -94,7 +94,7 @@
       </div>
       
       <!-- Add Waypoint Button -->
-      <div class="row q-mb-md">
+      <div class="row q-mb-md" v-if="enableWaypoints">
           <q-btn flat dense color="primary" icon="add" label="添加途经点" @click="addWaypoint" size="sm" />
       </div>
 

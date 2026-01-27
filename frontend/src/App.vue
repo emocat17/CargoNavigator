@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleDrawer" />
         <q-toolbar-title>
-          SmartRoute (大型货车智能选线)
+          大件运输智能选线
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

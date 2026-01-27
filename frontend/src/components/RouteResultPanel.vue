@@ -38,9 +38,9 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label class="text-weight-bold">{{ formatDuration(route.duration) }}</q-item-label>
+            <q-item-label v-if="enableCostTimeDisplay" class="text-weight-bold">{{ formatDuration(route.duration) }}</q-item-label>
             <q-item-label caption>
-              {{ (route.distance / 1000).toFixed(1) }}km | ¥{{ route.total_cost.toFixed(0) }}
+              {{ (route.distance / 1000).toFixed(1) }}km<span v-if="enableCostTimeDisplay"> | ¥{{ route.total_cost.toFixed(0) }}</span>
             </q-item-label>
           </q-item-section>
 
@@ -59,7 +59,7 @@
     <!-- Detail View Area -->
     <div class="col column" style="overflow: hidden;" v-if="selectedRoute">
         <!-- Warnings -->
-        <div class="col-auto q-mb-sm">
+        <div class="col-auto q-mb-sm" v-if="enableCostTimeDisplay || enableNightWarning">
             <q-banner v-if="selectedRoute.duration > 14400" rounded class="bg-red-1 text-red-9 q-mb-xs dense">
             <template v-slot:avatar>
                 <q-icon name="warning" color="red" />
@@ -67,7 +67,7 @@
             <div class="text-caption text-weight-bold">长途驾驶提醒：预计车程超过4小时，请注意休息。</div>
             </q-banner>
 
-            <q-banner v-if="selectedRoute.tags && selectedRoute.tags.includes('夜间行车')" rounded class="bg-indigo-1 text-indigo-10 q-mb-xs dense">
+            <q-banner v-if="enableNightWarning && selectedRoute.tags && selectedRoute.tags.includes('夜间行车')" rounded class="bg-indigo-1 text-indigo-10 q-mb-xs dense">
             <template v-slot:avatar>
                 <q-icon name="nights_stay" color="indigo" />
             </template>
@@ -89,7 +89,7 @@
                             {{ selectedRoute.major_roads.join(' > ') }}
                         </div>
 
-                        <div v-if="selectedRoute.total_cost" class="column q-mt-sm">
+                        <div v-if="enableCostTimeDisplay && selectedRoute.total_cost" class="column q-mt-sm">
                             <div class="row items-center text-teal-9 text-weight-bold text-subtitle1">
                                 <q-icon name="payments" class="q-mr-xs"/> 预估总费用 ¥{{ selectedRoute.total_cost.toFixed(0) }}
                             </div>
@@ -107,8 +107,8 @@
                         </div>
 
                         <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7 wrap">
-                            <div v-if="selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
-                            <div v-if="selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
+                            <div v-if="enableCostTimeDisplay && selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
+                            <div v-if="enableCostTimeDisplay && selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
                             <!-- New Tunnel Info -->
                             <div v-if="selectedRoute.tunnel_count > 0" class="row items-center text-brown-8 text-weight-medium">
                                 <q-icon name="landscape" class="q-mr-xs" /> 隧道{{ selectedRoute.tunnel_count }}个 (隧道总长 {{ (selectedRoute.tunnel_distance / 1000).toFixed(1) }}km)
@@ -139,7 +139,7 @@
                 </div>
 
                 <!-- 收费详情 -->
-                <div v-if="selectedRoute.toll_roads_details && selectedRoute.toll_roads_details.length" class="q-mb-sm">
+                <div v-if="enableCostTimeDisplay && selectedRoute.toll_roads_details && selectedRoute.toll_roads_details.length" class="q-mb-sm">
                     <q-expansion-item
                         expand-separator
                         icon="toll"
@@ -240,6 +240,8 @@ const emit = defineEmits(['close', 'select-route'])
 const $q = useQuasar()
 
 const enableExport = import.meta.env.VITE_ENABLE_DATA_EXPORT === 'true'
+const enableCostTimeDisplay = import.meta.env.VITE_ENABLE_COST_TIME_DISPLAY !== 'false'
+const enableNightWarning = import.meta.env.VITE_ENABLE_NIGHT_WARNING !== 'false'
 
 const selectedRoute = computed(() => {
     if (!props.routes || props.routes.length === 0) return null
