@@ -274,12 +274,11 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
                 step_risk_tags.append("长距离路段")
                 has_long_segment = True
 
-            # Populate new Step fields
             tmcs_data = []
             tmcs_list = step.get("tmcs", [])
             step_traffic_status = "未知"
+            step_duration = int(step.get("duration", 0))
             
-            # Determine Step Traffic Status (Worst case)
             has_congestion = False
             has_slow = False
             has_clear = False
@@ -289,13 +288,11 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
                     status = str(tmc.get("status", "未知"))
                     tmc_dist = int(tmc.get("distance", 0))
                     
-                    # Update Global Stats
                     if status in traffic_stats:
                         traffic_stats[status] += tmc_dist
                     else:
                         traffic_stats["未知"] += tmc_dist
                         
-                    # Update Step Status Flags
                     if status == "拥堵":
                         has_congestion = True
                     elif status == "缓行":
@@ -312,7 +309,6 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
                     except Exception as e:
                         print(f"Error parsing TMC: {e}, Data: {tmc}")
             else:
-                # Fallback if no tmcs
                 traffic_stats["未知"] += step_distance
             
             if has_congestion:
@@ -322,19 +318,44 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             elif has_clear:
                 step_traffic_status = "畅通"
 
-            steps.append(RouteStep(
-                instruction=instruction,
-                distance=step_distance,
-                duration=int(step.get("duration", 0)),
-                polyline=polyline,
-                road=road_name,
-                action=action,
-                assistant_action=assistant_action,
-                tmcs=tmcs_data,
-                traffic_status=step_traffic_status,
-                risk_tags=step_risk_tags
-            ))
-            full_polyline.append(polyline)
+            should_split = step_distance >= 3000 and len(tmcs_data) > 1
+            if should_split:
+                for tmc_index, tmc in enumerate(tmcs_data):
+                    sub_distance = int(tmc.distance or 0)
+                    sub_duration = 0
+                    if step_distance > 0:
+                        sub_duration = int(step_duration * (sub_distance / step_distance))
+                    sub_instruction = instruction
+                    if len(tmcs_data) > 1:
+                        sub_instruction = f"{instruction}（分段{tmc_index + 1}/{len(tmcs_data)}）"
+                    sub_risk_tags = step_risk_tags if tmc_index == 0 else []
+                    steps.append(RouteStep(
+                        instruction=sub_instruction,
+                        distance=sub_distance,
+                        duration=sub_duration,
+                        polyline=tmc.polyline,
+                        road=road_name,
+                        action=action,
+                        assistant_action=assistant_action,
+                        tmcs=[tmc],
+                        traffic_status=tmc.status,
+                        risk_tags=sub_risk_tags
+                    ))
+                    full_polyline.append(tmc.polyline)
+            else:
+                steps.append(RouteStep(
+                    instruction=instruction,
+                    distance=step_distance,
+                    duration=step_duration,
+                    polyline=polyline,
+                    road=road_name,
+                    action=action,
+                    assistant_action=assistant_action,
+                    tmcs=tmcs_data,
+                    traffic_status=step_traffic_status,
+                    risk_tags=step_risk_tags
+                ))
+                full_polyline.append(polyline)
             
             # Road Stats
             if road_name:
