@@ -32,6 +32,7 @@ class RouteStep(BaseModel):
     assistant_action: str = ""
     tmcs: List[TMC] = []
     traffic_status: str = "未知" # 畅通, 缓行, 拥堵, 未知
+    risk_tags: List[str] = []
 
 class RouteInfo(BaseModel):
     id: str
@@ -54,6 +55,7 @@ class RouteInfo(BaseModel):
     total_cost: float = 0.0
     tags: List[str] = []
     route_description: str = Field("", description="路线关键点描述 (如: 起点--G15--XX枢纽--终点)")
+    risk_warnings: List[str] = []
 
 class RoutePlanResponse(BaseModel):
     code: int = 200

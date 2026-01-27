@@ -143,6 +143,13 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
         # Tunnel Stats
         tunnel_count = 0
         tunnel_distance = 0
+        bridge_count = 0
+        turn_count = 0
+        has_down_slope = False
+        has_mountain_bend = False
+        has_small_radius = False
+        has_single_pier = False
+        has_long_segment = False
         
         # Key Points Description Logic
         key_points = [origin_label]
@@ -234,6 +241,38 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             if is_tunnel:
                 tunnel_count += 1
                 tunnel_distance += step_distance
+            
+            # Bridge count heuristic
+            if "桥" in road_name:
+                bridge_count += 1
+            bridge_count += assistant_action.count("桥")
+            bridge_count += instruction.count("桥")
+            
+            # Turn/bend density heuristic
+            if any(k in action for k in ["左转", "右转", "向左前方", "向右前方", "掉头"]):
+                turn_count += 1
+            
+            risk_text = f"{road_name}{instruction}{assistant_action}{action}"
+            step_risk_tags = []
+
+            if any(k in risk_text for k in ["长下坡", "长陡坡", "陡坡", "下坡"]):
+                step_risk_tags.append("长陡下坡")
+                has_down_slope = True
+
+            if "小半径" in risk_text:
+                step_risk_tags.append("小半径弯道")
+                has_small_radius = True
+            elif any(k in risk_text for k in ["山路", "盘山", "急弯", "连续弯", "多弯", "弯道"]):
+                step_risk_tags.append("山路急弯")
+                has_mountain_bend = True
+
+            if any(k in risk_text for k in ["独柱墩", "单柱墩"]):
+                step_risk_tags.append("独柱墩桥梁")
+                has_single_pier = True
+
+            if step_distance >= 10000:
+                step_risk_tags.append("长距离路段")
+                has_long_segment = True
 
             # Populate new Step fields
             tmcs_data = []
@@ -292,7 +331,8 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
                 action=action,
                 assistant_action=assistant_action,
                 tmcs=tmcs_data,
-                traffic_status=step_traffic_status
+                traffic_status=step_traffic_status,
+                risk_tags=step_risk_tags
             ))
             full_polyline.append(polyline)
             
@@ -373,6 +413,23 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
         key_points = deduplicate_redundant_points(key_points)
         
         route_description = "--".join(key_points)
+        
+        # Risk warnings synthesis
+        risk_warnings = []
+        if tunnel_count >= 3 or tunnel_distance >= 3000:
+            risk_warnings.append("隧道群提醒")
+        if bridge_count >= 10:
+            risk_warnings.append("桥梁密集提醒")
+        if has_down_slope:
+            risk_warnings.append("长陡下坡提醒")
+        if turn_count >= 20:
+            risk_warnings.append("弯道密集提醒")
+        if has_mountain_bend:
+            risk_warnings.append("山路急弯提醒")
+        if has_small_radius:
+            risk_warnings.append("小半径弯道提醒")
+        if has_single_pier:
+            risk_warnings.append("独柱墩桥梁提醒")
 
         routes.append(RouteInfo(
             id=str(idx + 1), # ID will be regenerated later
@@ -394,7 +451,8 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
             estimated_fuel_cost=est_fuel,
             total_cost=total_cost_val,
             tags=route_tags,
-            route_description=route_description
+            route_description=route_description,
+            risk_warnings=risk_warnings
         ))
     return routes
 
@@ -523,4 +581,3 @@ async def plan_route(request: RoutePlanRequest):
         unique_routes = unique_routes[:target_count]
 
     return RoutePlanResponse(data={"routes": unique_routes})
-

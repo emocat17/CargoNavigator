@@ -38,9 +38,9 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label v-if="enableCostTimeDisplay" class="text-weight-bold">{{ formatDuration(route.duration) }}</q-item-label>
+            <q-item-label v-if="enableTimeDisplay" class="text-weight-bold">{{ formatDuration(route.duration) }}</q-item-label>
             <q-item-label caption>
-              {{ (route.distance / 1000).toFixed(1) }}km<span v-if="enableCostTimeDisplay"> | ¥{{ route.total_cost.toFixed(0) }}</span>
+              {{ (route.distance / 1000).toFixed(1) }}km<span v-if="enableCostDisplay"> | ¥{{ route.total_cost.toFixed(0) }}</span>
             </q-item-label>
           </q-item-section>
 
@@ -48,6 +48,8 @@
             <div class="row q-gutter-xs justify-end" style="max-width: 120px; flex-wrap: wrap;">
                <q-badge v-for="tag in (route.tags || []).slice(0, 2)" :key="tag" color="teal" outline :label="tag" class="q-mb-xs" />
                <q-badge v-if="(route.tags || []).length > 2" color="teal" outline label="..." />
+               <q-badge v-for="warn in (route.risk_warnings || []).slice(0, 2)" :key="warn" color="orange" outline :label="warn" class="q-mb-xs" />
+               <q-badge v-if="(route.risk_warnings || []).length > 2" color="orange" outline label="..." />
             </div>
           </q-item-section>
         </q-item>
@@ -59,8 +61,8 @@
     <!-- Detail View Area -->
     <div class="col column" style="overflow: hidden;" v-if="selectedRoute">
         <!-- Warnings -->
-        <div class="col-auto q-mb-sm" v-if="enableCostTimeDisplay || enableNightWarning">
-            <q-banner v-if="selectedRoute.duration > 14400" rounded class="bg-red-1 text-red-9 q-mb-xs dense">
+        <div class="col-auto q-mb-sm" v-if="enableTimeDisplay || enableNightWarning">
+            <q-banner v-if="enableTimeDisplay && selectedRoute.duration > 14400" rounded class="bg-red-1 text-red-9 q-mb-xs dense">
             <template v-slot:avatar>
                 <q-icon name="warning" color="red" />
             </template>
@@ -72,6 +74,18 @@
                 <q-icon name="nights_stay" color="indigo" />
             </template>
             <div class="text-caption text-weight-bold">夜间行车提醒：预计行程包含深夜时段(2:00-5:00)，视线不佳请减速慢行。</div>
+            </q-banner>
+
+            <q-banner v-if="selectedRoute.risk_warnings && selectedRoute.risk_warnings.length" rounded class="bg-orange-1 text-orange-10 q-mb-xs dense">
+              <template v-slot:avatar>
+                  <q-icon name="report_problem" color="orange" />
+              </template>
+              <div class="row items-center">
+                <div class="text-caption text-weight-bold q-mr-sm">风险提示：</div>
+                <div class="row q-gutter-xs">
+                  <q-chip v-for="w in selectedRoute.risk_warnings" :key="w" size="sm" color="orange-2" text-color="orange-10" icon="priority_high">{{ w }}</q-chip>
+                </div>
+              </div>
             </q-banner>
         </div>
 
@@ -89,7 +103,7 @@
                             {{ selectedRoute.major_roads.join(' > ') }}
                         </div>
 
-                        <div v-if="enableCostTimeDisplay && selectedRoute.total_cost" class="column q-mt-sm">
+                        <div v-if="enableCostDisplay && selectedRoute.total_cost" class="column q-mt-sm">
                             <div class="row items-center text-teal-9 text-weight-bold text-subtitle1">
                                 <q-icon name="payments" class="q-mr-xs"/> 预估总费用 ¥{{ selectedRoute.total_cost.toFixed(0) }}
                             </div>
@@ -107,8 +121,8 @@
                         </div>
 
                         <div class="row q-gutter-x-md q-mt-sm text-caption text-grey-7 wrap">
-                            <div v-if="enableCostTimeDisplay && selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
-                            <div v-if="enableCostTimeDisplay && selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
+                            <div v-if="enableTimeDisplay && selectedRoute.traffic_lights" class="row items-center"><q-icon name="traffic" class="q-mr-xs"/> {{ selectedRoute.traffic_lights }}红绿灯</div>
+                            <div v-if="enableTimeDisplay && selectedRoute.traffic_condition" class="row items-center"><q-icon name="assessment" class="q-mr-xs"/> {{ selectedRoute.traffic_condition }}</div>
                             <!-- New Tunnel Info -->
                             <div v-if="selectedRoute.tunnel_count > 0" class="row items-center text-brown-8 text-weight-medium">
                                 <q-icon name="landscape" class="q-mr-xs" /> 隧道{{ selectedRoute.tunnel_count }}个 (隧道总长 {{ (selectedRoute.tunnel_distance / 1000).toFixed(1) }}km)
@@ -139,7 +153,7 @@
                 </div>
 
                 <!-- 收费详情 -->
-                <div v-if="enableCostTimeDisplay && selectedRoute.toll_roads_details && selectedRoute.toll_roads_details.length" class="q-mb-sm">
+                <div v-if="enableCostDisplay && selectedRoute.toll_roads_details && selectedRoute.toll_roads_details.length" class="q-mb-sm">
                     <q-expansion-item
                         expand-separator
                         icon="toll"
@@ -186,6 +200,7 @@
                             <q-item-label class="text-subtitle1">
                                 {{ step.instruction }}
                                 <q-badge v-if="isTunnel(step)" color="brown" label="隧道" class="q-ml-sm" outline size="sm" />
+                                <q-badge v-for="tag in (step.risk_tags || [])" :key="tag" color="red" :label="tag" class="q-ml-xs" outline size="sm" />
                             </q-item-label>
                             <q-item-label caption v-if="step.road" class="text-primary text-weight-medium q-mt-xs text-body2 row items-center">
                                 <q-icon name="place" size="xs" class="q-mr-xs" />{{ step.road }}
@@ -193,6 +208,13 @@
                             <!-- Assistant Action -->
                             <q-item-label caption v-if="step.assistant_action" class="text-orange-9 text-weight-medium q-mt-xs text-body2 row items-center">
                                 <q-icon name="info_outline" size="xs" class="q-mr-xs" />{{ step.assistant_action }}
+                            </q-item-label>
+                            <q-item-label caption v-if="showTmcDetails(step)" class="q-mt-xs text-body2 row items-center">
+                              <div class="row q-gutter-xs">
+                                <q-chip v-for="(tmc, tIndex) in step.tmcs" :key="tIndex" size="xs" :color="getTrafficColor(tmc.status)" text-color="white">
+                                  {{ tmc.status }} {{ tmc.distance }}米
+                                </q-chip>
+                              </div>
                             </q-item-label>
                         </q-item-section>
                         
@@ -240,7 +262,8 @@ const emit = defineEmits(['close', 'select-route'])
 const $q = useQuasar()
 
 const enableExport = import.meta.env.VITE_ENABLE_DATA_EXPORT === 'true'
-const enableCostTimeDisplay = import.meta.env.VITE_ENABLE_COST_TIME_DISPLAY !== 'false'
+const enableTimeDisplay = import.meta.env.VITE_ENABLE_TIME_DISPLAY !== 'false'
+const enableCostDisplay = import.meta.env.VITE_ENABLE_COST_DISPLAY !== 'false'
 const enableNightWarning = import.meta.env.VITE_ENABLE_NIGHT_WARNING !== 'false'
 
 const selectedRoute = computed(() => {
@@ -323,5 +346,9 @@ const getTrafficBg = (status) => {
 
 const isTunnel = (step) => {
     return step.road && (step.road.includes('隧道') || step.instruction.includes('隧道'))
+}
+
+const showTmcDetails = (step) => {
+    return step && step.tmcs && step.tmcs.length > 1 && step.distance >= 5000
 }
 </script>
