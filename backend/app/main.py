@@ -9,6 +9,7 @@ from app.api.assessment_routes import router as assessment_router
 from app.api.permit_routes import router as permit_router
 from app.api.survey_routes import router as survey_router
 from app.api.tracking_routes import router as tracking_router
+from app.api.monitor_routes import router as monitor_router
 from app.database import engine, Base
 from app.models import sql_models  # Import models to register them
 from app.models import chat_models  # Import chat models to register them for table creation
@@ -53,6 +54,7 @@ app.include_router(assessment_router, prefix="/api/v1")
 app.include_router(permit_router, prefix="/api/v1")
 app.include_router(survey_router, prefix="/api/v1")
 app.include_router(tracking_router, prefix="/api/v1")
+app.include_router(monitor_router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():
