@@ -97,6 +97,7 @@
 import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
+import { sharedStore, selectedRoute } from '../store/index.js'
 import VehicleWizard from './VehicleWizard.vue'
 import RouteCompare from './RouteCompare.vue'
 
@@ -110,7 +111,7 @@ const props = defineProps({
 })
 
 // 表单
-const form = reactive({ origin: '', destination: '' })
+const form = reactive({ origin: '福建省三明厦钨新能源', destination: '福建省平潭跨境电商园' })
 const vehicle = reactive({ length: 25, width: 3.5, height: 4.5, total_weight: 80, axis_weight: 15, axis_count: 6 })
 const panelCollapsed = ref(false)
 const planning = ref(false)
@@ -183,6 +184,10 @@ async function doPlanRoute() {
       routeResults.value = data.data.routes
       selectedIdx.value = 0
       assessment.value = null
+      // 保存到全局共享状态（供运输管理/数字档案使用）
+      sharedStore.routes = data.data.routes.map(r => ({...r, _origin: form.origin, _destination: form.destination}))
+      sharedStore.selectedIdx = 0
+      sharedStore.vehicle = {...vehicle}
       await nextTick()
       drawRoutesOnMap()
     } else {
@@ -196,6 +201,7 @@ async function doPlanRoute() {
 
 function selectRoute(i) {
   selectedIdx.value = i
+  sharedStore.selectedIdx = i
   drawRoutesOnMap()
 }
 
@@ -237,6 +243,7 @@ async function doAssess() {
       vehicle_info: { length: vehicle.length, width: vehicle.width, height: vehicle.height, total_weight: vehicle.total_weight, axis_weight: vehicle.axis_weight, axis_count: vehicle.axis_count }
     })
     assessment.value = data
+    sharedStore.assessment = data
     if (data.code === 200) {
       addBridgeMarkers(data.data)
       $q.notify({ type: 'positive', message: `评估完成: ${data.data.overall_assessment?.risk_level || '?'} · ${data.data.overall_assessment?.score}/10` })

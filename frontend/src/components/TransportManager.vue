@@ -94,6 +94,7 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
+import { sharedStore, selectedRoute, getRoutePolyline } from '../store/index.js'
 import { getOrders, updateOrderStatus } from '@/api/tracking'
 import { startMonitoring, getStreamUrl, stopMonitoring } from '@/api/monitor'
 
@@ -129,10 +130,34 @@ async function loadOrders() {
 async function createTestOrder() {
   actionLoading.value = true
   try {
+    // 使用共享 store 中的真实路线数据（含完整 Amap polyline）
+    const route = selectedRoute()
+    const routeData = route ? {
+      path_points: getRoutePolyline(route) || '',
+      route_description: route.route_description || `${route._origin || '?'}→${route._destination || '?'}`,
+      major_roads: route.major_roads || [],
+      distance: route.distance || 0,
+      duration: route.duration || 0,
+      tunnel_count: route.tunnel_count || 0,
+      toll_cost: route.toll_cost || 0,
+      traffic_condition: route.traffic_condition || '',
+      passed_cities: route.passed_cities || [],
+    } : {
+      path_points: '119.296,26.074;119.30,26.08;118.089,24.48',
+      route_description: '福州→厦门',
+      major_roads: ['G15沈海高速'],
+      distance: 280000, duration: 12000,
+    }
+    const vehicleData = {
+      length: sharedStore.vehicle.length || 25,
+      width: sharedStore.vehicle.width || 3.5,
+      height: sharedStore.vehicle.height || 4.5,
+      total_weight: sharedStore.vehicle.total_weight || 80,
+      axis_weight: sharedStore.vehicle.axis_weight || 15,
+      axis_count: sharedStore.vehicle.axis_count || 6,
+    }
     const r = await axios.post(`${API_BASE}/api/v1/tracking/orders`, {
-      route_data: { path_points: '119.296,26.074;119.30,26.08;118.089,24.48', route_description: '福州→厦门·G15沈海高速', major_roads: ['G15沈海高速'], distance: 280000, duration: 12000 },
-      vehicle_info: { length: 25, width: 3.5, height: 4.5, total_weight: 80, axis_weight: 15, axis_count: 6 },
-      assessment_data: {}
+      route_data: routeData, vehicle_info: vehicleData, assessment_data: sharedStore.assessment || {}
     })
     if (r.data?.code === 200) {
       const oid = r.data.data.id
@@ -173,7 +198,7 @@ function drawRouteOnMap(o) {
 async function startTransport() {
   if (!selectedOrder.value) return
   actionLoading.value = true
-  try { await updateOrderStatus(selectedOrder.value.id, 'IN_TRANSIT'); selectedOrder.value.status = 'IN_TRANSIT'; $q.notify({ type: 'positive', message: '运输已开始' }) } catch (e) { $q.notify({ type: 'negative', message: '操作失败' }) }
+  try { await updateOrderStatus(selectedOrder.value.id, 'IN_TRANSIT', '开始运输'); selectedOrder.value.status = 'IN_TRANSIT'; $q.notify({ type: 'positive', message: '运输已开始' }) } catch (e) { $q.notify({ type: 'negative', message: '操作失败' }) }
   actionLoading.value = false
 }
 

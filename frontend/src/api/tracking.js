@@ -25,8 +25,8 @@ export const getOrder = async (orderId) => {
 }
 
 /** Update the status of an order. */
-export const updateOrderStatus = async (orderId, status, notes = '') => {
-  const { data } = await axios.put(`${BASE}/tracking/orders/${orderId}/status`, { status, notes })
+export const updateOrderStatus = async (orderId, newStatus, notes = '') => {
+  const { data } = await axios.put(`${BASE}/tracking/orders/${orderId}/status`, { new_status: newStatus, notes })
   return data
 }
 
