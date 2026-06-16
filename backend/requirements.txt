@@ -12,8 +12,9 @@ async-timeout>=4.0.0
 numpy>=1.24.0
 scipy>=1.10.0
 
-# HTTP client (Amap API)
+# HTTP client (Amap API + LLM API)
 aiohttp>=3.8.0
+requests>=2.31.0
 
 # APScheduler (spider scheduling, optional)
 # apscheduler>=3.10.0

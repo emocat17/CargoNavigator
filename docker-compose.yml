@@ -70,6 +70,7 @@ services:
       - ./frontend/public:/app/public:ro
       - ./frontend/index.html:/app/index.html:ro
       - ./frontend/vite.config.js:/app/vite.config.js:ro
+      - ./frontend/.env:/app/.env:ro
       # node_modules 用容器内的，不挂载
     environment:
       - TZ=Asia/Shanghai
@@ -88,7 +89,7 @@ services:
     container_name: cargo-maxkb
     restart: unless-stopped
     ports:
-      - "${MAXKB_PORT:-18080}:8080"
+      - "${MAXKB_PORT:-18090}:8080"
     volumes:
       - maxkb_data:/opt/maxkb
     environment:
