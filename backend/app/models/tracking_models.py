@@ -106,3 +106,53 @@ class StatusLog(Base):
 
     # Relationship
     order = relationship("TransportOrder", back_populates="status_logs")
+
+
+class GPSTrackPoint(Base):
+    """GPS track point recorded during transport."""
+    __tablename__ = "gps_track_points"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    order_id = Column(String, ForeignKey("transport_orders.id"), nullable=False, index=True)
+    longitude = Column(String, nullable=False)
+    latitude = Column(String, nullable=False)
+    speed = Column(String, nullable=True)
+    heading = Column(String, nullable=True)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    is_simulated = Column(String, default="true")
+
+
+class CheckpointRecord(Base):
+    """Checkpoint pass record (bridge, tunnel, toll station, construction zone)."""
+    __tablename__ = "checkpoint_records"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    order_id = Column(String, ForeignKey("transport_orders.id"), nullable=False, index=True)
+    station = Column(String, nullable=False)
+    checkpoint_type = Column(String, nullable=False)
+    highway = Column(String, nullable=True)
+    longitude = Column(String, nullable=True)
+    latitude = Column(String, nullable=True)
+    planned_pass_time = Column(DateTime(timezone=True), nullable=True)
+    actual_pass_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    delay_minutes = Column(String, default="0")
+    notes = Column(Text, nullable=True)
+
+    order = relationship("TransportOrder")
+
+
+class AlertEvent(Base):
+    """Alert / anomaly event during transport."""
+    __tablename__ = "alert_events"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    order_id = Column(String, ForeignKey("transport_orders.id"), nullable=False, index=True)
+    alert_type = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    severity = Column(String, nullable=False)
+    longitude = Column(String, nullable=True)
+    latitude = Column(String, nullable=True)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    resolved = Column(String, default="false")
+
+    order = relationship("TransportOrder")

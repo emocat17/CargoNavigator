@@ -87,3 +87,49 @@ class TimelineEntry(BaseModel):
 class OrderDetailResponse(TransportOrderResponse):
     """Extended order detail with timeline."""
     timeline: List[TimelineEntry] = Field(default_factory=list)
+
+
+class GPSTrackPointResponse(BaseModel):
+    id: str
+    order_id: str
+    longitude: str
+    latitude: str
+    speed: Optional[str] = None
+    heading: Optional[str] = None
+    timestamp: Optional[datetime] = None
+    is_simulated: Optional[str] = "true"
+
+    class Config:
+        from_attributes = True
+
+
+class CheckpointRecordResponse(BaseModel):
+    id: str
+    order_id: str
+    station: str
+    checkpoint_type: str
+    highway: Optional[str] = None
+    longitude: Optional[str] = None
+    latitude: Optional[str] = None
+    planned_pass_time: Optional[datetime] = None
+    actual_pass_time: Optional[datetime] = None
+    delay_minutes: Optional[str] = "0"
+    notes: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AlertEventResponse(BaseModel):
+    id: str
+    order_id: str
+    alert_type: str
+    message: str
+    severity: str
+    longitude: Optional[str] = None
+    latitude: Optional[str] = None
+    timestamp: Optional[datetime] = None
+    resolved: Optional[str] = "false"
+
+    class Config:
+        from_attributes = True
