@@ -23,6 +23,13 @@ if not FACILITY_DIR.exists():
 TABLE_DIR = FACILITY_DIR / "table"
 BRIDGE_DATA_DIR = FACILITY_DIR / "bridge_data"
 
+def _find_excel(filename: str) -> Path:
+    """Find an Excel file: try FACILITY_DIR directly first, then TABLE_DIR."""
+    path = FACILITY_DIR / filename
+    if path.exists():
+        return path
+    return TABLE_DIR / filename
+
 # Highway name mapping (from domain knowledge)
 HIGHWAY_NAMES = {
     "G15":   "沈海高速",
@@ -42,7 +49,7 @@ HIGHWAY_NAMES = {
 def migrate_highways():
     """Migrate highway codes and names."""
     print("[migrate] highways...")
-    df = pd.read_excel(str(TABLE_DIR / "highways.xlsx"))
+    df = pd.read_excel(str(_find_excel("highways.xlsx"))
     rows = 0
     for _, row in df.iterrows():
         code = str(row.iloc[0]).strip()
@@ -60,7 +67,7 @@ def migrate_highways():
 def migrate_junctions():
     """Migrate junction names and GPS coordinates."""
     print("[migrate] junctions...")
-    df = pd.read_excel(str(TABLE_DIR / "junctions.xlsx"))
+    df = pd.read_excel(str(_find_excel("junctions.xlsx"))
     rows = 0
     for _, row in df.iterrows():
         name = str(row.iloc[0]).strip()
@@ -82,7 +89,7 @@ def migrate_junctions():
 def migrate_junction_positions():
     """Migrate junction positions (K values on highways)."""
     print("[migrate] junction_positions...")
-    df = pd.read_excel(str(TABLE_DIR / "junctions_positions.xlsx"))
+    df = pd.read_excel(str(_find_excel("junctions_positions.xlsx"))
     rows = 0
     for _, row in df.iterrows():
         name = str(row.iloc[1]).strip()
@@ -143,7 +150,7 @@ def build_road_sections():
 def migrate_bridges():
     """Migrate bridge inventory from Excel."""
     print("[migrate] bridges...")
-    df = pd.read_excel(str(TABLE_DIR / "bridge_list.xlsx"))
+    df = pd.read_excel(str(_find_excel("bridge_list.xlsx"))
 
     column_map = {
         "桩号": "station",

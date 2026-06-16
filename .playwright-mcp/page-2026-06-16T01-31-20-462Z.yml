@@ -1,0 +1,109 @@
+- generic [ref=e631]:
+  - generic [ref=e633]:
+    - img [ref=e635]
+    - generic [ref=e636]:
+      - generic [ref=e637]:
+        - generic [ref=e639] [cursor=pointer]:
+          - img [ref=e641]
+          - generic [ref=e643]: 首页
+        - generic [ref=e645] [cursor=pointer]:
+          - img [ref=e647]
+          - generic [ref=e650]: 智能体
+        - generic [ref=e652] [cursor=pointer]:
+          - img [ref=e654]
+          - generic [ref=e656]: 知识库
+        - generic [ref=e658] [cursor=pointer]:
+          - img [ref=e660]
+          - generic [ref=e662]: 工具
+        - generic [ref=e664] [cursor=pointer]:
+          - img [ref=e666]
+          - generic [ref=e668]: 模型
+      - generic [ref=e669]:
+        - button "升级" [ref=e670] [cursor=pointer]:
+          - generic [ref=e671]:
+            - img [ref=e673]
+            - text: 升级
+        - button [ref=e675] [cursor=pointer]:
+          - img [ref=e678]
+        - button [ref=e681] [cursor=pointer]:
+          - img [ref=e684]
+        - button [ref=e686] [cursor=pointer]:
+          - img [ref=e689]
+        - button [ref=e692] [cursor=pointer]:
+          - img [ref=e695]
+    - button [ref=e698] [cursor=pointer]
+  - generic [ref=e701]:
+    - generic [ref=e704]:
+      - generic [ref=e706]:
+        - button [ref=e707] [cursor=pointer]:
+          - img [ref=e710]
+        - generic "traffic" [ref=e715]
+      - menubar [ref=e719]:
+        - menuitem "文档" [ref=e721] [cursor=pointer]:
+          - img [ref=e723]
+          - generic [ref=e728]: 文档
+        - menuitem "工作流" [ref=e730] [cursor=pointer]:
+          - img [ref=e732]
+          - generic [ref=e736]: 工作流
+        - menuitem "问题" [ref=e738] [cursor=pointer]:
+          - img [ref=e740]
+          - generic [ref=e742]: 问题
+        - menuitem "自定义分词" [ref=e744] [cursor=pointer]:
+          - img [ref=e746]
+          - generic [ref=e748]: 自定义分词
+        - menuitem "命中测试" [ref=e750] [cursor=pointer]:
+          - img [ref=e752]
+          - generic [ref=e757]: 命中测试
+        - menuitem "设置" [active] [ref=e759] [cursor=pointer]:
+          - img [ref=e761]
+          - generic [ref=e763]: 设置
+    - generic [ref=e998]:
+      - heading "设置" [level=2] [ref=e999]
+      - generic [ref=e1006]:
+        - heading "基本信息" [level=4] [ref=e1007]
+        - generic [ref=e1008]:
+          - generic [ref=e1009]:
+            - generic [ref=e1010]: 知识库名称*
+            - generic [ref=e1013]:
+              - textbox "知识库名称*" [ref=e1014]:
+                - /placeholder: 请输入知识库名称
+                - text: traffic
+              - generic [ref=e1017]: 7 / 64
+          - generic [ref=e1018]:
+            - generic [ref=e1019]: 知识库描述*
+            - generic [ref=e1021]:
+              - textbox "知识库描述*" [ref=e1022]:
+                - /placeholder: 描述知识库的内容，详尽的描述将帮助AI能深入理解该知识库的内容，能更准确的检索到内容，提高该知识库的命中率。
+                - text: 高速路况
+              - generic [ref=e1023]: 4 / 256
+          - generic [ref=e1024]:
+            - generic [ref=e1025]: 向量模型*
+            - generic [ref=e1029]:
+              - generic:
+                - combobox "向量模型*" [ref=e1031]
+                - generic [ref=e1033]:
+                  - img [ref=e1036]
+                  - generic [ref=e1039]: maxkb-embedding
+              - img [ref=e1042] [cursor=pointer]
+        - generic [ref=e1044]:
+          - group "知识库类型*" [ref=e1045]:
+            - generic [ref=e1046]: 知识库类型*
+            - generic [ref=e1052]:
+              - generic [ref=e1053]: 通用知识库
+              - generic [ref=e1054]: 通过上传文件或手动录入构建知识库
+          - generic [ref=e1055]:
+            - heading "其他设置" [level=4] [ref=e1056]
+            - group "每次上传最多文件数" [ref=e1057]:
+              - generic [ref=e1058]: 每次上传最多文件数
+              - generic [ref=e1060]:
+                - slider "滑块介于 1 至 1000" [ref=e1063] [cursor=pointer]
+                - spinbutton [ref=e1068]: "638"
+            - group "上传的每个文档最大(MB)" [ref=e1069]:
+              - generic [ref=e1071]:
+                - generic [ref=e1072]: 上传的每个文档最大(MB)
+                - img [ref=e1074]
+              - generic [ref=e1078]:
+                - slider "滑块介于 1 至 1000" [ref=e1081] [cursor=pointer]
+                - spinbutton [ref=e1086]: "684"
+        - button "保存" [ref=e1088] [cursor=pointer]:
+          - generic [ref=e1089]: 保存

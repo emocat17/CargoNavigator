@@ -1,0 +1,184 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+          - tab "运输追踪" [selected] [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: timeline
+              - generic [ref=e27]: 运输追踪
+          - tab "护送监控" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: monitor_heart
+              - generic [ref=e32]: 护送监控
+          - tab "数字档案" [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: inventory_2
+              - generic [ref=e37]: 数字档案
+        - generic [ref=e39] [cursor=pointer]: chevron_right
+      - separator [ref=e40]
+      - tabpanel [ref=e152]:
+        - tabpanel [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e155]: 运输追踪总览
+            - generic [ref=e156]:
+              - generic [ref=e159]:
+                - generic [ref=e160]: 总运输单
+                - generic [ref=e161]: "8"
+              - generic [ref=e164]:
+                - generic [ref=e165]: 待处理
+                - generic [ref=e166]: "7"
+              - generic [ref=e169]:
+                - generic [ref=e170]: 运输中
+                - generic [ref=e171]: "0"
+              - generic [ref=e174]:
+                - generic [ref=e175]: 今日完成
+                - generic [ref=e176]: "1"
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - button "全部" [ref=e179] [cursor=pointer]:
+                  - generic [ref=e181]: 全部
+                - button "待提交" [ref=e182] [cursor=pointer]:
+                  - generic [ref=e184]: 待提交
+                - button "审核中" [ref=e185] [cursor=pointer]:
+                  - generic [ref=e187]: 审核中
+                - button "勘验中" [ref=e188] [cursor=pointer]:
+                  - generic [ref=e190]: 勘验中
+                - button "运输中" [ref=e191] [cursor=pointer]:
+                  - generic [ref=e193]: 运输中
+                - button "已完成" [ref=e194] [cursor=pointer]:
+                  - generic [ref=e196]: 已完成
+              - button "刷新" [ref=e197] [cursor=pointer]:
+                - generic [ref=e198]:
+                  - img [ref=e199]: refresh
+                  - generic [ref=e200]: 刷新
+            - generic [ref=e201]:
+              - table [ref=e203]:
+                - rowgroup [ref=e204]:
+                  - row "运输单号 状态 创建时间 更新时间 备注 操作" [ref=e205]:
+                    - columnheader "运输单号" [ref=e206] [cursor=pointer]:
+                      - text: 运输单号
+                      - generic [ref=e207]: arrow_upward
+                    - columnheader "状态" [ref=e208] [cursor=pointer]:
+                      - text: 状态
+                      - generic [ref=e209]: arrow_upward
+                    - columnheader "创建时间" [ref=e210] [cursor=pointer]:
+                      - text: 创建时间
+                      - generic [ref=e211]: arrow_upward
+                    - columnheader "更新时间" [ref=e212] [cursor=pointer]:
+                      - text: 更新时间
+                      - generic [ref=e213]: arrow_upward
+                    - columnheader "备注" [ref=e214]
+                    - columnheader "操作" [ref=e215]
+                - rowgroup [ref=e216]:
+                  - row "YZ-20260616-0008 2026/06/16 16:46 2026-06-16T16:47:05" [ref=e217] [cursor=pointer]:
+                    - cell "YZ-20260616-0008" [ref=e218]
+                    - cell [ref=e219]:
+                      - status [ref=e220]: 到达完成
+                    - cell "2026/06/16 16:46" [ref=e221]
+                    - cell "2026-06-16T16:47:05" [ref=e222]
+                    - cell [ref=e223]
+                    - cell [ref=e224]:
+                      - button [ref=e225]:
+                        - img [ref=e227]: visibility
+                  - row "YZ-20260616-0007 2026/06/16 16:46 2026-06-16T16:46:40" [ref=e228] [cursor=pointer]:
+                    - cell "YZ-20260616-0007" [ref=e229]
+                    - cell [ref=e230]:
+                      - status [ref=e231]: 草稿
+                    - cell "2026/06/16 16:46" [ref=e232]
+                    - cell "2026-06-16T16:46:40" [ref=e233]
+                    - cell [ref=e234]
+                    - cell [ref=e235]:
+                      - button [ref=e236]:
+                        - img [ref=e238]: visibility
+                  - row "YZ-20260616-0005 2026/06/16 16:35 2026-06-16T16:35:34" [ref=e239] [cursor=pointer]:
+                    - cell "YZ-20260616-0005" [ref=e240]
+                    - cell [ref=e241]:
+                      - status [ref=e242]: 草稿
+                    - cell "2026/06/16 16:35" [ref=e243]
+                    - cell "2026-06-16T16:35:34" [ref=e244]
+                    - cell [ref=e245]
+                    - cell [ref=e246]:
+                      - button [ref=e247]:
+                        - img [ref=e249]: visibility
+                  - row "YZ-20260616-0006 2026/06/16 16:35 2026-06-16T16:35:34" [ref=e250] [cursor=pointer]:
+                    - cell "YZ-20260616-0006" [ref=e251]
+                    - cell [ref=e252]:
+                      - status [ref=e253]: 已发证
+                    - cell "2026/06/16 16:35" [ref=e254]
+                    - cell "2026-06-16T16:35:34" [ref=e255]
+                    - cell [ref=e256]
+                    - cell [ref=e257]:
+                      - button [ref=e258]:
+                        - img [ref=e260]: visibility
+                  - row "YZ-20260616-0003 2026/06/16 16:27 2026-06-16T16:27:58" [ref=e261] [cursor=pointer]:
+                    - cell "YZ-20260616-0003" [ref=e262]
+                    - cell [ref=e263]:
+                      - status [ref=e264]: 草稿
+                    - cell "2026/06/16 16:27" [ref=e265]
+                    - cell "2026-06-16T16:27:58" [ref=e266]
+                    - cell [ref=e267]
+                    - cell [ref=e268]:
+                      - button [ref=e269]:
+                        - img [ref=e271]: visibility
+                  - row "YZ-20260616-0004 2026/06/16 16:27 2026-06-16T16:27:58" [ref=e272] [cursor=pointer]:
+                    - cell "YZ-20260616-0004" [ref=e273]
+                    - cell [ref=e274]:
+                      - status [ref=e275]: 已发证
+                    - cell "2026/06/16 16:27" [ref=e276]
+                    - cell "2026-06-16T16:27:58" [ref=e277]
+                    - cell [ref=e278]
+                    - cell [ref=e279]:
+                      - button [ref=e280]:
+                        - img [ref=e282]: visibility
+                  - row "YZ-20260616-0001 2026/06/16 16:26 2026-06-16T16:26:47" [ref=e283] [cursor=pointer]:
+                    - cell "YZ-20260616-0001" [ref=e284]
+                    - cell [ref=e285]:
+                      - status [ref=e286]: 草稿
+                    - cell "2026/06/16 16:26" [ref=e287]
+                    - cell "2026-06-16T16:26:47" [ref=e288]
+                    - cell [ref=e289]
+                    - cell [ref=e290]:
+                      - button [ref=e291]:
+                        - img [ref=e293]: visibility
+                  - row "YZ-20260616-0002 2026/06/16 16:26 2026-06-16T16:26:48" [ref=e294] [cursor=pointer]:
+                    - cell "YZ-20260616-0002" [ref=e295]
+                    - cell [ref=e296]:
+                      - status [ref=e297]: 已发证
+                    - cell "2026/06/16 16:26" [ref=e298]
+                    - cell "2026-06-16T16:26:48" [ref=e299]
+                    - cell [ref=e300]
+                    - cell [ref=e301]:
+                      - button [ref=e302]:
+                        - img [ref=e304]: visibility
+              - generic [ref=e305]:
+                - generic [ref=e306]:
+                  - generic [ref=e307]: "Records per page:"
+                  - generic [ref=e310] [cursor=pointer]:
+                    - generic [ref=e312]:
+                      - generic [ref=e313]: "20"
+                      - combobox "20" [ref=e314]
+                    - generic [ref=e316]: arrow_drop_down
+                - generic [ref=e318]: 1-8 of 8
+            - generic [ref=e322]:
+              - generic [ref=e323]: 平均处理天数
+              - generic [ref=e324]: 0 天
+  - generic [ref=e118]:
+    - iframe [ref=e119]:
+      
+    - generic:
+      - img
+    - generic [ref=e123]: © 2026 AutoNavi - GS(2025)5996号

@@ -1,0 +1,4 @@
+- generic [ref=e2]:
+  - textbox [ref=e3]
+  - button "认证" [ref=e4]
+  - button "去登录" [ref=e5]

@@ -1,0 +1,55 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [selected] [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+          - tab "运输追踪" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: timeline
+              - generic [ref=e27]: 运输追踪
+          - tab "护送监控" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: monitor_heart
+              - generic [ref=e32]: 护送监控
+          - tab "数字档案" [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: inventory_2
+              - generic [ref=e37]: 数字档案
+        - generic [ref=e39] [cursor=pointer]: chevron_right
+      - separator [ref=e40]
+      - tabpanel [ref=e124]:
+        - tabpanel [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e127]: 智能问答助手
+            - generic [ref=e131]:
+              - generic [ref=e132]: smart_toy
+              - paragraph [ref=e133]: 问我关于路线规划、路况信息、或大件运输的问题
+              - generic [ref=e134]:
+                - generic [ref=e136] [cursor=pointer]: 福建高速最近有什么施工路段？
+                - generic [ref=e138] [cursor=pointer]: 从三明到平潭怎么走？
+                - generic [ref=e140] [cursor=pointer]: 大件运输有哪些规定？
+            - generic [ref=e143]:
+              - generic [ref=e146]:
+                - generic: 请输入问题...
+                - textbox "请输入问题..." [ref=e147]
+              - button [disabled] [ref=e149]:
+                - img [ref=e151]: send
+  - generic [ref=e118]:
+    - iframe [ref=e119]:
+      
+    - generic:
+      - img
+    - generic [ref=e123]: © 2026 AutoNavi - GS(2025)5996号

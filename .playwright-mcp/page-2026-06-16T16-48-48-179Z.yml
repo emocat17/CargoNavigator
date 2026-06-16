@@ -1,0 +1,85 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [selected] [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+          - tab "运输追踪" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: timeline
+              - generic [ref=e27]: 运输追踪
+          - tab "护送监控" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: monitor_heart
+              - generic [ref=e32]: 护送监控
+          - tab "数字档案" [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: inventory_2
+              - generic [ref=e37]: 数字档案
+        - generic [ref=e39] [cursor=pointer]: chevron_right
+      - separator [ref=e40]
+      - tabpanel [ref=e383]:
+        - tabpanel [ref=e384]:
+          - generic [ref=e385]:
+            - generic [ref=e386]: 路径规划
+            - generic [ref=e387]:
+              - generic [ref=e391]:
+                - generic [ref=e392]:
+                  - generic [ref=e393]:
+                    - generic: 起点
+                    - textbox "起点" [ref=e394]: 福建省三明厦钨新能源
+                  - generic [ref=e396] [cursor=pointer]: place
+                - generic [ref=e399]: 输入地址或点击地图图标选点
+              - generic [ref=e403]:
+                - generic [ref=e404]:
+                  - generic [ref=e405]:
+                    - generic: 终点
+                    - textbox "终点" [ref=e406]: 福建省平潭跨境电商园
+                  - generic [ref=e408] [cursor=pointer]: place
+                - generic [ref=e411]: 输入地址或点击地图图标选点
+              - generic [ref=e415]:
+                - generic [ref=e416]:
+                  - generic [ref=e418] [cursor=pointer]: event
+                  - generic [ref=e419]:
+                    - generic: 预计出发时间 (选填)
+                    - textbox "预计出发时间 (选填)" [ref=e420]
+                - generic [ref=e423]: 若为空则默认当前时间出发
+              - generic [ref=e424]:
+                - generic [ref=e425]: 运输任务与车辆配置
+                - generic [ref=e428]:
+                  - generic [ref=e429]:
+                    - generic [ref=e430]: 任务详情配置
+                    - generic [ref=e431]: 请配置车辆及货物信息以获取精准路线
+                  - generic [ref=e432]:
+                    - button [ref=e433] [cursor=pointer]:
+                      - img [ref=e435]: design_services
+                    - button [ref=e436] [cursor=pointer]:
+                      - img [ref=e438]: edit_document
+              - generic [ref=e440]:
+                - generic [ref=e441]: 期望路线方案数 (3)
+                - slider [ref=e442]:
+                  - generic [ref=e448]:
+                    - img [ref=e449]
+                    - generic:
+                      - generic:
+                        - generic: "3"
+              - button "开始规划" [ref=e453] [cursor=pointer]:
+                - generic [ref=e455]: 开始规划
+  - generic [ref=e118]:
+    - iframe [ref=e119]:
+      
+    - generic:
+      - img
+    - generic [ref=e123]: © 2026 AutoNavi - GS(2025)5996号

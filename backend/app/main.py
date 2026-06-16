@@ -31,8 +31,8 @@ app = FastAPI(title="SmartRoute API", description="API for Smart Truck Route Pla
 # Configure CORS
 origins = [
     "http://localhost",
-    "http://localhost:6789", # Frontend port
-    "http://localhost:9876", # Backend port (for swagger)
+    "http://localhost:16789", # Frontend port
+    "http://localhost:19876", # Backend port (for swagger)
     "*"
 ]
 

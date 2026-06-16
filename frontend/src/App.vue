@@ -244,7 +244,7 @@ const handlePlanRoute = async (formData) => {
   }
 
   try {
-    const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
+    const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
     const response = await axios.post(`${API}/api/v1/routes/plan`, {
       origin: formData.origin,
       destination: formData.destination,

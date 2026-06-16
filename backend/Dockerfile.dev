@@ -1,0 +1,27 @@
+# ── 后端开发模式：uvicorn reload + 热重载 ──
+FROM python:3.12-slim
+WORKDIR /app
+
+# 系统依赖（numpy/scipy 需要 — 使用阿里云镜像加速）
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gcc gfortran libopenblas-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python 依赖
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+
+# 预构建的 bridge DB（13.9MB SQLite，122桥/153900影响线）
+# 数据源 XLSX 不进镜像 — 如需重建 DB: python -m data.migrate_data
+COPY data/cargo_bridge.db ./data/
+COPY data/schema.sql ./data/
+
+# 应用代码（运行时由 docker-compose volume 挂载覆盖，实现热重载）
+COPY app/ ./app/
+COPY spider/ ./spider/
+COPY bootstrap.py .
+
+EXPOSE 19876
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "19876", "--reload"]

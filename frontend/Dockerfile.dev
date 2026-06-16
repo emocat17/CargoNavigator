@@ -1,0 +1,15 @@
+# ── 前端开发模式：Vite dev server + 热重载 ──
+FROM node:20-alpine
+WORKDIR /app
+
+# npm 国内镜像加速
+RUN npm config set registry https://registry.npmmirror.com
+
+# node_modules 先装好（不挂载，避免跨平台问题）
+COPY package*.json ./
+RUN npm ci
+
+EXPOSE 16789
+
+# vite --host 0.0.0.0 允许外部访问
+CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "16789"]

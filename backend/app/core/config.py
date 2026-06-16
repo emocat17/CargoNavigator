@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     DEEPSEEK_MODEL: str = "deepseek-v4-flash"
 
     # MaxKB
-    MAXKB_BASE_URL: str = "http://localhost:8080"
+    MAXKB_BASE_URL: str = "http://localhost:18080"
     MAXKB_API_KEY: str = ""
     MAXKB_CHAT_API_URL: str = ""
     MAXKB_DATASET_ID: str = ""

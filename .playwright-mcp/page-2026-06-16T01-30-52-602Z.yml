@@ -1,0 +1,89 @@
+- generic [ref=e112]:
+  - generic [ref=e114]:
+    - img [ref=e116]
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e120] [cursor=pointer]:
+          - img [ref=e122]
+          - generic [ref=e124]: 首页
+        - generic [ref=e126] [cursor=pointer]:
+          - img [ref=e128]
+          - generic [ref=e131]: 智能体
+        - generic [ref=e133] [cursor=pointer]:
+          - img [ref=e135]
+          - generic [ref=e137]: 知识库
+        - generic [ref=e139] [cursor=pointer]:
+          - img [ref=e141]
+          - generic [ref=e143]: 工具
+        - generic [ref=e145] [cursor=pointer]:
+          - img [ref=e147]
+          - generic [ref=e149]: 模型
+      - generic [ref=e150]:
+        - button "升级" [ref=e151] [cursor=pointer]:
+          - generic [ref=e152]:
+            - img [ref=e154]
+            - text: 升级
+        - button [ref=e156] [cursor=pointer]:
+          - img [ref=e159]
+        - button [ref=e162] [cursor=pointer]:
+          - img [ref=e165]
+        - button [ref=e167] [cursor=pointer]:
+          - img [ref=e170]
+        - button [ref=e173] [cursor=pointer]:
+          - img [ref=e176]
+    - button [ref=e179] [cursor=pointer]
+  - generic [ref=e526]:
+    - generic [ref=e527]:
+      - generic [ref=e528]:
+        - heading "知识库" [level=4] [ref=e529]
+        - generic [ref=e530]:
+          - generic [ref=e531]:
+            - generic [ref=e533]:
+              - img [ref=e536]
+              - textbox "搜索" [ref=e538]
+            - button [ref=e541] [cursor=pointer]:
+              - img [ref=e544]
+          - tree "Tree" [ref=e547]:
+            - treeitem "根目录" [level=1] [ref=e549] [cursor=pointer]:
+              - generic [ref=e553]:
+                - img [ref=e555]
+                - generic "根目录" [ref=e558]
+      - button [ref=e559] [cursor=pointer]:
+        - img [ref=e561]
+    - generic [ref=e565]:
+      - generic [ref=e567]:
+        - heading "根目录" [level=2] [ref=e568]
+        - generic [ref=e569]:
+          - generic [ref=e570]:
+            - generic [ref=e572] [cursor=pointer]:
+              - generic:
+                - combobox [ref=e574]
+                - generic [ref=e575]: 名称
+              - img [ref=e578]
+            - textbox "按名称搜索" [ref=e582]
+          - button "批量选择" [ref=e585] [cursor=pointer]:
+            - generic [ref=e586]:
+              - img [ref=e588]
+              - text: 批量选择
+          - generic [ref=e590]:
+            - button "模板中心" [ref=e591] [cursor=pointer]:
+              - generic [ref=e592]:
+                - img [ref=e594]
+                - text: 模板中心
+            - button "创建" [ref=e597] [cursor=pointer]:
+              - generic [ref=e598]:
+                - text: 创建
+                - img [ref=e600]
+      - group "checkbox-group" [ref=e608]:
+        - generic [ref=e612] [cursor=pointer]:
+          - generic [ref=e617]:
+            - generic "traffic" [ref=e618]
+            - generic [ref=e619]:
+              - generic "系统管理员" [ref=e620]
+              - generic [ref=e621]: 创建于
+              - generic [ref=e622]: 2026-06-16
+          - generic [ref=e624]: 高速路况
+          - generic [ref=e628]:
+            - text: 1文档数
+            - separator [ref=e629]
+            - text: 683字符

@@ -1,0 +1,42 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [selected] [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+      - separator [ref=e24]
+      - tabpanel [ref=e105]:
+        - tabpanel [ref=e106]:
+          - generic [ref=e107]:
+            - generic [ref=e108]: 智能问答助手
+            - generic [ref=e112]:
+              - generic [ref=e113]: smart_toy
+              - paragraph [ref=e114]: 问我关于路线规划、路况信息、或大件运输的问题
+              - generic [ref=e115]:
+                - generic [ref=e117] [cursor=pointer]: 福建高速最近有什么施工路段？
+                - generic [ref=e119] [cursor=pointer]: 从三明到平潭怎么走？
+                - generic [ref=e121] [cursor=pointer]: 大件运输有哪些规定？
+            - generic [ref=e124]:
+              - generic [ref=e127]:
+                - generic: 请输入问题...
+                - textbox "请输入问题..." [ref=e128]
+              - button [disabled] [ref=e130]:
+                - img [ref=e132]: send
+  - generic [ref=e99]:
+    - iframe [ref=e100]:
+      
+    - generic:
+      - img
+    - generic [ref=e104]: © 2026 AutoNavi - GS(2025)5996号

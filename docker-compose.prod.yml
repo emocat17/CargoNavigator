@@ -1,0 +1,31 @@
+# ================================================================
+# CargoNavigator — 生产环境（nginx 静态文件 + 多阶段构建）
+#
+# 启动:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# 与开发环境区别:
+#   - 前端使用 nginx 提供静态文件（非 Vite dev server）
+#   - 后端无热重载（无 --reload）
+#   - 无源码 volume 挂载
+# ================================================================
+
+name: cargo-navigator
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile      # 多阶段生产构建
+    volumes:
+      # 仅持久化数据，不挂载源码
+      - cargo_data:/app/data
+      - ./backend/spider/data:/app/spider/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile       # Nginx 生产构建
+    volumes: []                    # 无源码挂载
+    environment:
+      - VITE_API_BASE=http://backend:19876

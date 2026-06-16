@@ -1,0 +1,168 @@
+- generic [ref=e1]:
+  - generic [ref=e367]:
+    - generic [ref=e369]:
+      - img [ref=e371]
+      - generic [ref=e372]:
+        - generic [ref=e373]:
+          - generic [ref=e375] [cursor=pointer]:
+            - img [ref=e377]
+            - generic [ref=e379]: 首页
+          - generic [ref=e381] [cursor=pointer]:
+            - img [ref=e383]
+            - generic [ref=e386]: 智能体
+          - generic [ref=e388] [cursor=pointer]:
+            - img [ref=e390]
+            - generic [ref=e392]: 知识库
+          - generic [ref=e394] [cursor=pointer]:
+            - img [ref=e396]
+            - generic [ref=e398]: 工具
+          - generic [ref=e400] [cursor=pointer]:
+            - img [ref=e402]
+            - generic [ref=e404]: 模型
+        - generic [ref=e405]:
+          - button "升级" [ref=e406] [cursor=pointer]:
+            - generic [ref=e407]:
+              - img [ref=e409]
+              - text: 升级
+          - button [ref=e411] [cursor=pointer]:
+            - img [ref=e414]
+          - button [ref=e417] [cursor=pointer]:
+            - img [ref=e420]
+          - button [ref=e422] [cursor=pointer]:
+            - img [ref=e425]
+          - button [ref=e428] [cursor=pointer]:
+            - img [ref=e431]
+      - button [ref=e434] [cursor=pointer]
+    - generic [ref=e437]:
+      - generic [ref=e438]:
+        - generic [ref=e439]:
+          - heading "供应商" [level=4] [ref=e440]
+          - generic [ref=e445]:
+            - generic [ref=e446] [cursor=pointer]:
+              - img [ref=e448]
+              - generic [ref=e453]: 全部模型
+            - generic [ref=e454]:
+              - button "公有模型" [ref=e456] [cursor=pointer]:
+                - generic [ref=e458]:
+                  - img [ref=e460]
+                  - generic [ref=e463]: 公有模型
+                - img [ref=e465]
+              - button "私有模型" [ref=e468] [cursor=pointer]:
+                - generic [ref=e470]:
+                  - img [ref=e472]
+                  - generic [ref=e475]: 私有模型
+                - img [ref=e477]
+        - button [ref=e479] [cursor=pointer]:
+          - img [ref=e481]
+      - generic [ref=e484]:
+        - generic [ref=e486]:
+          - heading "全部模型" [level=4] [ref=e487]
+          - generic [ref=e488]:
+            - generic [ref=e489]:
+              - generic [ref=e491] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e493]
+                  - generic [ref=e494]: 模型名称
+                - img [ref=e497]
+              - textbox "按名称搜索" [ref=e501]
+            - button "添加模型" [ref=e503] [cursor=pointer]:
+              - generic [ref=e504]: 添加模型
+        - generic [ref=e513]:
+          - generic [ref=e515]:
+            - img [ref=e518]
+            - generic [ref=e520]:
+              - generic "maxkb-embedding" [ref=e522]
+              - generic [ref=e523]:
+                - generic "系统管理员" [ref=e524]
+                - generic [ref=e525]: 创建于
+                - generic [ref=e526]: 2026-06-16
+          - list [ref=e528]:
+            - listitem [ref=e529]:
+              - generic [ref=e530]: 模型类型
+              - generic [ref=e531]: 向量模型
+            - listitem [ref=e532]:
+              - generic [ref=e533]: 基础模型
+              - generic [ref=e534]: /opt/maxkb-app/model/embedding/shibing624_text2vec-base-chinese
+  - dialog [ref=e764]:
+    - generic [ref=e765]:
+      - banner [ref=e766]:
+        - navigation "面包屑" [ref=e767]:
+          - generic [ref=e768]:
+            - link "选择供应商" [ref=e769]
+            - text: ">"
+          - link "添加 DeepSeek" [ref=e771]
+        - button "关闭此对话框" [ref=e772] [cursor=pointer]:
+          - img [ref=e774]
+      - generic [ref=e777]:
+        - tablist [ref=e781]:
+          - tab "基础信息" [ref=e783]
+          - tab "高级设置" [active] [selected] [ref=e784] [cursor=pointer]
+        - generic [ref=e785]:
+          - text: "* * * * *"
+          - tabpanel "高级设置" [ref=e888]:
+            - generic [ref=e889]:
+              - heading "模型参数" [level=5] [ref=e890]
+              - button "添加" [ref=e891] [cursor=pointer]:
+                - generic [ref=e892]:
+                  - img [ref=e894]
+                  - text: 添加
+            - generic [ref=e897]:
+              - table [ref=e899]:
+                - rowgroup [ref=e907]:
+                  - row "显示名称 参数 组件类型 默认值 必填 操作" [ref=e908]:
+                    - columnheader "显示名称" [ref=e909]:
+                      - generic [ref=e910]: 显示名称
+                    - columnheader "参数" [ref=e911]:
+                      - generic [ref=e912]: 参数
+                    - columnheader "组件类型" [ref=e913]:
+                      - generic [ref=e914]: 组件类型
+                    - columnheader "默认值" [ref=e915]:
+                      - generic [ref=e916]: 默认值
+                    - columnheader "必填" [ref=e917]:
+                      - generic [ref=e918]: 必填
+                    - columnheader "操作" [ref=e919]:
+                      - generic [ref=e920]: 操作
+              - table [ref=e925]:
+                - rowgroup [ref=e933]:
+                  - row "温度 temperature 滑块 0.7" [ref=e934]:
+                    - cell "温度" [ref=e935]:
+                      - generic [ref=e936]: 温度
+                    - cell "temperature" [ref=e937]:
+                      - generic [ref=e938]: temperature
+                    - cell "滑块" [ref=e939]:
+                      - generic [ref=e942]: 滑块
+                    - cell "0.7" [ref=e943]:
+                      - generic [ref=e944]: "0.7"
+                    - cell [ref=e945]:
+                      - generic [ref=e948]:
+                        - switch [checked] [disabled]
+                    - cell [ref=e951]:
+                      - generic [ref=e952]:
+                        - button [ref=e954] [cursor=pointer]:
+                          - img [ref=e957]
+                        - button [ref=e959] [cursor=pointer]:
+                          - img [ref=e962]
+                  - row "输出最大Token数 max_tokens 滑块 800" [ref=e964]:
+                    - cell "输出最大Token数" [ref=e965]:
+                      - generic [ref=e966]: 输出最大Token数
+                    - cell "max_tokens" [ref=e967]:
+                      - generic [ref=e968]: max_tokens
+                    - cell "滑块" [ref=e969]:
+                      - generic [ref=e972]: 滑块
+                    - cell "800" [ref=e973]:
+                      - generic [ref=e974]: "800"
+                    - cell [ref=e975]:
+                      - generic [ref=e978]:
+                        - switch [checked] [disabled]
+                    - cell [ref=e981]:
+                      - generic [ref=e982]:
+                        - button [ref=e984] [cursor=pointer]:
+                          - img [ref=e987]
+                        - button [ref=e989] [cursor=pointer]:
+                          - img [ref=e992]
+      - contentinfo [ref=e835]:
+        - generic [ref=e836]:
+          - button "取消" [ref=e837] [cursor=pointer]:
+            - generic [ref=e838]: 取消
+          - button "保存" [ref=e839] [cursor=pointer]:
+            - generic [ref=e840]: 保存

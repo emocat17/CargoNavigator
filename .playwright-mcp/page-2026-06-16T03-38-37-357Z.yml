@@ -1,0 +1,74 @@
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - img [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e11] [cursor=pointer]:
+          - img [ref=e13]
+          - generic [ref=e15]: 首页
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 智能体
+        - generic [ref=e24] [cursor=pointer]:
+          - img [ref=e26]
+          - generic [ref=e28]: 知识库
+        - generic [ref=e30] [cursor=pointer]:
+          - img [ref=e32]
+          - generic [ref=e34]: 工具
+        - generic [ref=e36] [cursor=pointer]:
+          - img [ref=e38]
+          - generic [ref=e40]: 模型
+      - generic [ref=e41]:
+        - button "升级" [ref=e42] [cursor=pointer]:
+          - generic [ref=e43]:
+            - img [ref=e45]
+            - text: 升级
+        - button [ref=e47] [cursor=pointer]:
+          - img [ref=e50]
+        - button [ref=e53] [cursor=pointer]:
+          - img [ref=e56]
+        - button [ref=e58] [cursor=pointer]:
+          - img [ref=e61]
+        - button [ref=e64] [cursor=pointer]:
+          - img [ref=e67]
+    - button [ref=e70] [cursor=pointer]
+  - generic [ref=e73]:
+    - generic [ref=e76]:
+      - generic [ref=e78]:
+        - button [ref=e79] [cursor=pointer]:
+          - img [ref=e82]
+        - generic "traffic" [ref=e87]
+      - menubar [ref=e91]:
+        - menuitem "文档" [ref=e93] [cursor=pointer]:
+          - img [ref=e95]
+          - generic [ref=e100]: 文档
+        - menuitem "工作流" [ref=e102] [cursor=pointer]:
+          - img [ref=e104]
+          - generic [ref=e108]: 工作流
+        - menuitem "问题" [ref=e110] [cursor=pointer]:
+          - img [ref=e112]
+          - generic [ref=e114]: 问题
+        - menuitem "自定义分词" [ref=e116] [cursor=pointer]:
+          - img [ref=e118]
+          - generic [ref=e120]: 自定义分词
+        - menuitem "命中测试" [active] [ref=e122] [cursor=pointer]:
+          - img [ref=e124]
+          - generic [ref=e129]: 命中测试
+        - menuitem "设置" [ref=e131] [cursor=pointer]:
+          - img [ref=e133]
+          - generic [ref=e135]: 设置
+    - generic [ref=e472]:
+      - heading "命中测试 针对用户提问调试段落匹配情况，保障回答效果。" [level=4] [ref=e473]:
+        - text: 命中测试
+        - generic [ref=e474]: 针对用户提问调试段落匹配情况，保障回答效果。
+      - generic [ref=e481]:
+        - img [ref=e483]
+        - paragraph [ref=e485]: 命中段落显示在这里
+      - generic [ref=e486]:
+        - button "参数设置" [ref=e487] [cursor=pointer]:
+          - generic [ref=e488]:
+            - img [ref=e490]
+            - text: 参数设置
+        - generic [ref=e492]:
+          - textbox "请输入" [ref=e494]
+          - button [disabled] [ref=e496]

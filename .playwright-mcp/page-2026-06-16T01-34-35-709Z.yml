@@ -1,0 +1,289 @@
+- generic [ref=e1]:
+  - generic [ref=e1327]:
+    - generic [ref=e1329]:
+      - img [ref=e1331]
+      - generic [ref=e1332]:
+        - generic [ref=e1333]:
+          - generic [ref=e1335] [cursor=pointer]:
+            - img [ref=e1337]
+            - generic [ref=e1339]: 首页
+          - generic [ref=e1341] [cursor=pointer]:
+            - img [ref=e1343]
+            - generic [ref=e1345]: 智能体
+          - generic [ref=e1347] [cursor=pointer]:
+            - img [ref=e1349]
+            - generic [ref=e1351]: 知识库
+          - generic [ref=e1353] [cursor=pointer]:
+            - img [ref=e1355]
+            - generic [ref=e1357]: 工具
+          - generic [ref=e1359] [cursor=pointer]:
+            - img [ref=e1361]
+            - generic [ref=e1363]: 模型
+        - generic [ref=e1364]:
+          - button "升级" [ref=e1365] [cursor=pointer]:
+            - generic [ref=e1366]:
+              - img [ref=e1368]
+              - text: 升级
+          - button [ref=e1370] [cursor=pointer]:
+            - img [ref=e1373]
+          - button [ref=e1376] [cursor=pointer]:
+            - img [ref=e1379]
+          - button [ref=e1381] [cursor=pointer]:
+            - img [ref=e1384]
+          - button [ref=e1387] [cursor=pointer]:
+            - img [ref=e1390]
+      - button [ref=e1393] [cursor=pointer]
+    - generic [ref=e1396]:
+      - generic [ref=e1399]:
+        - generic [ref=e1401]:
+          - button [ref=e1402] [cursor=pointer]:
+            - img [ref=e1405]
+          - generic "CargoNavigator" [ref=e1410]
+        - menubar [ref=e1414]:
+          - menuitem "概览" [ref=e1416] [cursor=pointer]:
+            - img [ref=e1418]
+            - generic [ref=e1423]: 概览
+          - menuitem "设置" [ref=e1425] [cursor=pointer]:
+            - img [ref=e1427]
+            - generic [ref=e1429]: 设置
+          - menuitem "对话日志" [ref=e1431] [cursor=pointer]:
+            - img [ref=e1433]
+            - generic [ref=e1435]: 对话日志
+      - generic [ref=e2171]:
+        - generic [ref=e2172]:
+          - heading "设置" [level=3] [ref=e2173]
+          - generic [ref=e2174]:
+            - button "保存" [ref=e2175] [cursor=pointer]:
+              - generic [ref=e2176]: 保存
+            - button "发布" [ref=e2177] [cursor=pointer]:
+              - generic [ref=e2178]: 发布
+        - generic [ref=e2181]:
+          - generic [ref=e2182]:
+            - heading "基本信息" [level=4] [ref=e2184]
+            - generic [ref=e2189]:
+              - generic [ref=e2190]:
+                - generic [ref=e2193]: 名称 *
+                - generic [ref=e2196]:
+                  - textbox "名称 *" [ref=e2197]:
+                    - /placeholder: 请输入智能体名称
+                    - text: CargoNavigator
+                  - generic [ref=e2200]: 14 / 64
+              - generic [ref=e2201]:
+                - generic [ref=e2202]: 描述
+                - generic [ref=e2204]:
+                  - textbox "描述" [ref=e2205]:
+                    - /placeholder: 描述该智能体的应用场景及用途，如：XXX 小助手回答用户提出的 XXX 产品使用问题
+                    - text: 大件运输智能选线助手，提供路线规划、法规查询、路况预警等服务
+                  - generic [ref=e2206]: 30 / 256
+              - generic [ref=e2207]:
+                - generic [ref=e2209]:
+                  - generic [ref=e2210]: AI 模型
+                  - button "参数设置" [disabled] [ref=e2211]:
+                    - generic [ref=e2212]:
+                      - img [ref=e2214]
+                      - text: 参数设置
+                - generic [ref=e2219]:
+                  - generic:
+                    - combobox "AI 模型 参数设置" [ref=e2221]
+                    - generic [ref=e2222]: 请选择 AI 模型
+                  - img [ref=e2225] [cursor=pointer]
+              - group "系统提示词 生成" [ref=e2227]:
+                - generic [ref=e2229]:
+                  - generic [ref=e2230]:
+                    - generic [ref=e2231]: 系统提示词
+                    - img [ref=e2233]
+                  - button "生成" [disabled] [ref=e2236]:
+                    - generic [ref=e2237]:
+                      - img [ref=e2239]
+                      - text: 生成
+                - generic [ref=e2242]:
+                  - textbox [ref=e2248]:
+                    - generic [ref=e2249]:
+                      - generic: "系统提示词，可以引用系统中的变量：{data} 是命中知识库中的分段；{question} 是用户提出的问题，{memory}开启长期记忆后的用户记忆。"
+                  - button [ref=e2252] [cursor=pointer]:
+                    - img [ref=e2255]
+              - group "用户提示词 (无引用知识库)" [ref=e2257]:
+                - generic [ref=e2259]:
+                  - generic [ref=e2260]: 用户提示词 (无引用知识库)
+                  - img [ref=e2262]
+                - generic [ref=e2266]:
+                  - textbox [ref=e2272]:
+                    - generic [ref=e2273]: "{question}"
+                  - button [ref=e2276] [cursor=pointer]:
+                    - img [ref=e2279]
+              - generic [ref=e2281]:
+                - generic [ref=e2282]: 历史聊天记录
+                - generic [ref=e2284]:
+                  - button "减少数值" [ref=e2285] [cursor=pointer]:
+                    - img [ref=e2287]
+                  - button "增加数值" [ref=e2289] [cursor=pointer]:
+                    - img [ref=e2291]
+                  - spinbutton "历史聊天记录" [ref=e2295]: "1"
+              - group "长期记忆" [ref=e2296]:
+                - generic [ref=e2298]:
+                  - generic [ref=e2299]:
+                    - generic [ref=e2300]: 长期记忆
+                    - img [ref=e2302]
+                  - generic [ref=e2306]:
+                    - switch
+              - paragraph [ref=e2309]: 知识库
+              - generic [ref=e2311]:
+                - group "用户提示词 (引用知识库)" [ref=e2312]:
+                  - generic [ref=e2314] [cursor=pointer]:
+                    - img [ref=e2316]
+                    - generic [ref=e2318]: 用户提示词 (引用知识库)
+                    - img [ref=e2320]
+                  - generic [ref=e2324]:
+                    - textbox [ref=e2330]:
+                      - generic [ref=e2331]: "已知信息：{data}"
+                      - generic [ref=e2332]: "用户问题：{question}"
+                      - generic [ref=e2333]: 回答要求：
+                      - generic [ref=e2334]: "- 请使用中文回答用户问题"
+                    - button [ref=e2337] [cursor=pointer]:
+                      - img [ref=e2340]
+                - generic [ref=e2342] [cursor=pointer]:
+                  - generic [ref=e2343]:
+                    - img [ref=e2345]
+                    - generic [ref=e2347]: 关联知识库
+                  - generic [ref=e2348]:
+                    - button [ref=e2350]:
+                      - img [ref=e2353]
+                    - button [ref=e2355]:
+                      - img [ref=e2358]
+                - generic [ref=e2648]: 关联的知识库展示在这里
+              - generic [ref=e2362]:
+                - generic [ref=e2363]: 技能
+                - generic [ref=e2365] [cursor=pointer]:
+                  - generic [ref=e2366]:
+                    - checkbox "输出执行过程"
+                  - generic [ref=e2368]: 输出执行过程
+              - generic [ref=e2370]:
+                - generic [ref=e2372]:
+                  - generic [ref=e2373] [cursor=pointer]:
+                    - img [ref=e2375]
+                    - text: MCP
+                  - button [ref=e2378] [cursor=pointer]:
+                    - img [ref=e2381]
+                - generic [ref=e2384]:
+                  - generic [ref=e2385] [cursor=pointer]:
+                    - img [ref=e2387]
+                    - text: 工具
+                  - button [ref=e2390] [cursor=pointer]:
+                    - img [ref=e2393]
+                - generic [ref=e2396]:
+                  - generic [ref=e2397] [cursor=pointer]:
+                    - img [ref=e2399]
+                    - text: Skills
+                  - button [ref=e2402] [cursor=pointer]:
+                    - img [ref=e2405]
+                - generic [ref=e2408]:
+                  - generic [ref=e2409] [cursor=pointer]:
+                    - img [ref=e2411]
+                    - text: 智能体
+                  - button [ref=e2414] [cursor=pointer]:
+                    - img [ref=e2417]
+              - group "开场白" [ref=e2419]:
+                - generic [ref=e2420]: 开场白
+                - generic [ref=e2422]:
+                  - textbox [ref=e2428]:
+                    - generic [ref=e2429]: 您好，我是 XXX 小助手，您可以向我提出 XXX 使用问题。
+                    - generic [ref=e2430]: "- XXX 主要功能有什么？"
+                    - generic [ref=e2431]: "- XXX 如何收费？"
+                    - generic [ref=e2432]: "- 需要转人工服务"
+                  - button [ref=e2435] [cursor=pointer]:
+                    - img [ref=e2438]
+              - group "输出思考" [ref=e2440]:
+                - generic [ref=e2442]:
+                  - generic [ref=e2443]: 输出思考
+                  - generic [ref=e2444]:
+                    - button [ref=e2445] [cursor=pointer]:
+                      - img [ref=e2448]
+                    - generic [ref=e2450]:
+                      - switch
+              - generic [ref=e2455]:
+                - generic [ref=e2456]: 语音输入
+                - generic [ref=e2458]:
+                  - switch
+              - generic [ref=e2463]:
+                - generic [ref=e2464]: 语音播放
+                - generic [ref=e2466]:
+                  - switch
+          - generic [ref=e2469]:
+            - heading "调试预览" [level=4] [ref=e2470]
+            - generic [ref=e2473]:
+              - generic [ref=e2477]:
+                - generic [ref=e2478]:
+                  - img [ref=e2480]
+                  - generic [ref=e2484]:
+                    - paragraph [ref=e2488]: 您好，我是 XXX 小助手，您可以向我提出 XXX 使用问题。
+                    - generic [ref=e2490] [cursor=pointer]:
+                      - img [ref=e2493]
+                      - generic [ref=e2495]: XXX 主要功能有什么？
+                    - generic [ref=e2497] [cursor=pointer]:
+                      - img [ref=e2500]
+                      - generic [ref=e2502]: XXX 如何收费？
+                    - generic [ref=e2504] [cursor=pointer]:
+                      - img [ref=e2507]
+                      - generic [ref=e2509]: 需要转人工服务
+                - group "checkbox-group"
+              - generic [ref=e2512]:
+                - textbox "请输入问题" [ref=e2514]
+                - button [disabled] [ref=e2517]
+  - tooltip "traffic 系统管理员 创建于 2026-06-16 高速路况 1文档数 683字符" [ref=e2733]:
+    - generic [ref=e2735] [cursor=pointer]:
+      - generic [ref=e2740]:
+        - generic "traffic" [ref=e2741]
+        - generic [ref=e2742]:
+          - generic "系统管理员" [ref=e2743]
+          - generic [ref=e2744]: 创建于
+          - generic [ref=e2745]: 2026-06-16
+      - generic [ref=e2747]: 高速路况
+      - generic [ref=e2751]:
+        - text: 1文档数
+        - separator [ref=e2752]
+        - text: 683字符
+  - dialog "添加关联知识库" [ref=e2650]:
+    - generic [ref=e2651]:
+      - banner [ref=e2652]:
+        - generic [ref=e2653]:
+          - generic [ref=e2654]:
+            - heading "添加关联知识库" [level=4] [ref=e2655]
+            - generic [ref=e2656]: 所选知识库必须使用相同的 Embedding 模型
+          - button [ref=e2657] [cursor=pointer]:
+            - img [ref=e2660]
+        - button "关闭此对话框" [ref=e2662] [cursor=pointer]:
+          - img [ref=e2664]
+      - generic [ref=e2667]:
+        - generic [ref=e2670]:
+          - generic [ref=e2671]:
+            - generic [ref=e2673]:
+              - img [ref=e2676]
+              - textbox "搜索" [ref=e2678]
+            - button [ref=e2681] [cursor=pointer]:
+              - img [ref=e2684]
+          - tree "Tree" [ref=e2687]:
+            - treeitem "根目录" [level=1] [ref=e2689] [cursor=pointer]:
+              - generic [ref=e2693]:
+                - img [ref=e2695]
+                - generic "根目录" [ref=e2698]
+        - generic [ref=e2700]:
+          - generic [ref=e2701]:
+            - heading "根目录" [level=4] [ref=e2702]
+            - generic [ref=e2704]:
+              - img [ref=e2707]
+              - textbox "搜索" [ref=e2709]
+          - generic [ref=e2719] [cursor=pointer]:
+            - generic "traffic" [ref=e2722]
+            - generic [ref=e2724]:
+              - checkbox [active]
+      - contentinfo [ref=e2726]:
+        - generic [ref=e2727]:
+          - generic [ref=e2754]:
+            - generic [ref=e2755]: 已选 1
+            - button "清空" [ref=e2756] [cursor=pointer]:
+              - generic [ref=e2757]: 清空
+          - generic [ref=e2728]:
+            - button "取消" [ref=e2729] [cursor=pointer]:
+              - generic [ref=e2730]: 取消
+            - button "添加" [ref=e2731] [cursor=pointer]:
+              - generic [ref=e2732]: 添加

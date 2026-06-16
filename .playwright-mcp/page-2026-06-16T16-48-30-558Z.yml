@@ -1,0 +1,69 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+          - tab "运输追踪" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: timeline
+              - generic [ref=e27]: 运输追踪
+          - tab "护送监控" [selected] [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: monitor_heart
+              - generic [ref=e32]: 护送监控
+          - tab "数字档案" [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: inventory_2
+              - generic [ref=e37]: 数字档案
+        - generic [ref=e39] [cursor=pointer]: chevron_right
+      - separator [ref=e40]
+      - tabpanel [ref=e325]:
+        - tabpanel [ref=e326]:
+          - generic [ref=e327]:
+            - generic [ref=e328]:
+              - generic [ref=e332] [cursor=pointer]:
+                - generic [ref=e333]:
+                  - generic: 选择运输单
+                  - combobox "选择运输单" [ref=e335]
+                - generic [ref=e337]: arrow_drop_down
+              - button "开始监控" [disabled] [ref=e339]:
+                - generic [ref=e340]:
+                  - img [ref=e341]: play_arrow
+                  - generic [ref=e342]: 开始监控
+              - button "停止监控" [disabled] [ref=e344]:
+                - generic [ref=e345]:
+                  - img [ref=e346]: stop
+                  - generic [ref=e347]: 停止监控
+            - generic [ref=e349]:
+              - generic [ref=e351]:
+                - iframe [ref=e352]:
+                  
+                - generic:
+                  - img
+              - generic [ref=e356]:
+                - generic [ref=e357]:
+                  - generic [ref=e359]: 检查点
+                  - list
+                  - generic [ref=e360]: 暂无检查点数据
+                - generic [ref=e361]:
+                  - generic [ref=e363]: 告警 (0)
+                  - list
+  - generic [ref=e118]:
+    - iframe [ref=e119]:
+      
+    - generic:
+      - img
+    - generic [ref=e123]: © 2026 AutoNavi - GS(2025)5996号

@@ -1,0 +1,76 @@
+- generic [ref=e370]:
+  - generic [ref=e372]:
+    - img [ref=e374]
+    - generic [ref=e375]:
+      - generic [ref=e376]:
+        - generic [ref=e378] [cursor=pointer]:
+          - img [ref=e380]
+          - generic [ref=e382]: 首页
+        - generic [ref=e384] [cursor=pointer]:
+          - img [ref=e386]
+          - generic [ref=e389]: 智能体
+        - generic [ref=e391] [cursor=pointer]:
+          - img [ref=e393]
+          - generic [ref=e395]: 知识库
+        - generic [ref=e397] [cursor=pointer]:
+          - img [ref=e399]
+          - generic [ref=e401]: 工具
+        - generic [ref=e403] [cursor=pointer]:
+          - img [ref=e405]
+          - generic [ref=e407]: 模型
+      - generic [ref=e408]:
+        - button "升级" [ref=e409] [cursor=pointer]:
+          - generic [ref=e410]:
+            - img [ref=e412]
+            - text: 升级
+        - button [ref=e414] [cursor=pointer]:
+          - img [ref=e417]
+        - button [ref=e420] [cursor=pointer]:
+          - img [ref=e423]
+        - button [ref=e425] [cursor=pointer]:
+          - img [ref=e428]
+        - button [ref=e431] [cursor=pointer]:
+          - img [ref=e434]
+    - button [ref=e437] [cursor=pointer]
+  - generic [ref=e440]:
+    - generic [ref=e441]:
+      - button [ref=e442] [cursor=pointer]:
+        - img [ref=e445]
+      - heading "上传文档" [level=3] [ref=e448]
+    - generic [ref=e456]:
+      - heading "上传文档" [level=4] [ref=e457]
+      - generic [ref=e458]:
+        - radiogroup "radio-group" [ref=e460]:
+          - generic [ref=e461]:
+            - radio "文本文件" [checked] [ref=e462]
+            - generic [ref=e463] [cursor=pointer]: 文本文件
+          - generic [ref=e464]:
+            - radio "表格" [ref=e465]
+            - generic [ref=e466] [cursor=pointer]: 表格
+          - generic [ref=e467]:
+            - radio "QA 问答对" [ref=e468]
+            - generic [ref=e469] [cursor=pointer]: QA 问答对
+        - generic [ref=e471]:
+          - generic [ref=e472]:
+            - img [ref=e475]
+            - generic [ref=e477]:
+              - paragraph [ref=e478]: 1、文件上传前，建议规范文件的分段标识
+              - paragraph [ref=e479]: 2. 每次最多上传 638 个文件, 每个文件不超过 684 MB
+          - button "拖拽文件至此上传或 选择文件选择文件夹 支持格式：TXT、Markdown、PDF、DOCX、HTML、XLS、XLSX、CSV、ZIP" [active] [ref=e481] [cursor=pointer]:
+            - generic [ref=e483]:
+              - paragraph [ref=e484]:
+                - text: 拖拽文件至此上传或
+                - emphasis [ref=e485]: 选择文件
+                - emphasis [ref=e486]: 选择文件夹
+              - paragraph [ref=e488]: 支持格式：TXT、Markdown、PDF、DOCX、HTML、XLS、XLSX、CSV、ZIP
+      - generic [ref=e498]:
+        - generic [ref=e500]:
+          - paragraph [ref=e501]: 2026-06-16_09-56-02_沈海高速_K2015_400_K2015_400.md
+          - generic [ref=e502]: 385B
+        - button [ref=e503] [cursor=pointer]:
+          - img [ref=e506]
+    - generic [ref=e489]:
+      - button "取消" [ref=e490] [cursor=pointer]:
+        - generic [ref=e491]: 取消
+      - button "下一步" [ref=e492] [cursor=pointer]:
+        - generic [ref=e493]: 下一步

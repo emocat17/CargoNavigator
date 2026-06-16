@@ -3,7 +3,7 @@
  */
 import axios from 'axios'
 
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
+const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
 const BASE = `${API}/api/v1`
 
 /** Get the complete digital archive for an order. */

@@ -1,35 +1,45 @@
+# ================================================================
+# CargoNavigator — 开发环境（一键启动：前端 + 后端 + MaxKB）
+#
+# 启动所有服务:
+#   docker compose up -d --build
+#
+# 仅启动前后端（不含 MaxKB）:
+#   docker compose up -d --build backend frontend
+#
+# 含 MaxKB 知识库:
+#   docker compose --profile kb up -d --build
+#
+# 热重载:
+#   后端: 修改 backend/ 下文件 → uvicorn 自动重启
+#   前端: 修改 frontend/src/ 下文件 → Vite HMR 即时更新
+#   修改 package.json / requirements.txt → 重新 docker compose up -d --build
+#
+# MaxKB 首次访问:
+#   http://localhost:8080
+#   默认账号: admin / admin123.
+# ================================================================
+
+name: cargo-navigator
+
 services:
   # ============================================
-  # MaxKB 知识库 (可选 - 独立部署)
-  # ============================================
-  maxkb:
-    image: registry.fit2cloud.com/maxkb/maxkb:latest
-    container_name: cargo-maxkb
-    restart: always
-    ports:
-      - "${MAXKB_PORT:-8080}:8080"
-    volumes:
-      - maxkb_data:/opt/maxkb
-    environment:
-      - TZ=Asia/Shanghai
-    networks:
-      - cargo-net
-    profiles:
-      - full
-      - kb
-
-  # ============================================
-  # CargoNavigator Backend
+  # CargoNavigator 后端 (FastAPI + uvicorn)
   # ============================================
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     container_name: cargo-backend
-    restart: always
+    restart: unless-stopped
     ports:
-      - "${BACKEND_PORT:-9876}:9876"
+      - "${BACKEND_PORT:-19876}:19876"
     volumes:
+      # 源码热重载：修改 backend/app 即生效
+      - ./backend/app:/app/app:ro
+      # 数据目录（bridge DB + spider 数据持久化）
       - cargo_data:/app/data
-      - ./backend/spider/data:/app/spider/data  # Spider output persisted
+      - ./backend/spider/data:/app/spider/data
     env_file:
       - .env
     environment:
@@ -38,33 +48,62 @@ services:
     networks:
       - cargo-net
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9876/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:19876/health')"]
       interval: 30s
       timeout: 5s
       retries: 3
 
   # ============================================
-  # CargoNavigator Frontend (Vue 3 + Quasar)
+  # CargoNavigator 前端 (Vue3 + Quasar + Vite)
   # ============================================
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     container_name: cargo-frontend
-    restart: always
+    restart: unless-stopped
     ports:
-      - "${FRONTEND_PORT:-6789}:6789"
+      - "${FRONTEND_PORT:-16789}:16789"
+    volumes:
+      # 源码热重载：修改 frontend/src 即生效
+      - ./frontend/src:/app/src:ro
+      - ./frontend/public:/app/public:ro
+      - ./frontend/index.html:/app/index.html:ro
+      - ./frontend/vite.config.js:/app/vite.config.js:ro
+      # node_modules 用容器内的，不挂载
     environment:
       - TZ=Asia/Shanghai
-      - VITE_API_BASE=http://backend:9876
+      - VITE_API_BASE=http://localhost:${BACKEND_PORT:-19876}
     networks:
       - cargo-net
     depends_on:
       backend:
         condition: service_healthy
 
+  # ============================================
+  # MaxKB 知识库 (可选 — profile: kb)
+  # ============================================
+  maxkb:
+    image: registry.fit2cloud.com/maxkb/maxkb:latest
+    container_name: cargo-maxkb
+    restart: unless-stopped
+    ports:
+      - "${MAXKB_PORT:-18080}:8080"
+    volumes:
+      - maxkb_data:/opt/maxkb
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - cargo-net
+    profiles:
+      - kb
+
 volumes:
-  maxkb_data:
-    driver: local
   cargo_data:
+    name: cargo-data
+    driver: local
+  maxkb_data:
+    name: cargo-maxkb-data
     driver: local
 
 networks:

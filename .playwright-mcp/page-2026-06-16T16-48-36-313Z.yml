@@ -1,0 +1,50 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - toolbar [ref=e5]:
+      - button [ref=e6] [cursor=pointer]:
+        - img [ref=e8]: menu
+      - generic [ref=e9]: 大件运输智能选线
+  - complementary [ref=e10]:
+    - generic [ref=e11]:
+      - tablist [ref=e12]:
+        - generic [ref=e13]:
+          - tab "路径规划" [ref=e14] [cursor=pointer]:
+            - generic [ref=e15]:
+              - generic [ref=e16]: directions
+              - generic [ref=e17]: 路径规划
+          - tab "智能问答" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: smart_toy
+              - generic [ref=e22]: 智能问答
+          - tab "运输追踪" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: timeline
+              - generic [ref=e27]: 运输追踪
+          - tab "护送监控" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: monitor_heart
+              - generic [ref=e32]: 护送监控
+          - tab "数字档案" [selected] [ref=e34] [cursor=pointer]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: inventory_2
+              - generic [ref=e37]: 数字档案
+        - generic [ref=e364] [cursor=pointer]: chevron_left
+      - separator [ref=e40]
+      - tabpanel [ref=e365]:
+        - tabpanel [ref=e366]:
+          - generic [ref=e367]:
+            - generic [ref=e368]: 运输数字档案
+            - generic [ref=e373] [cursor=pointer]:
+              - generic [ref=e374]:
+                - generic: 选择运输单
+                - combobox "选择运输单" [ref=e376]
+              - generic [ref=e378]: arrow_drop_down
+            - generic [ref=e380]:
+              - generic [ref=e381]: inventory_2
+              - paragraph [ref=e382]: 选择一个已完成的运输单查看数字档案
+  - generic [ref=e118]:
+    - iframe [ref=e119]:
+      
+    - generic:
+      - img
+    - generic [ref=e123]: © 2026 AutoNavi - GS(2025)5996号

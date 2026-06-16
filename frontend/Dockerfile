@@ -14,16 +14,16 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # SPA fallback: all routes → index.html
 RUN echo 'server { \
-    listen 6789; \
+    listen 16789; \
     root /usr/share/nginx/html; \
     index index.html; \
     location / { try_files $uri $uri/ /index.html; } \
     location /api { \
-        proxy_pass http://backend:9876; \
+        proxy_pass http://backend:19876; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
-EXPOSE 6789
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:6789/ || exit 1
+EXPOSE 16789
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:16789/ || exit 1

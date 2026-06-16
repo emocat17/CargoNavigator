@@ -1,0 +1,162 @@
+- generic [ref=e1]:
+  - generic [ref=e367]:
+    - generic [ref=e369]:
+      - img [ref=e371]
+      - generic [ref=e372]:
+        - generic [ref=e373]:
+          - generic [ref=e375] [cursor=pointer]:
+            - img [ref=e377]
+            - generic [ref=e379]: 首页
+          - generic [ref=e381] [cursor=pointer]:
+            - img [ref=e383]
+            - generic [ref=e386]: 智能体
+          - generic [ref=e388] [cursor=pointer]:
+            - img [ref=e390]
+            - generic [ref=e392]: 知识库
+          - generic [ref=e394] [cursor=pointer]:
+            - img [ref=e396]
+            - generic [ref=e398]: 工具
+          - generic [ref=e400] [cursor=pointer]:
+            - img [ref=e402]
+            - generic [ref=e404]: 模型
+        - generic [ref=e405]:
+          - button "升级" [ref=e406] [cursor=pointer]:
+            - generic [ref=e407]:
+              - img [ref=e409]
+              - text: 升级
+          - button [ref=e411] [cursor=pointer]:
+            - img [ref=e414]
+          - button [ref=e417] [cursor=pointer]:
+            - img [ref=e420]
+          - button [ref=e422] [cursor=pointer]:
+            - img [ref=e425]
+          - button [ref=e428] [cursor=pointer]:
+            - img [ref=e431]
+      - button [ref=e434] [cursor=pointer]
+    - generic [ref=e437]:
+      - generic [ref=e438]:
+        - generic [ref=e439]:
+          - heading "供应商" [level=4] [ref=e440]
+          - generic [ref=e445]:
+            - generic [ref=e446] [cursor=pointer]:
+              - img [ref=e448]
+              - generic [ref=e453]: 全部模型
+            - generic [ref=e454]:
+              - button "公有模型" [ref=e456] [cursor=pointer]:
+                - generic [ref=e458]:
+                  - img [ref=e460]
+                  - generic [ref=e463]: 公有模型
+                - img [ref=e465]
+              - button "私有模型" [ref=e468] [cursor=pointer]:
+                - generic [ref=e470]:
+                  - img [ref=e472]
+                  - generic [ref=e475]: 私有模型
+                - img [ref=e477]
+        - button [ref=e479] [cursor=pointer]:
+          - img [ref=e481]
+      - generic [ref=e484]:
+        - generic [ref=e486]:
+          - heading "全部模型" [level=4] [ref=e487]
+          - generic [ref=e488]:
+            - generic [ref=e489]:
+              - generic [ref=e491] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e493]
+                  - generic [ref=e494]: 模型名称
+                - img [ref=e497]
+              - textbox "按名称搜索" [ref=e501]
+            - button "添加模型" [ref=e503] [cursor=pointer]:
+              - generic [ref=e504]: 添加模型
+        - generic [ref=e513]:
+          - generic [ref=e515]:
+            - img [ref=e518]
+            - generic [ref=e520]:
+              - generic "maxkb-embedding" [ref=e522]
+              - generic [ref=e523]:
+                - generic "系统管理员" [ref=e524]
+                - generic [ref=e525]: 创建于
+                - generic [ref=e526]: 2026-06-16
+          - list [ref=e528]:
+            - listitem [ref=e529]:
+              - generic [ref=e530]: 模型类型
+              - generic [ref=e531]: 向量模型
+            - listitem [ref=e532]:
+              - generic [ref=e533]: 基础模型
+              - generic [ref=e534]: /opt/maxkb-app/model/embedding/shibing624_text2vec-base-chinese
+  - dialog [ref=e537]:
+    - generic [active] [ref=e538]:
+      - banner [ref=e539]:
+        - generic [ref=e540]:
+          - heading "选择供应商" [level=4] [ref=e541]
+          - button "全部模型" [ref=e543] [cursor=pointer]:
+            - text: 全部模型
+            - img [ref=e545]
+        - button "关闭此对话框" [ref=e547] [cursor=pointer]:
+          - img [ref=e549]
+      - generic [ref=e552]:
+        - generic [ref=e556] [cursor=pointer]:
+          - img "【icon】阿里百炼大模型" [ref=e558]
+          - generic [ref=e573]: 阿里云百炼
+        - generic [ref=e577] [cursor=pointer]:
+          - img [ref=e579]
+          - generic [ref=e582]: Anthropic
+        - generic [ref=e586] [cursor=pointer]:
+          - img [ref=e588]
+          - generic [ref=e592]: Amazon Bedrock
+        - generic [ref=e596] [cursor=pointer]:
+          - img [ref=e598]
+          - generic [ref=e602]: Azure OpenAI
+        - generic [ref=e606] [cursor=pointer]:
+          - img [ref=e608]
+          - generic [ref=e610]: DeepSeek
+        - generic [ref=e614] [cursor=pointer]:
+          - img [ref=e616]
+          - generic [ref=e618]: Docker AI
+        - generic [ref=e622] [cursor=pointer]:
+          - img [ref=e624]
+          - generic [ref=e626]: Gemini
+        - generic [ref=e630] [cursor=pointer]:
+          - img [ref=e632]
+          - generic [ref=e636]: Kimi
+        - generic [ref=e640] [cursor=pointer]:
+          - img [ref=e642]
+          - generic [ref=e644]: 本地模型
+        - generic [ref=e648] [cursor=pointer]:
+          - img [ref=e650]
+          - generic [ref=e653]: MiniMax
+        - generic [ref=e657] [cursor=pointer]:
+          - img [ref=e659]
+          - generic [ref=e661]: Ollama
+        - generic [ref=e665] [cursor=pointer]:
+          - img [ref=e667]
+          - generic [ref=e669]: OpenAI
+        - generic [ref=e673] [cursor=pointer]:
+          - img [ref=e675]
+          - generic [ref=e681]: Regolo
+        - generic [ref=e685] [cursor=pointer]:
+          - img [ref=e687]
+          - generic [ref=e690]: SILICONFLOW
+        - generic [ref=e694] [cursor=pointer]:
+          - img [ref=e696]
+          - generic [ref=e700]: 腾讯云
+        - generic [ref=e704] [cursor=pointer]:
+          - img [ref=e706]
+          - generic [ref=e708]: 腾讯混元
+        - generic [ref=e712] [cursor=pointer]:
+          - img [ref=e714]
+          - generic [ref=e716]: vLLM
+        - generic [ref=e720] [cursor=pointer]:
+          - img [ref=e722]
+          - generic [ref=e724]: 火山引擎
+        - generic [ref=e728] [cursor=pointer]:
+          - img [ref=e730]
+          - generic [ref=e734]: 千帆大模型
+        - generic [ref=e738] [cursor=pointer]:
+          - img [ref=e740]
+          - generic [ref=e744]: 讯飞星火
+        - generic [ref=e748] [cursor=pointer]:
+          - img [ref=e750]
+          - generic [ref=e752]: Xorbits Inference
+        - generic [ref=e756] [cursor=pointer]:
+          - img [ref=e758]
+          - generic [ref=e762]: 智谱 AI

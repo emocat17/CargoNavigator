@@ -1,0 +1,160 @@
+- generic [ref=e1327]:
+  - generic [ref=e1329]:
+    - img [ref=e1331]
+    - generic [ref=e1332]:
+      - generic [ref=e1333]:
+        - generic [ref=e1335] [cursor=pointer]:
+          - img [ref=e1337]
+          - generic [ref=e1339]: 首页
+        - generic [ref=e1341] [cursor=pointer]:
+          - img [ref=e1343]
+          - generic [ref=e1345]: 智能体
+        - generic [ref=e1347] [cursor=pointer]:
+          - img [ref=e1349]
+          - generic [ref=e1351]: 知识库
+        - generic [ref=e1353] [cursor=pointer]:
+          - img [ref=e1355]
+          - generic [ref=e1357]: 工具
+        - generic [ref=e1359] [cursor=pointer]:
+          - img [ref=e1361]
+          - generic [ref=e1363]: 模型
+      - generic [ref=e1364]:
+        - button "升级" [ref=e1365] [cursor=pointer]:
+          - generic [ref=e1366]:
+            - img [ref=e1368]
+            - text: 升级
+        - button [ref=e1370] [cursor=pointer]:
+          - img [ref=e1373]
+        - button [ref=e1376] [cursor=pointer]:
+          - img [ref=e1379]
+        - button [ref=e1381] [cursor=pointer]:
+          - img [ref=e1384]
+        - button [ref=e1387] [cursor=pointer]:
+          - img [ref=e1390]
+    - button [ref=e1393] [cursor=pointer]
+  - generic [ref=e1396]:
+    - generic [ref=e1399]:
+      - generic [ref=e1401]:
+        - button [ref=e1402] [cursor=pointer]:
+          - img [ref=e1405]
+        - generic "CargoNavigator" [ref=e1410]
+      - menubar [ref=e1414]:
+        - menuitem "概览" [ref=e1416] [cursor=pointer]:
+          - img [ref=e1418]
+          - generic [ref=e1423]: 概览
+        - menuitem "设置" [ref=e1425] [cursor=pointer]:
+          - img [ref=e1427]
+          - generic [ref=e1429]: 设置
+        - menuitem "对话日志" [ref=e1431] [cursor=pointer]:
+          - img [ref=e1433]
+          - generic [ref=e1435]: 对话日志
+    - generic [ref=e1793]:
+      - heading "概览" [level=2] [ref=e1794]
+      - generic [ref=e1798]:
+        - generic [ref=e1800]:
+          - heading "基本信息" [level=4] [ref=e1801]
+          - generic [ref=e1803]:
+            - heading "CargoNavigator" [level=4] [ref=e1807]
+            - generic [ref=e1808]:
+              - generic [ref=e1809]:
+                - generic [ref=e1810]:
+                  - generic [ref=e1811]: 公开访问链接
+                  - generic [ref=e1812]:
+                    - switch [checked]
+                    - generic [ref=e1816] [cursor=pointer]: 开
+                - generic [ref=e1818]:
+                  - generic [ref=e1819]: http://localhost:8080/chat/e7112b2e60708f85
+                  - button [ref=e1820] [cursor=pointer]:
+                    - img [ref=e1823]
+                  - button [ref=e1825] [cursor=pointer]:
+                    - img [ref=e1828]
+                - generic [ref=e1830]:
+                  - link "去对话" [ref=e1831] [cursor=pointer]:
+                    - /url: http://localhost:8080/chat/e7112b2e60708f85
+                    - generic [ref=e1832]:
+                      - img [ref=e1834]
+                      - text: 去对话
+                  - button "嵌入第三方" [ref=e1837] [cursor=pointer]:
+                    - generic [ref=e1838]:
+                      - img [ref=e1840]
+                      - text: 嵌入第三方
+                  - button "访问限制" [ref=e1842] [cursor=pointer]:
+                    - generic [ref=e1843]:
+                      - img [ref=e1845]
+                      - text: 访问限制
+                  - button "显示设置" [ref=e1847] [cursor=pointer]:
+                    - generic [ref=e1848]:
+                      - img [ref=e1850]
+                      - text: 显示设置
+              - generic [ref=e1852]:
+                - generic [ref=e1854]: API 访问凭据
+                - generic [ref=e1855]:
+                  - generic [ref=e1856]:
+                    - generic [ref=e1857]: API 文档：
+                    - button "http://localhost:8080/chat/api-doc/" [ref=e1858] [cursor=pointer]:
+                      - generic [ref=e1859]: http://localhost:8080/chat/api-doc/
+                  - generic [ref=e1860]:
+                    - generic [ref=e1862]: Base URL：
+                    - generic [ref=e1863]: http://localhost:8080/chat/api/019ece0e-f615-7533-abed-ac6546d39091
+                    - button [ref=e1864] [cursor=pointer]:
+                      - img [ref=e1867]
+                - button "API Key" [active] [ref=e1870] [cursor=pointer]:
+                  - generic [ref=e1871]:
+                    - img [ref=e1873]
+                    - text: API Key
+        - generic [ref=e1876]:
+          - heading "监控统计" [level=4] [ref=e1877]
+          - generic [ref=e1880] [cursor=pointer]:
+            - generic:
+              - combobox [ref=e1882]
+              - generic [ref=e1883]: 过去7天
+            - img [ref=e1886]
+          - generic [ref=e1889]:
+            - generic [ref=e1893]:
+              - img [ref=e1896] [cursor=pointer]
+              - generic [ref=e1899]:
+                - paragraph [ref=e1900]: 活跃用户
+                - generic [ref=e1901]:
+                  - heading "0" [level=2] [ref=e1902]
+                  - generic [ref=e1903]: "+0"
+            - generic [ref=e1907]:
+              - img [ref=e1910] [cursor=pointer]
+              - generic [ref=e1912]:
+                - paragraph [ref=e1913]: 对话次数
+                - heading "0" [level=2] [ref=e1915]
+            - generic [ref=e1919]:
+              - img [ref=e1922] [cursor=pointer]
+              - generic [ref=e1924]:
+                - paragraph [ref=e1925]: Tokens 总数
+                - heading "0" [level=2] [ref=e1927]
+            - generic [ref=e1931]:
+              - img [ref=e1934] [cursor=pointer]
+              - generic [ref=e1936]:
+                - paragraph [ref=e1937]: 用户满意度
+                - generic [ref=e1938]:
+                  - img [ref=e1940]
+                  - heading "0" [level=2] [ref=e1943]
+                  - img [ref=e1945]
+                  - heading "0" [level=2] [ref=e1948]
+            - generic [ref=e1979]:
+              - generic [ref=e1981] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e1983]
+                  - generic [ref=e1984]: TOP 10
+                - img [ref=e1987]
+              - generic [ref=e1990]:
+                - heading "用户消耗 Tokens" [level=4] [ref=e1991]
+                - generic [ref=e1992]:
+                  - img [ref=e1994]
+                  - paragraph [ref=e2011]: 暂无数据
+            - generic [ref=e2014]:
+              - generic [ref=e2016] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e2018]
+                  - generic [ref=e2019]: TOP 10
+                - img [ref=e2022]
+              - generic [ref=e2025]:
+                - heading "用户提问次数" [level=4] [ref=e2026]
+                - generic [ref=e2027]:
+                  - img [ref=e2029]
+                  - paragraph [ref=e2046]: 暂无数据
