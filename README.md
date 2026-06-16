@@ -1,105 +1,210 @@
-# SmartRoute: 大型货车智能选线与合规管理系统
+# CargoNavigator — 大件运输智能选线与审批管理系统
 
-> **赋能大件运输，降低决策成本，规避通行风险**
-
----
-
-## 1. 项目概述 (Executive Summary)
-
-**SmartRoute** 是一款专为大件运输和物流行业定制的**智能辅助决策系统**。针对行业内“货车专用导航API昂贵”、“人工选线效率低”、“通行资质审核繁琐”等痛点，本项目采用创新的**“多策略召回 + 智能优选”**算法架构，在利用标准地图数据的基础上，通过边缘计算与NLP技术，实现了媲美商业级货车导航的选线能力。
-
-**核心价值**:
-*   **降本**: 零商业授权费，通过算法优化替代昂贵的专用导航服务（节省 ¥24W+/年）。
-*   **增效**: 自动化路径规划与资质预审，将人工耗时从小时级缩短至秒级。
-*   **安全**: 内置隧道统计、夜间禁行预警及疲劳驾驶分析，主动规避运输风险。
+> 对标江苏"秒批秒办"、广西AI平台、Bentley SUPERLOAD，为福建省大件运输提供一站式路线规划、桥梁安全评估、施工事件匹配、许可证生成、运输监控与数字档案管理。
 
 ---
 
-## 2. 核心功能 (Key Features)
+## 1. 核心功能
 
-### 2.1 🚀 智能多策略选线引擎 (Smart Routing Engine)
-摒弃传统的“单一策略”模式，SmartRoute 采用**并发多路召回**机制：
-*   **全量召回**: 后端并发请求**速度优先、费用优先、距离优先、躲避拥堵**等多种策略。
-*   **智能去重**: 基于几何相似度与关键指标（里程/耗时/路费）的去重算法，剔除冗余路线。
-*   **决策辅助**: 为每条路线提供多维度画像：
-    *   **TCO 成本估算**: 结合车型油耗（动态计算）与实时路费，输出精准的总拥有成本。
-    *   **关键节点分析**: 自动识别并高亮沿途的长隧道（>1km）、收费站及行政区划切换。
-
-### 2.2 🚛 车辆通行资质全生命周期管理
-打通“人-车-货-路”数据闭环，提供标准化的资质预审能力：
-*   **动态车辆建模**: 支持复杂的轴组配置（如 1+2+3 轴型）、轴重与轴距的精确录入。
-*   **合规性预审**: 依据 GB1589 规范，自动校验车辆参数与货物尺寸的匹配度（Roadmap）。
-*   **数据持久化**: 支持本地/云端双重存储，确保企业核心数据资产安全。
-
-### 2.3 🛡️ 主动安全防御体系
-*   **夜间禁行规避**: 智能识别出发时间，针对 02:00-05:00 禁行时段提供预警。
-*   **NLP 路线描述**: 利用自然语言处理技术，将复杂的导航指令压缩为“关键途经点摘要”，辅助司机快速建立路线认知。
+| 模块 | 功能 | 说明 |
+|------|------|------|
+| 🚀 **路线规划** | 多策略并发选线 | 高德地图4策略并发（速度/费用/距离/避堵），自动去重排名 |
+| 🔬 **桥梁评估** | 荷载效应对比法 | 122座桥梁 + 153,900条影响线，7级通行评级（对标HVSAPS） |
+| 🚧 **施工匹配** | K值桩号精确匹配 | 66个施工事件与路线段落自动重叠检测 |
+| 🤖 **智能问答** | DeepSeek LLM + SSE | 法规知识库检索 → 路线规划 → 桥梁评估 → 施工匹配 → LLM合成 |
+| 📋 **许可证生成** | 全自动填报 | 符合交通运输部令2021年第12号，I/II/III类自动分类 |
+| 🛤️ **勘测清单** | 5类检查点 | 桥梁/隧道/收费站/匝道/高空障碍，优先级排序 |
+| 📊 **运输追踪** | 10状态状态机 | DRAFT → SUBMITTED → ... → IN_TRANSIT → COMPLETED |
+| 🗺️ **护送监控** | 实时地图大屏 | SSE推送GPS位置，Amap地图实时追踪，检查点+告警面板 |
+| 📦 **数字档案** | 一键导出 | 完整轨迹回放 + 事件时间线 + JSON/PDF双格式导出 |
 
 ---
 
-## 3. 技术架构 (Technical Architecture)
+## 2. 快速开始（Docker）
 
-本项目采用**前后端分离**的现代化架构，确保系统的高可用性与可扩展性。
+### 前提条件
+- **Docker** 28+ & **Docker Compose** v2.40+
+- 高德地图 API Key（[免费申请](https://console.amap.com/dev/key/app)）
+- DeepSeek API Key（[免费申请](https://platform.deepseek.com/api_keys)）
 
-### 3.1 架构图示
+### 2.1 配置
 
-```mermaid
-graph TD
-    User[用户终端] --> Frontend[Vue3 + Quasar 前端]
-    Frontend --> |REST API| Backend[FastAPI 后端服务]
-    
-    subgraph "Backend Core"
-        API[API 网关] --> Service[业务逻辑层]
-        Service --> |Async Concurrent| Amap[高德地图服务 V3]
-        Service --> NLP[NLP 处理引擎]
-        Service --> Cost[成本计算模型]
-    end
-    
-    subgraph "Data Layer"
-        DB[(SQLite/PostgreSQL)]
-        Cache[内存缓存]
-    end
-    
-    Backend --> DB
+编辑项目根目录 `.env` 文件，填入你的 API Key：
+
+```bash
+# 必填
+AMAP_API_KEY=你的高德地图key
+DEEPSEEK_API_KEY=你的DeepSeek_api_key
+
+# 可选 — MaxKB 知识库
+MAXKB_PORT=18090
+MAXKB_USERNAME=admin
+MAXKB_PASSWORD=admin123.
 ```
 
-### 3.2 关键技术栈
-*   **后端**: 
-    *   **FastAPI**: 利用 Python `asyncio` 实现高并发地图请求，响应速度提升 300%。
-    *   **SQLAlchemy**: 稳健的 ORM 层，支持平滑迁移至 PostgreSQL/MySQL。
-    *   **Pandas/NumPy**: 用于复杂的成本模型计算与数据分析。
-*   **前端**: 
-    *   **Vue 3 (Composition API)**: 响应式数据流，极致的交互体验。
-    *   **Quasar Framework**: 企业级 UI 组件库，适配桌面端与移动端。
-    *   **AMap JS API 2.0**: 高性能地图渲染，支持万级坐标点的流畅绘制。
+### 2.2 一键启动
+
+```bash
+# 开发模式（热重载 + 源码映射）
+docker compose up -d --build
+
+# 含 MaxKB 知识库
+docker compose --profile kb up -d --build
+
+# 生产模式
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+
+### 2.3 访问
+
+| 服务 | 地址 |
+|------|------|
+| **前端** | http://localhost:16789 |
+| **后端 API 文档** | http://localhost:19876/docs |
+| **后端健康检查** | http://localhost:19876/health |
+| **MaxKB 知识库** | http://localhost:18090（需 `--profile kb`） |
+
+### 2.4 热重载
+
+Docker 开发模式下，修改代码即时生效：
+
+| 修改位置 | 生效方式 |
+|----------|---------|
+| `frontend/src/*.vue` | Vite HMR 即时更新 |
+| `backend/app/*.py` | uvicorn `--reload` 自动重启 |
+| `package.json` / `requirements.txt` | 重新 `docker compose up -d --build` |
 
 ---
 
-## 4. 快速部署 (Deployment)
-
-详细部署指南请参考 [Deploy.md](./Deploy.md)。
+## 3. 本地开发（不使用 Docker）
 
 ### 环境要求
-*   **Python**: 3.10+
-*   **Node.js**: 16+
-*   **OS**: Windows / Linux / macOS
+- Python 3.12+
+- Node.js 20+
+- Git
 
-### 启动服务
-1.  **后端**: `cd backend && uvicorn app.main:app --reload --port 9876`
-2.  **前端**: `cd frontend && npm run dev`
+### 启动
+
+```bash
+# 后端
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 19876
+
+# 前端（新终端）
+cd frontend
+npm install
+npm run dev
+```
+
+前端 http://localhost:16789 | 后端 http://localhost:19876/docs
 
 ---
 
-## 5. 项目演进 (Roadmap)
+## 4. 项目结构
 
-*   **Stage 1 (Completed)**: 基础选线功能、车辆档案管理、单一路线展示。
-*   **Stage 2 (Completed)**: **多策略并发选线**、TCO 成本模型、NLP 路线摘要、数据导出。
-*   **Stage 3 (Planned)**: 
-    *   **AI 智能推荐**: 基于历史运输数据，利用机器学习推荐最优路线。
-    *   **实时导航集成**: 将规划结果下发至车载终端。
-    *   **竞品比价**: 对接更多地图源（百度/腾讯）进行横向对比。
+```
+CargoNavigator/
+├── docker-compose.yml          # 开发环境（默认）
+├── docker-compose.prod.yml     # 生产环境覆盖
+├── .env                        # 环境变量配置（API Key等）
+│
+├── backend/
+│   ├── Dockerfile              # 生产镜像（多阶段构建）
+│   ├── Dockerfile.dev          # 开发镜像（热重载）
+│   ├── requirements.txt
+│   ├── bootstrap.py            # 启动前检查
+│   ├── app/
+│   │   ├── main.py             # FastAPI 入口
+│   │   ├── api/                # API 路由（8个模块）
+│   │   │   ├── routes.py           # 路线规划
+│   │   │   ├── assessment_routes.py # 路线评估
+│   │   │   ├── agent_routes.py     # 智能问答(SSE)
+│   │   │   ├── permit_routes.py    # 许可证生成
+│   │   │   ├── survey_routes.py    # 勘测清单
+│   │   │   ├── tracking_routes.py  # 运输追踪
+│   │   │   ├── monitor_routes.py   # 护送监控+档案
+│   │   │   └── vehicle_routes.py   # 车辆管理
+│   │   ├── services/           # 业务逻辑（15个服务）
+│   │   ├── models/             # 数据模型
+│   │   └── schemas/            # Pydantic 模型
+│   ├── data/
+│   │   ├── cargo_bridge.db     # 桥梁数据库（122桥/153900行）
+│   │   ├── schema.sql          # 表结构
+│   │   └── migrate_data.py     # 数据迁移脚本（手动）
+│   └── tests/                  # 362个测试
+│
+├── frontend/
+│   ├── Dockerfile              # 生产镜像（nginx）
+│   ├── Dockerfile.dev          # 开发镜像（Vite）
+│   ├── vite.config.js
+│   └── src/
+│       ├── App.vue             # 主布局（5个tab）
+│       ├── api/                # API模块（8个）
+│       └── components/         # 组件
+│           ├── RouteForm.vue       # 路线规划表单
+│           ├── SmartQA.vue         # 智能问答(SSE)
+│           ├── StatusDashboard.vue # 运输追踪面板
+│           ├── MonitorDashboard.vue # 护送监控大屏
+│           ├── TransportArchive.vue # 数字档案查看器
+│           └── ...
+│
+└── docs/
+    ├── deployment.md
+    ├── superpowers/specs/      # 设计文档
+    └── reference/              # 参考资料
+```
 
 ---
 
-> **SmartRoute Team**
-> *专注于物流科技创新，致力于每一公里的降本增效。*
+## 5. 技术栈
+
+| 层 | 技术 | 说明 |
+|----|------|------|
+| **后端框架** | FastAPI + uvicorn | 异步高并发，SSE流式推送 |
+| **前端框架** | Vue 3 + Quasar + Vite | Composition API，企业级组件 |
+| **地图** | 高德 JS API 2.0 | 万级坐标流畅渲染 |
+| **LLM** | DeepSeek API | 流式合成，法规知识检索 |
+| **桥梁计算** | NumPy + SciPy | 影响线加载，效应比值计算 |
+| **数据库** | SQLite + SQLAlchemy | 122桥/153900行，零配置 |
+| **部署** | Docker Compose | 一键启动，热重载开发 |
+
+---
+
+## 6. 测试
+
+```bash
+cd backend
+python -m pytest tests/ -v
+# 362 passed
+```
+
+---
+
+## 7. API 概览（42个端点）
+
+| 前缀 | 端点数 | 功能 |
+|------|--------|------|
+| `/routes` | 3 | 路线规划、评估、比较 |
+| `/vehicles` | 5 | 车辆档案CRUD + 分类 + 尺寸检查 |
+| `/agent` | 5 | 智能问答(SSE) + 会话管理 |
+| `/permit` | 3 | 许可证生成、预览、导出 |
+| `/survey` | 1 | 勘测清单生成 |
+| `/tracking` | 6 | 运输单CRUD + 状态机 + 统计 |
+| `/monitor` | 4 | 监控启动/停止/SSE流/会话 |
+| `/archive` | 2 | 档案查询 + JSON/PDF导出 |
+| `/applications` | 5 | 申请CRUD |
+
+---
+
+## 8. 许可证分类标准
+
+| 类别 | 标准 | 审批时限 |
+|------|------|---------|
+| **I 类** | 高≤4.2m, 宽≤3m, 长≤20m | 5个工作日 |
+| **II 类** | 高≤4.5m, 宽≤3.75m, 长≤28m, 重≤100t | 10个工作日 |
+| **III 类** | 超出II类任一标准 | 20个工作日 |
+
+---
+
+> **CargoNavigator** — 让每一吨大件运输都安全、合规、高效。
