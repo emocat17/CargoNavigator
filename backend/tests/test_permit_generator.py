@@ -28,7 +28,7 @@ def sample_vehicle_info():
         "length": 24.0,
         "width": 4.9,
         "height": 4.7,
-        "weight": 150.0,
+        "total_weight": 150.0,
         "axle_count": 8,
         "axle_spacings": [3.5, 1.5, 3.0, 3.0, 3.0, 3.0, 3.0],
         "axle_loads": [18.0, 18.0, 19.0, 19.0, 19.0, 19.0, 19.0, 19.0],
@@ -47,7 +47,7 @@ def sample_cargo_info():
         "length": 10.0,
         "width": 4.5,
         "height": 4.2,
-        "weight": 120.0,
+        "total_weight": 120.0,
     }
 
 
@@ -465,7 +465,7 @@ class TestGenerateEscortPlan:
             "length": 30.0,
             "width": 2.5,
             "height": 3.0,
-            "weight": 40.0,
+            "total_weight": 40.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="低")
         assert plan["escort_vehicle_count"] >= 2
@@ -477,7 +477,7 @@ class TestGenerateEscortPlan:
             "length": 20.0,
             "width": 4.0,
             "height": 3.0,
-            "weight": 40.0,
+            "total_weight": 40.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="低")
         assert plan["escort_vehicle_count"] >= 2
@@ -489,7 +489,7 @@ class TestGenerateEscortPlan:
             "length": 20.0,
             "width": 2.5,
             "height": 4.8,
-            "weight": 40.0,
+            "total_weight": 40.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="低")
         assert plan["escort_vehicle_count"] >= 1
@@ -501,7 +501,7 @@ class TestGenerateEscortPlan:
             "length": 20.0,
             "width": 2.5,
             "height": 3.0,
-            "weight": 120.0,
+            "total_weight": 120.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="低")
         assert plan["escort_vehicle_count"] >= 2
@@ -513,7 +513,7 @@ class TestGenerateEscortPlan:
             "length": 18.0,
             "width": 2.5,
             "height": 3.5,
-            "weight": 40.0,
+            "total_weight": 40.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="低")
         assert plan["escort_required"] is True  # always required for oversized
@@ -526,7 +526,7 @@ class TestGenerateEscortPlan:
             "length": 22.0,
             "width": 3.5,
             "height": 4.0,
-            "weight": 80.0,
+            "total_weight": 80.0,
         }
         plan = PermitGenerator.generate_escort_plan(vehicle, risk_level="极高")
         assert plan["escort_vehicle_count"] == 3
@@ -536,7 +536,7 @@ class TestGenerateEscortPlan:
     def test_escort_emergency_plan_coverage(self):
         """Emergency plan covers major incident types."""
         plan = PermitGenerator.generate_escort_plan(
-            {"length": 20, "width": 3, "height": 4, "weight": 50},
+            {"length": 20, "width": 3, "height": 4, "total_weight": 50},
             risk_level="中"
         )
         emergency = "".join(plan["emergency_plan"])
@@ -700,7 +700,7 @@ class TestComplianceSummary:
             "length": 40.0,
             "width": 6.0,
             "height": 5.5,
-            "weight": 250.0,
+            "total_weight": 250.0,
         }
         route_data = {
             "routes": [{"route_description": "A→B"}],
@@ -709,7 +709,7 @@ class TestComplianceSummary:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "超大设备", "weight": 200},
+            cargo_info={"name": "超大设备", "total_weight": 200},
         )
 
         compliance = result["compliance"]
@@ -727,7 +727,7 @@ class TestComplianceSummary:
             "length": 18.0,
             "width": 2.5,
             "height": 3.5,
-            "weight": 40.0,
+            "total_weight": 40.0,
         }
         route_data = {
             "routes": [{"route_description": "A→B"}],
@@ -736,7 +736,7 @@ class TestComplianceSummary:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "普通货物", "weight": 30},
+            cargo_info={"name": "普通货物", "total_weight": 30},
         )
 
         compliance = result["compliance"]
@@ -754,7 +754,7 @@ class TestRiskLevelDetermination:
 
     def test_low_risk_vehicle(self):
         """Small vehicle without assessment gets low risk."""
-        vehicle = {"length": 18.0, "width": 2.5, "height": 3.5, "weight": 40.0}
+        vehicle = {"length": 18.0, "width": 2.5, "height": 3.5, "total_weight": 40.0}
         route_data = {
             "routes": [{"route_description": "A→B"}],
             "assessment": {},
@@ -762,13 +762,13 @@ class TestRiskLevelDetermination:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "test", "weight": 30},
+            cargo_info={"name": "test", "total_weight": 30},
         )
         assert result["compliance"]["risk_level"] == "低"
 
     def test_medium_risk_vehicle(self):
         """Moderately oversized vehicle gets medium risk (score 2-3)."""
-        vehicle = {"length": 25.0, "width": 3.3, "height": 4.6, "weight": 80.0}
+        vehicle = {"length": 25.0, "width": 3.3, "height": 4.6, "total_weight": 80.0}
         route_data = {
             "routes": [{"route_description": "A→B"}],
             "assessment": {},
@@ -776,13 +776,13 @@ class TestRiskLevelDetermination:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "test", "weight": 60},
+            cargo_info={"name": "test", "total_weight": 60},
         )
         assert result["compliance"]["risk_level"] == "中"
 
     def test_high_risk_vehicle(self):
         """Highly oversized vehicle gets high risk."""
-        vehicle = {"length": 30.0, "width": 4.0, "height": 4.8, "weight": 120.0}
+        vehicle = {"length": 30.0, "width": 4.0, "height": 4.8, "total_weight": 120.0}
         route_data = {
             "routes": [{"route_description": "A→B"}],
             "assessment": {},
@@ -790,13 +790,13 @@ class TestRiskLevelDetermination:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "test", "weight": 130},
+            cargo_info={"name": "test", "total_weight": 130},
         )
         assert result["compliance"]["risk_level"] == "高"
 
     def test_extreme_risk_vehicle(self):
         """Extremely oversized vehicle gets 极高 risk."""
-        vehicle = {"length": 35.0, "width": 5.0, "height": 5.5, "weight": 200.0}
+        vehicle = {"length": 35.0, "width": 5.0, "height": 5.5, "total_weight": 200.0}
         route_data = {
             "routes": [{"route_description": "A→B"}],
             "assessment": {},
@@ -804,6 +804,6 @@ class TestRiskLevelDetermination:
         result = PermitGenerator.generate_application(
             route_data=route_data,
             vehicle_info=vehicle,
-            cargo_info={"name": "test", "weight": 180},
+            cargo_info={"name": "test", "total_weight": 180},
         )
         assert result["compliance"]["risk_level"] == "极高"

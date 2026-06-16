@@ -306,7 +306,7 @@ class PermitGenerator:
         length = vehicle_info.get("length", 20.0)
         width = vehicle_info.get("width", 3.0)
         height = vehicle_info.get("height", 4.0)
-        weight = vehicle_info.get("weight", 49.0)
+        weight = vehicle_info.get("total_weight", 49.0)
 
         # Determine escort vehicle count based on dimension thresholds
         escort_count = 0
@@ -598,7 +598,7 @@ class PermitGenerator:
             "total_length": vehicle_info.get("length", 0),
             "total_width": vehicle_info.get("width", 0),
             "total_height": vehicle_info.get("height", 0),
-            "total_weight": vehicle_info.get("weight", 0),
+            "total_weight": vehicle_info.get("total_weight", 0),
             "axle_count": vehicle_info.get("axle_count", 0),
             "axle_spacings": axle_spacings,
             "axle_spacings_str": ", ".join(str(s) for s in axle_spacings) if axle_spacings else "",
@@ -706,7 +706,7 @@ class PermitGenerator:
         length = vehicle_info.get("length", 20.0)
         width = vehicle_info.get("width", 3.0)
         height = vehicle_info.get("height", 4.0)
-        weight = vehicle_info.get("weight", 49.0)
+        weight = vehicle_info.get("total_weight", 49.0)
 
         risk_score = 0
         if length >= 30:
@@ -768,7 +768,7 @@ class PermitGenerator:
         length = vehicle_info.get("length", 0)
         width = vehicle_info.get("width", 0)
         height = vehicle_info.get("height", 0)
-        weight = vehicle_info.get("weight", 0)
+        weight = vehicle_info.get("total_weight", 0)
 
         # Dimension compliance checks
         checks = []

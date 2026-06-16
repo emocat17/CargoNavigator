@@ -6,46 +6,16 @@ Provides:
 - POST /routes/compare  - Multi-route comparison and ranking
 """
 import logging
-from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from app.schemas.shared import VehicleInfoInput, RouteDataInput
 from app.services.route_assessor import route_assessor
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Route Assessment"])
-
-
-# ── Request/Response models ──
-
-class VehicleInfoInput(BaseModel):
-    """Vehicle parameters for route assessment."""
-    length: float = Field(..., description="车长 (米)", ge=0)
-    width: float = Field(..., description="车宽 (米)", ge=0)
-    height: float = Field(..., description="车高 (米)", ge=0)
-    weight: float = Field(..., description="车货总重 (吨)", ge=0)
-    axis_weight: Optional[float] = Field(None, description="最大轴重 (吨)")
-    axis_count: Optional[int] = Field(None, description="轴数", ge=1)
-    axis_loads: Optional[list[float]] = Field(None, description="各轴载荷分布 (吨)")
-    axis_spacings: Optional[list[float]] = Field(None, description="各轴间距 (米)")
-
-
-class RouteDataInput(BaseModel):
-    """Route data input for assessment. Accepts fields from the Amap
-    RouteInfo model, but all fields are optional for flexibility."""
-    id: Optional[str] = Field(None, description="路线ID")
-    route_description: Optional[str] = Field("", description="路线描述 (如: 北村--G76--海沧)")
-    major_roads: Optional[list[str]] = Field(default_factory=list, description="主要道路列表")
-    distance: Optional[int] = Field(0, description="总距离 (米)")
-    duration: Optional[int] = Field(0, description="预计时间 (秒)")
-    tunnel_count: Optional[int] = Field(0, description="隧道数量")
-    tunnel_distance: Optional[int] = Field(0, description="隧道总长 (米)")
-    toll_cost: Optional[float] = Field(0.0, description="过路费 (元)")
-    traffic_condition: Optional[str] = Field("", description="路况描述")
-    risk_warnings: Optional[list[str]] = Field(default_factory=list, description="风险警告")
-    strategy: Optional[str] = Field("", description="选路策略")
 
 
 class RouteAssessRequest(BaseModel):

@@ -139,11 +139,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import { getOrders, getStatistics } from '@/api/tracking'
 
 const emit = defineEmits(['view-order'])
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
 const loading = ref(false)
 const orders = ref([])
 const stats = ref({
@@ -237,9 +235,9 @@ const filteredOrders = computed(() => {
 
 async function loadOrders() {
   try {
-    const res = await axios.get(`${API}/api/v1/tracking/orders`, { params: { limit: 500, sort_desc: true } })
-    if (res.data.code === 200) {
-      orders.value = res.data.data.orders || []
+    const res = await getOrders(0, 500)
+    if (res.code === 200) {
+      orders.value = res.data.orders || []
     }
   } catch (e) {
     console.error('Failed to load orders:', e)
@@ -248,9 +246,9 @@ async function loadOrders() {
 
 async function loadStats() {
   try {
-    const res = await axios.get(`${API}/api/v1/tracking/statistics`)
-    if (res.data.code === 200) {
-      stats.value = res.data.data
+    const res = await getStatistics()
+    if (res.code === 200) {
+      stats.value = res.data
     }
   } catch (e) {
     console.error('Failed to load stats:', e)

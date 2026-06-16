@@ -169,8 +169,8 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
+import { streamChat } from '@/api/agent'
 const $q = useQuasar()
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
 
 const props = defineProps({ routes:{type:Array,default:()=>[]}, selectedRouteIndex:{type:Number,default:0}, vehicle:{type:Object,default:null} })
 const emit = defineEmits(['plan-route'])
@@ -336,54 +336,25 @@ const send = async (text) => {
   let bridgeData = '', constructionData = '', routeData = ''
 
   try {
-    const resp = await fetch(`${API}/api/v1/agent/chat`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message:msg})
-    })
-    if(!resp.ok) throw new Error(`HTTP ${resp.status}`)
-
-    const reader = resp.body.getReader()
-    const decoder = new TextDecoder()
-    let buffer = ''
-
-    while (true) {
-      const {done, value} = await reader.read()
-      if (done) break
-      buffer += decoder.decode(value, {stream: true})
-
-      // Process complete SSE events
-      const events = buffer.split('\n\n')
-      buffer = events.pop() // keep incomplete last event
-
-      for (const evt of events) {
-        if (!evt.trim()) continue
-        const lines = evt.split('\n')
-        let eventType = '', data = ''
-        for (const line of lines) {
-          if (line.startsWith('event: ')) eventType = line.slice(7).trim()
-          else if (line.startsWith('data: ')) data = line.slice(6)
-        }
-
-        if (eventType === 'token') {
-          try {
-            const p = JSON.parse(data)
-            const token = typeof p==='string' ? p : (p.content||p.choices?.[0]?.delta?.content||'')
-            messages.value[aiIdx].content += token
-          } catch { messages.value[aiIdx].content += data }
-        } else if (eventType === 'route') {
-          try { routeData = JSON.parse(data) } catch { routeData = data }
-          messages.value[aiIdx].routeData = routeData
-        } else if (eventType === 'bridge') {
-          try { bridgeData = JSON.parse(data) } catch { bridgeData = data }
-          messages.value[aiIdx].bridgeData = bridgeData
-        } else if (eventType === 'construction') {
-          try { constructionData = JSON.parse(data) } catch { constructionData = data }
-          messages.value[aiIdx].constructionData = constructionData
-        } else if (eventType === 'status') {
-          parsePhase(data)
-        } else if (eventType === 'done') {
-          phaseText.value = ''
-        }
+    for await (const { event, data } of streamChat(msg)) {
+      if (event === 'token') {
+        const token = typeof data === 'string' ? data : (data.content || data.choices?.[0]?.delta?.content || '')
+        messages.value[aiIdx].content += token
+      } else if (event === 'route') {
+        routeData = typeof data === 'string' ? data : data
+        messages.value[aiIdx].routeData = routeData
+      } else if (event === 'bridge') {
+        bridgeData = typeof data === 'string' ? data : data
+        messages.value[aiIdx].bridgeData = bridgeData
+      } else if (event === 'construction') {
+        constructionData = typeof data === 'string' ? data : data
+        messages.value[aiIdx].constructionData = constructionData
+      } else if (event === 'regulation') {
+        // regulation KB results can be shown inline
+      } else if (event === 'status') {
+        parsePhase(data)
+      } else if (event === 'done') {
+        phaseText.value = ''
       }
       await nextTick()
       await scrollDown()

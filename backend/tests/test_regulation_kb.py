@@ -73,24 +73,24 @@ class TestClassifyPermit:
             "height": 3.5,
             "width": 2.5,
             "length": 15.0,
-            "weight": 40,
+            "total_weight": 40,
             "axle_count": 6,
         })
         assert result == "I"
 
     def test_height_above_class_I_is_III(self, kb):
         """Height > 4.5m is Class III."""
-        result = kb.classify_permit({"height": 4.7, "width": 3.0, "weight": 60})
+        result = kb.classify_permit({"height": 4.7, "width": 3.0, "total_weight": 60})
         assert result == "III"
 
     def test_width_above_class_I_is_III(self, kb):
         """Width > 3.75m is Class III."""
-        result = kb.classify_permit({"height": 4.0, "width": 4.0, "weight": 80})
+        result = kb.classify_permit({"height": 4.0, "width": 4.0, "total_weight": 80})
         assert result == "III"
 
     def test_length_above_class_I_is_III(self, kb):
         """Length > 28m is Class III."""
-        result = kb.classify_permit({"height": 4.0, "width": 3.0, "length": 30, "weight": 80})
+        result = kb.classify_permit({"height": 4.0, "width": 3.0, "length": 30, "total_weight": 80})
         assert result == "III"
 
     def test_heavy_but_normal_dimensions_is_II(self, kb):
@@ -98,7 +98,7 @@ class TestClassifyPermit:
         result = kb.classify_permit({
             "height": 4.2,
             "width": 3.5,
-            "weight": 120,
+            "total_weight": 120,
         })
         assert result == "II"
 
@@ -108,7 +108,7 @@ class TestClassifyPermit:
             "height": 4.3,
             "width": 3.0,
             "length": 20,
-            "weight": 80,
+            "total_weight": 80,
         })
         assert result == "I"
 
@@ -117,7 +117,7 @@ class TestClassifyPermit:
         result = kb.classify_permit({
             "height": 4.0,
             "width": 2.5,
-            "weight": 55,
+            "total_weight": 55,
             "axle_count": 3,
             "vehicle_type": "truck",
         })
@@ -129,7 +129,7 @@ class TestClassifyPermit:
         result = kb.classify_permit({
             "height": 4.7,
             "width": 3.0,
-            "weight": 60,
+            "total_weight": 60,
         })
         # height 4.7 > 4.5 → class III
         assert result == "III"
@@ -165,12 +165,12 @@ class TestDocuments:
 
 class TestEscortRequirements:
     def test_class_I_no_escort(self, kb):
-        result = kb.get_escort_requirements({"height": 3.5, "width": 2.5, "weight": 40})
+        result = kb.get_escort_requirements({"height": 3.5, "width": 2.5, "total_weight": 40})
         assert result["escort_required"] is False
         assert result["min_escort_vehicles"] == 0
 
     def test_class_III_escort_required(self, kb):
-        result = kb.get_escort_requirements({"height": 4.7, "width": 3.0, "weight": 80})
+        result = kb.get_escort_requirements({"height": 4.7, "width": 3.0, "total_weight": 80})
         assert result["escort_required"] is True
         assert result["min_escort_vehicles"] >= 1
 
@@ -178,7 +178,7 @@ class TestEscortRequirements:
         result = kb.get_escort_requirements({
             "height": 4.8,
             "width": 4.7,  # > 4.5m → 2 escort vehicles for width
-            "weight": 90,
+            "total_weight": 90,
         })
         assert result["escort_required"] is True
         assert result["min_escort_vehicles"] >= 2
@@ -188,7 +188,7 @@ class TestEscortRequirements:
             "height": 5.2,
             "width": 4.6,
             "length": 36,
-            "weight": 120,
+            "total_weight": 120,
         })
         assert result["police_escort_required"] is True
 
@@ -202,7 +202,7 @@ class TestDimensionCompliance:
             "height": 3.5,
             "width": 2.5,
             "length": 15.0,
-            "weight": 40,
+            "total_weight": 40,
             "axle_count": 6,
         })
         assert result["is_compliant"] is True
@@ -212,7 +212,7 @@ class TestDimensionCompliance:
         result = kb.check_dimension_compliance({
             "height": 4.5,
             "width": 2.5,
-            "weight": 40,
+            "total_weight": 40,
             "axle_count": 5,
         })
         assert result["is_compliant"] is False
@@ -222,7 +222,7 @@ class TestDimensionCompliance:
         result = kb.check_dimension_compliance({
             "height": 3.0,
             "width": 2.5,
-            "weight": 30,
+            "total_weight": 30,
             "axle_count": 2,
             "vehicle_type": "truck",
         })
@@ -234,7 +234,7 @@ class TestDimensionCompliance:
             "height": 5.0,
             "width": 4.0,
             "length": 25.0,
-            "weight": 60,
+            "total_weight": 60,
             "axle_count": 3,
             "vehicle_type": "truck",
         })
@@ -244,7 +244,7 @@ class TestDimensionCompliance:
         result = kb.check_dimension_compliance({
             "height": 4.5,
             "width": 2.5,
-            "weight": 40,
+            "total_weight": 40,
             "axle_count": 6,
         })
         for v in result["violations"]:
@@ -258,27 +258,27 @@ class TestDimensionCompliance:
 class TestPenaltyEstimate:
     def test_no_violations_no_penalty(self, kb):
         result = kb.get_penalty_estimate(vehicle_info={
-            "height": 3.5, "width": 2.5, "weight": 40, "axle_count": 6,
+            "height": 3.5, "width": 2.5, "total_weight": 40, "axle_count": 6,
         })
         assert result["total_penalty"]["min"] == 0
         assert result["total_penalty"]["max"] == 0
 
     def test_size_violation_penalty(self, kb):
         result = kb.get_penalty_estimate(vehicle_info={
-            "height": 4.7, "width": 2.5, "weight": 40, "axle_count": 6,
+            "height": 4.7, "width": 2.5, "total_weight": 40, "axle_count": 6,
         })
         assert result["size_penalty"]["min"] >= 200
 
     def test_weight_violation_penalty(self, kb):
         result = kb.get_penalty_estimate(vehicle_info={
-            "height": 3.0, "width": 2.5, "weight": 25, "axle_count": 2, "vehicle_type": "truck",
+            "height": 3.0, "width": 2.5, "total_weight": 25, "axle_count": 2, "vehicle_type": "truck",
         })
         # 2-axle limit 18t, 25t → 7t excess → 7000kg * 500/1000 = 3500
         assert result["weight_penalty"]["amount"] > 0
 
     def test_combined_penalty_capped_at_30000(self, kb):
         result = kb.get_penalty_estimate(vehicle_info={
-            "height": 5.0, "width": 4.0, "length": 30, "weight": 120,
+            "height": 5.0, "width": 4.0, "length": 30, "total_weight": 120,
             "axle_count": 3, "vehicle_type": "truck",
         })
         assert result["total_penalty"]["max"] <= 30000
@@ -289,20 +289,20 @@ class TestPenaltyEstimate:
 
 class TestFormatForLLM:
     def test_returns_string(self, kb):
-        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "weight": 80})
+        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "total_weight": 80})
         assert isinstance(text, str)
         assert len(text) > 100
 
     def test_includes_permit_class(self, kb):
-        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "weight": 80})
+        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "total_weight": 80})
         assert "三类" in text
 
     def test_includes_document_list(self, kb):
-        text = kb.format_for_llm({"height": 4.0, "width": 3.0, "weight": 50})
+        text = kb.format_for_llm({"height": 4.0, "width": 3.0, "total_weight": 50})
         assert "申请材料" in text
 
     def test_includes_penalty_info(self, kb):
-        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "weight": 80})
+        text = kb.format_for_llm({"height": 4.7, "width": 3.0, "total_weight": 80})
         assert "处罚" in text or "罚款" in text
 
 
@@ -317,18 +317,18 @@ class TestEdgeCases:
 
     def test_none_values(self, kb):
         """None values should be treated as 0."""
-        result = kb.classify_permit({"height": None, "width": None, "weight": None})
+        result = kb.classify_permit({"height": None, "width": None, "total_weight": None})
         assert result == "I"
 
     def test_string_values(self, kb):
         """String numeric values should be coerced."""
-        result = kb.classify_permit({"height": "4.7", "width": "3.0", "weight": "60"})
+        result = kb.classify_permit({"height": "4.7", "width": "3.0", "total_weight": "60"})
         assert result == "III"
 
     def test_zero_values(self, kb):
-        result = kb.classify_permit({"height": 0, "width": 0, "weight": 0})
+        result = kb.classify_permit({"height": 0, "width": 0, "total_weight": 0})
         assert result == "I"
 
     def test_compliance_zero_dimensions(self, kb):
-        result = kb.check_dimension_compliance({"height": 0, "width": 0, "weight": 0, "axle_count": 0})
+        result = kb.check_dimension_compliance({"height": 0, "width": 0, "total_weight": 0, "axle_count": 0})
         assert result["is_compliant"] is True

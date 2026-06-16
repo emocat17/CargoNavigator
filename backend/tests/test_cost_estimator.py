@@ -59,7 +59,7 @@ def sample_vehicle_standard() -> dict:
         "length": 18.0,
         "width": 2.5,
         "height": 3.8,
-        "weight": 45.0,
+        "total_weight": 45.0,
         "axle_count": 6,
         "vehicle_type": "train",
     }
@@ -72,7 +72,7 @@ def sample_vehicle_oversized() -> dict:
         "length": 32.0,
         "width": 4.9,
         "height": 4.8,
-        "weight": 150.0,
+        "total_weight": 150.0,
         "axle_count": 8,
         "vehicle_type": "train",
         "axis_weight": 18.0,
@@ -304,7 +304,7 @@ def test_estimate_with_none_values(sample_route):
         "length": None,
         "width": None,
         "height": None,
-        "weight": None,
+        "total_weight": None,
         "axle_count": None,
     }
     result = cost_estimator.estimate(sample_route, vehicle)

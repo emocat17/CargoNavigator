@@ -407,7 +407,7 @@ class AgentService:
         if not wt_match:
             wt_match = re.search(r'([\d.]+)\s*(?:吨|t)\s*(?:重|总重|重量)', message)
         if wt_match:
-            info["weight"] = float(wt_match.group(1))
+            info["total_weight"] = float(wt_match.group(1))
 
         # Axle count patterns
         ax_match = re.search(r'([\d六七八九十]+)\s*(?:轴|桥)', message)

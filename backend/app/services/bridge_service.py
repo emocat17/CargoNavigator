@@ -315,7 +315,7 @@ def _build_axle_config(vehicle_info: dict) -> Optional[dict]:
         }
 
     # Estimate from basic params
-    total_weight = vehicle_info.get("weight", 49.0)  # tons
+    total_weight = vehicle_info.get("total_weight", 49.0)  # tons
     axis_count = vehicle_info.get("axis_count", 6)
     max_axis_weight = vehicle_info.get("axis_weight", 10.0)
 

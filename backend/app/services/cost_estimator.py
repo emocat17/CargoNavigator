@@ -179,7 +179,7 @@ def _calculate_fuel(
     base_rate = _determine_fuel_rate(route_data)
 
     # Load correction: base_rate × (1 + 0.3 × load_tons / max_load_tons)
-    weight = float(vehicle_info.get("weight", 49) or 49)
+    weight = float(vehicle_info.get("total_weight", 49) or 49)
     max_load = _get_max_load_tons(vehicle_info)
     load_correction = 1.0
     if max_load > 0 and weight > 0:

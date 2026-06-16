@@ -145,7 +145,7 @@ class RegulationKB:
         height = float(vehicle_info.get("height", 0) or 0)
         width = float(vehicle_info.get("width", 0) or 0)
         length = float(vehicle_info.get("length", 0) or 0)
-        weight = float(vehicle_info.get("weight", vehicle_info.get("total_weight", 0)) or 0)
+        weight = float(vehicle_info.get("total_weight", 0) or 0)
 
         # ---- first check: is it even over-limit ? ----
         is_over_limit = False
@@ -322,7 +322,7 @@ class RegulationKB:
         height = float(vehicle_info.get("height", 0) or 0)
         width = float(vehicle_info.get("width", 0) or 0)
         length = float(vehicle_info.get("length", 0) or 0)
-        weight = float(vehicle_info.get("weight", vehicle_info.get("total_weight", 0)) or 0)
+        weight = float(vehicle_info.get("total_weight", 0) or 0)
         axle_count = int(vehicle_info.get("axle_count", 0) or 0)
         vtype = vehicle_info.get("vehicle_type", "truck")
 

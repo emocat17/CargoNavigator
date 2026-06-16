@@ -341,7 +341,7 @@ def _assess_dimensions(vehicle_info: dict, route_data: dict) -> dict:
     """
     height = vehicle_info.get("height", 4.0)
     width = vehicle_info.get("width", 2.55)
-    weight = vehicle_info.get("weight", 49.0)
+    weight = vehicle_info.get("total_weight", 49.0)
 
     # Estimate checkpoints: one per highway segment + one per tunnel
     # (simplified: use major_roads count + tunnel_count)
@@ -801,7 +801,7 @@ def _build_recommendations(
             for_approver_special.append("高风险桥梁通行需安排护送车辆，限速≤20km/h")
         else:
             for_approver_special.append("需对高风险桥梁进行现场勘察并确认通行条件")
-    if vehicle_info.get("weight", 0) > 49.0:
+    if vehicle_info.get("total_weight", 0) > 49.0:
         for_approver_special.append("需办理超限运输许可证")
 
     for_approver_special.append("出发前关注天气预报")

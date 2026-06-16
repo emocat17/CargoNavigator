@@ -15,38 +15,15 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from app.schemas.shared import VehicleInfoInput
 from app.services.permit_generator import permit_generator
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Permit Application"])
 
-
-# ── Request models ──
-
-class VehicleInfoInput(BaseModel):
-    """Vehicle parameters for permit application."""
-    vehicle_type: Optional[str] = Field(
-        default="", description="车辆类型 (如: 牵引车+低平板半挂车)"
-    )
-    length: float = Field(..., description="车货总长 (米)", ge=0)
-    width: float = Field(..., description="车货总宽 (米)", ge=0)
-    height: float = Field(..., description="车货总高 (米)", ge=0)
-    weight: float = Field(..., description="车货总重 (吨)", ge=0)
-    axle_count: Optional[int] = Field(None, description="总轴数", ge=1)
-    axle_spacings: Optional[list[float]] = Field(
-        default=None, description="各轴间距 (米)"
-    )
-    axle_loads: Optional[list[float]] = Field(
-        default=None, description="各轴载荷 (吨)"
-    )
-    tractor_length: Optional[float] = Field(None, description="牵引车长度 (米)")
-    trailer_length: Optional[float] = Field(None, description="挂车长度 (米)")
-    tractor_axle_count: Optional[int] = Field(None, description="牵引车轴数")
-    trailer_axle_count: Optional[int] = Field(None, description="挂车轴数")
-    first_axle_distance: Optional[float] = Field(
-        None, description="车头距第一轴中心距离 (米)"
-    )
+# 保留 CargoInfoInput 和 ApplicantInfoInput —— 它们不是共享的
+# VehicleInfoInput 已从 shared 导入
 
 
 class CargoInfoInput(BaseModel):
