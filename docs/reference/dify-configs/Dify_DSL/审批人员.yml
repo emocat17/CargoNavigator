@@ -1,0 +1,3642 @@
+app:
+  description: ''
+  icon: 🔍
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 审批人员
+  use_icon_as_answer_icon: true
+dependencies:
+- current_identifier: null
+  type: package
+  value:
+    plugin_unique_identifier: langgenius/siliconflow:0.0.29@1e8f0b4a32c07d5e192847e4cd57384dcf196f35c667670ca7f00e18a8ead4e9
+    version: null
+- current_identifier: null
+  type: package
+  value:
+    plugin_unique_identifier: langgenius/zhipuai:0.0.15@0fe895dabd88378b75fbd5a8b437b329094f9867de3db901dfee31945b30bd08
+    version: null
+- current_identifier: null
+  type: package
+  value:
+    plugin_unique_identifier: langgenius/tongyi:0.0.54@a719a5a226596151af6ff33fa710a74476faa6e1afde9e4a201ff8a7803857ff
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5000
+        file_size_limit: 2000
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: 您好，我是智能审批助手！请将复制的完整表单粘贴到对话框发送，我将为您生成完整的风险分析与评估报告
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-1760843420947-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '1760843420947'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608434253680-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608434253680'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608434280500-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608434280500'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608439030760-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608439030760'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608439352080-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608439352080'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608439612060-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608439612060'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: parameter-extractor
+      id: 1711528708197-source-17608439831980-target
+      selected: false
+      source: '1711528708197'
+      sourceHandle: source
+      target: '17608439831980'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: parameter-extractor
+      id: 1760843420947-source-1760852592238-target
+      selected: false
+      source: '1760843420947'
+      sourceHandle: source
+      target: '1760852592238'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: agent
+      id: 17608532131230-source-17608532059960-target
+      selected: false
+      source: '17608532131230'
+      sourceHandle: source
+      target: '17608532059960'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: parameter-extractor
+      id: 1760843420947-source-1760853675977-target
+      selected: false
+      source: '1760843420947'
+      sourceHandle: source
+      target: '1760853675977'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: agent
+      id: 1760854383572-source-17608542461450-target
+      selected: false
+      source: '1760854383572'
+      sourceHandle: source
+      target: '17608542461450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1760854619000-source-1760854584400-target
+      selected: false
+      source: '1760854619000'
+      sourceHandle: source
+      target: '1760854584400'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1760854584400-source-1760854649990-target
+      selected: false
+      source: '1760854584400'
+      sourceHandle: source
+      target: '1760854649990'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: llm
+      id: 17608542461450-source-1760857068450-target
+      selected: false
+      source: '17608542461450'
+      sourceHandle: source
+      target: '1760857068450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: llm
+      id: 17608532059960-source-1760857068450-target
+      selected: false
+      source: '17608532059960'
+      sourceHandle: source
+      target: '1760857068450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: knowledge-retrieval
+      id: 1760857068450-source-1760854619000-target
+      selected: false
+      source: '1760857068450'
+      sourceHandle: source
+      target: '1760854619000'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: llm
+      id: 1760857947223-source-1760857068450-target
+      selected: false
+      source: '1760857947223'
+      sourceHandle: source
+      target: '1760857068450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: llm
+      id: 17608581185890-source-1760857068450-target
+      selected: false
+      source: '17608581185890'
+      sourceHandle: source
+      target: '1760857068450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 1760852592238-source-1761474894623-target
+      source: '1760852592238'
+      sourceHandle: source
+      target: '1761474894623'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608434253680-source-1761474894623-target
+      source: '17608434253680'
+      sourceHandle: source
+      target: '1761474894623'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: knowledge-retrieval
+      id: 1761474894623-source-17608532131230-target
+      source: '1761474894623'
+      sourceHandle: source
+      target: '17608532131230'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 1760853675977-source-1761475030189-target
+      source: '1760853675977'
+      sourceHandle: source
+      target: '1761475030189'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608434280500-source-1761475030189-target
+      source: '17608434280500'
+      sourceHandle: source
+      target: '1761475030189'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: template-transform
+      id: 1761474894623-source-1761475030189-target
+      source: '1761474894623'
+      sourceHandle: source
+      target: '1761475030189'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: knowledge-retrieval
+      id: 1761475030189-source-1760854383572-target
+      source: '1761475030189'
+      sourceHandle: source
+      target: '1760854383572'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608439030760-source-1761475174703-target
+      source: '17608439030760'
+      sourceHandle: source
+      target: '1761475174703'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608439352080-source-1761475174703-target
+      source: '17608439352080'
+      sourceHandle: source
+      target: '1761475174703'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: agent
+      id: 1761475174703-source-17608581185890-target
+      source: '1761475174703'
+      sourceHandle: source
+      target: '17608581185890'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608439612060-source-1761475275314-target
+      source: '17608439612060'
+      sourceHandle: source
+      target: '1761475275314'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: template-transform
+      id: 17608439831980-source-1761475275314-target
+      source: '17608439831980'
+      sourceHandle: source
+      target: '1761475275314'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: agent
+      id: 1761475275314-source-1760857947223-target
+      source: '1761475275314'
+      sourceHandle: source
+      target: '1760857947223'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 51
+      id: '1711528708197'
+      position:
+        x: -345.28498686316743
+        y: 969.3046940033296
+      positionAbsolute:
+        x: -345.28498686316743
+        y: 969.3046940033296
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen-turbo-latest
+          provider: langgenius/tongyi/tongyi
+        parameters:
+        - description: '## 基础信息
+
+            - **申请编号**：
+
+            - **货物名称**
+
+            - **通行开始时间**
+
+            - **通行结束时间**
+
+            - **起运省**：
+
+            - **沿线省**：
+
+            - **出发地**：
+
+            - **目的地**：'
+          name: Basic_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 基础信息
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1760843420947'
+      position:
+        x: -6.556335804822481
+        y: 627.7421952508644
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 627.7421952508644
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen-turbo-latest
+          provider: langgenius/tongyi/tongyi
+        parameters:
+        - description: "### 通行路线\n以下为例子：\n 原门海湖大件运销有限公司--赤苏松路--苏颂大道--同安大道--324国道---G2517沙原高速--原门互通-G15沈海高速-海抢枢纽--G76原苔高速--天宝枢纽--G1523甬芜高速--粤闽界--G1523甬芜高速---G0422武深高速---G35济广高速---G1508广州绕城高速---S45从埔高速---S18花高速---竹料东收费站---广从四路---广从五路---广从六路--广从七路---广从八路---广从九路--广从十路--广从南路---花都大道---S381---G106国道---G355国道---源潭路口---G240国道---广清大道---X380--雄兴工业园（广东中隧租赁有限公司）\
+            \  "
+          name: Route_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 路线提取
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608434253680'
+      position:
+        x: -6.556335804822481
+        y: 755.5280417835519
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 755.5280417835519
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: "## 车辆及货物尺寸\n\n- **货物质量**：\n- **车货总质量**：\n- **轴数**：\n- **轮胎数**：\n\
+            - **轴距**：\n- **轴荷分布**：\n- **货物外廓尺寸（长×宽×高）**： \n- **车货总体外廓尺寸（长×宽×高）**："
+          name: Vehicle_and_cargo_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 车辆及货物尺寸
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608434280500'
+      position:
+        x: -6.556335804822481
+        y: 887.6124211659871
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 887.6124211659871
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: '## 业户信息
+
+            - **业户名称**：
+
+            - **道路运输经营许可证号**：
+
+            - **地址**：
+
+            - **有效期**： '
+          name: Business_owner_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 业户信息
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608439030760'
+      position:
+        x: -6.556335804822481
+        y: 985.7824813981795
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 985.7824813981795
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: '## 经办人信息
+
+            - **经办人姓名**：
+
+            - **经办人身份证**：
+
+            - **手机号码**：'
+          name: Contact_person_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 经办人信息
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608439352080'
+      position:
+        x: -6.556335804822481
+        y: 1079.798257553986
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 1079.798257553986
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: "## 牵引车或运输车辆信息\n- **车辆牌号**：  \n- **厂牌型号**：  \n- **整备质量**：\n\
+            - **车辆所有人**：  "
+          name: Tractor_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 牵引车或运输车辆信息
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608439612060'
+      position:
+        x: -6.556335804822481
+        y: 1186.0399599668565
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 1186.0399599668565
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: "## 挂车信息\n- **挂车牌号**：  \n- **挂车厂牌型号**：\n- **整备质量**：\n- **挂车所有人**："
+          name: Trailer_info
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 挂车信息
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '17608439831980'
+      position:
+        x: -6.556335804822481
+        y: 1293.029596992305
+      positionAbsolute:
+        x: -6.556335804822481
+        y: 1293.029596992305
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: 快速返回出发时间和预计结束时间
+        model:
+          completion_params: {}
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: 提取出发时间和预计结束时间
+          name: Time
+          required: false
+          type: string
+        query:
+        - '1760843420947'
+        - Basic_info
+        reasoning_mode: prompt
+        selected: false
+        title: 提取时间
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1760852592238'
+      position:
+        x: 318.8349585451087
+        y: 634.7778324092404
+      positionAbsolute:
+        x: 318.8349585451087
+        y: 634.7778324092404
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        agent_parameters:
+          context:
+            type: variable
+            value:
+            - '17608532131230'
+            - result
+          instruction:
+            type: constant
+            value: '你是一个专业的大件运输合规性校验专家。现在需要针对{{#1760852592238.Time#}}{{#1760843420947.Basic_info#}}{{#17608434253680.Route_info#}}进行路线通行建议；
+
+
+              **运输基本信息：**
+
+              - 基础信息：{{#1760843420947.Basic_info#}}
+
+              - 运输时间：{{#1760852592238.Time#}}
+
+
+              **核查任务：**
+
+              请按照以下优先级进行道路施工与事件核查：
+
+
+              1. **优先查询知识库/**：使用通行路线中提取的高速公路编号，查询福建省高速交通时间和道路施工情况知识库
+
+              2. **高德地图补充验证**：对知识库未覆盖的路段或需要进一步验证的信息，使用高德地图MCP工具进行工具调用查询相关风险情况（包括可通行性、天气等）
+
+              3. **重点关注路段**：特别关注申请中提到的关键节点枢纽，比如收费站、边界、高速切换出入口等
+
+
+              **输出要求：**
+
+              - 按路段分段报告施工/事件信息
+
+              - 标注风险等级（高/中/低）
+
+              - 提供具体的影响分析和建议措施
+
+              - 如发现重大风险，立即给出预警
+
+
+              请开始执行核查流程。'
+          model:
+            type: constant
+            value:
+              completion_params:
+                thinking: false
+                web_search: false
+              mode: chat
+              model: glm-4.5
+              model_type: llm
+              provider: langgenius/zhipuai/zhipuai
+              type: model-selector
+          query:
+            type: constant
+            value: '根据以下通行路线{{#1761474894623.output#}}，查询相关高速公路的施工情况、交通管制和实时路况：
+
+
+              **重点关注：**
+
+              - 计划性施工项目及影响时段
+
+              - 临时交通管制措施
+
+              - 事故高发路段预警
+
+              - 收费站设备维护情况
+
+
+              请提供详细的施工计划表、影响范围和绕行建议（如有）。
+
+
+              使用maps_text_search工具，按以{{#1761474894623.output#}}中的高速关键字以及调用高德地图mcp对地名进行查询判断在高速的位置区域，使用关键词组合进行道路施工和事件搜索：
+
+
+              **福建省路段搜索关键词：**
+
+              施工、改造、交通管制、事故、封路等等
+
+
+              **搜索要求：**
+
+              - 每个关键词单独搜索
+
+              - 重点关注标注时间范围内的事件的具体位置、时间和影响范围
+
+              - 特别注意涉及大件车辆通行的限制信息
+
+
+              使用高德地图的天气maps_weather工具，使用{{#1761474894623.output#}}对时间范围内的每一天的关键节点设施所在城市在运输期间的天气情况：
+
+              **重点关注：**
+
+              - 台风预警信息
+
+              - 暴雨、强对流天气预警
+
+              - 连续降雨天数预测
+
+              - 能见度影响分析
+
+
+              结合天气信息，评估对道路施工进度和运输安全的影响。
+
+
+
+              最后；
+
+              请按照以下模板整合所有核查结果：
+
+
+              ## 道路施工与事件核查报告
+
+
+              ### 🚧 施工风险汇总
+
+              **[路段名称]**
+
+              - 风险等级：[高/中/低]
+
+              - 施工时段：[具体时间]
+
+              - 影响范围：[车道封闭/限速/绕行等]
+
+              - 应对建议：[具体措施]
+
+
+              ### ⚠️ 重点关注事项
+
+              1. **重大风险项**：[列出需要立即处理的事项]
+
+              2. **需协调事项**：[列出需要提前沟通的事项]
+
+              3. **备用路线建议**：[如有必要]
+
+
+              ### 📅 时间敏感性分析
+
+              - 施工时间与运输计划的冲突点
+
+              - 建议调整的运输时段
+
+              - 天气因素对施工进度的影响评估
+
+
+              ### ✅ 合规性结论
+
+              [基于核查结果给出明确的通过/有条件通过/不通过的结论]
+
+              同时将总知识库检索到的引用文件附在文末
+
+              '
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 天气预报查询。
+              parameters:
+                city:
+                  auto: 1
+                  value: null
+              provider_name: langgenius/gaode/gaode
+              provider_show_name: langgenius/gaode/gaode
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Target city for weather forecast query.
+                  ja_JP: Target city for weather forecast query.
+                  pt_BR: Cidade de destino para consulta de previsão do tempo.
+                  zh_Hans: 天气预报查询的目标城市。
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: cidade
+                  zh_Hans: 城市
+                llm_description: If you don't know you can extract the city name from
+                  the question or you can reply：Please tell me your city. You have
+                  to extract the Chinese city name from the question.
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 天气预报查询。
+              tool_label: 天气预报
+              tool_name: gaode_weather
+              type: builtin
+            - enabled: true
+              extra:
+                description: 驾车路径规划 API 可以根据用户起终点经纬度坐标规划以小客车、轿车通勤出行的方案，并且返回通勤方案的数据。
+              parameters:
+                destination:
+                  auto: 1
+                  value: null
+                origin:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 出发点经纬度，坐标格式为：经度，纬度
+                  ja_JP: 出发点经纬度，坐标格式为：经度，纬度
+                  pt_BR: 出发点经纬度，坐标格式为：经度，纬度
+                  zh_Hans: 出发点经纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: origin
+                  ja_JP: origin
+                  pt_BR: origin
+                  zh_Hans: origin
+                llm_description: 出发点经纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: origin
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 目的地经纬度，坐标格式为：经度，纬度
+                  ja_JP: 目的地经纬度，坐标格式为：经度，纬度
+                  pt_BR: 目的地经纬度，坐标格式为：经度，纬度
+                  zh_Hans: 目的地经纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: destination
+                  ja_JP: destination
+                  pt_BR: destination
+                  zh_Hans: destination
+                llm_description: 目的地经纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: destination
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 驾车路径规划 API 可以根据用户起终点经纬度坐标规划以小客车、轿车通勤出行的方案，并且返回通勤方案的数据。
+              tool_label: maps_direction_driving
+              tool_name: maps_direction_driving
+              type: mcp
+            - enabled: true
+              extra:
+                description: 关键字搜索 API 根据用户输入的关键字进行 POI 搜索，并返回相关的信息
+              parameters:
+                city:
+                  auto: 1
+                  value: null
+                citylimit:
+                  auto: 1
+                  value: null
+                keywords:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 查询关键字
+                  ja_JP: 查询关键字
+                  pt_BR: 查询关键字
+                  zh_Hans: 查询关键字
+                label:
+                  en_US: keywords
+                  ja_JP: keywords
+                  pt_BR: keywords
+                  zh_Hans: keywords
+                llm_description: 查询关键字
+                max: null
+                min: null
+                name: keywords
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 查询城市
+                  ja_JP: 查询城市
+                  pt_BR: 查询城市
+                  zh_Hans: 查询城市
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: city
+                  zh_Hans: city
+                llm_description: 查询城市
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 是否限制城市范围内搜索，默认不限制
+                  ja_JP: 是否限制城市范围内搜索，默认不限制
+                  pt_BR: 是否限制城市范围内搜索，默认不限制
+                  zh_Hans: 是否限制城市范围内搜索，默认不限制
+                label:
+                  en_US: citylimit
+                  ja_JP: citylimit
+                  pt_BR: citylimit
+                  zh_Hans: citylimit
+                llm_description: 是否限制城市范围内搜索，默认不限制
+                max: null
+                min: null
+                name: citylimit
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              settings: {}
+              tool_description: 关键字搜索 API 根据用户输入的关键字进行 POI 搜索，并返回相关的信息
+              tool_label: maps_text_search
+              tool_name: maps_text_search
+              type: mcp
+            - enabled: true
+              extra:
+                description: 查询关键词搜或者周边搜获取到的POI ID的详细信息
+              parameters:
+                id:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 关键词搜或者周边搜获取到的POI ID
+                  ja_JP: 关键词搜或者周边搜获取到的POI ID
+                  pt_BR: 关键词搜或者周边搜获取到的POI ID
+                  zh_Hans: 关键词搜或者周边搜获取到的POI ID
+                label:
+                  en_US: id
+                  ja_JP: id
+                  pt_BR: id
+                  zh_Hans: id
+                llm_description: 关键词搜或者周边搜获取到的POI ID
+                max: null
+                min: null
+                name: id
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 查询关键词搜或者周边搜获取到的POI ID的详细信息
+              tool_label: maps_search_detail
+              tool_name: maps_search_detail
+              type: mcp
+            - enabled: true
+              extra:
+                description: 根据城市名称或者标准adcode查询指定城市的天气
+              parameters:
+                city:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 城市名称或者adcode
+                  ja_JP: 城市名称或者adcode
+                  pt_BR: 城市名称或者adcode
+                  zh_Hans: 城市名称或者adcode
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: city
+                  zh_Hans: city
+                llm_description: 城市名称或者adcode
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 根据城市名称或者标准adcode查询指定城市的天气
+              tool_label: maps_weather
+              tool_name: maps_weather
+              type: mcp
+            - enabled: true
+              extra:
+                description: 周边搜，根据用户传入关键词以及坐标location，搜索出radius半径范围的POI
+              parameters:
+                keywords:
+                  auto: 1
+                  value: null
+                location:
+                  auto: 1
+                  value: null
+                radius:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 搜索关键词
+                  ja_JP: 搜索关键词
+                  pt_BR: 搜索关键词
+                  zh_Hans: 搜索关键词
+                label:
+                  en_US: keywords
+                  ja_JP: keywords
+                  pt_BR: keywords
+                  zh_Hans: keywords
+                llm_description: 搜索关键词
+                max: null
+                min: null
+                name: keywords
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 中心点经度纬度
+                  ja_JP: 中心点经度纬度
+                  pt_BR: 中心点经度纬度
+                  zh_Hans: 中心点经度纬度
+                label:
+                  en_US: location
+                  ja_JP: location
+                  pt_BR: location
+                  zh_Hans: location
+                llm_description: 中心点经度纬度
+                max: null
+                min: null
+                name: location
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 搜索半径
+                  ja_JP: 搜索半径
+                  pt_BR: 搜索半径
+                  zh_Hans: 搜索半径
+                label:
+                  en_US: radius
+                  ja_JP: radius
+                  pt_BR: radius
+                  zh_Hans: radius
+                llm_description: 搜索半径
+                max: null
+                min: null
+                name: radius
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 周边搜，根据用户传入关键词以及坐标location，搜索出radius半径范围的POI
+              tool_label: maps_around_search
+              tool_name: maps_around_search
+              type: mcp
+            - enabled: true
+              extra:
+                description: 测量两个经纬度坐标之间的距离,支持驾车、步行以及球面距离测量
+              parameters:
+                destination:
+                  auto: 1
+                  value: null
+                origins:
+                  auto: 1
+                  value: null
+                type:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  ja_JP: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  pt_BR: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  zh_Hans: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                label:
+                  en_US: origins
+                  ja_JP: origins
+                  pt_BR: origins
+                  zh_Hans: origins
+                llm_description: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: origins
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 终点经度，纬度，坐标格式为：经度，纬度
+                  ja_JP: 终点经度，纬度，坐标格式为：经度，纬度
+                  pt_BR: 终点经度，纬度，坐标格式为：经度，纬度
+                  zh_Hans: 终点经度，纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: destination
+                  ja_JP: destination
+                  pt_BR: destination
+                  zh_Hans: destination
+                llm_description: 终点经度，纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: destination
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  ja_JP: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  pt_BR: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  zh_Hans: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                label:
+                  en_US: type
+                  ja_JP: type
+                  pt_BR: type
+                  zh_Hans: type
+                llm_description: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                max: null
+                min: null
+                name: type
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 测量两个经纬度坐标之间的距离,支持驾车、步行以及球面距离测量
+              tool_label: maps_distance
+              tool_name: maps_distance
+              type: mcp
+            - enabled: true
+              extra:
+                description: 将详细的结构化地址转换为经纬度坐标。支持对地标性名胜景区、建筑物名称解析为经纬度坐标
+              parameters:
+                address:
+                  auto: 1
+                  value: null
+                city:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 待解析的结构化地址信息
+                  ja_JP: 待解析的结构化地址信息
+                  pt_BR: 待解析的结构化地址信息
+                  zh_Hans: 待解析的结构化地址信息
+                label:
+                  en_US: address
+                  ja_JP: address
+                  pt_BR: address
+                  zh_Hans: address
+                llm_description: 待解析的结构化地址信息
+                max: null
+                min: null
+                name: address
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 指定查询的城市
+                  ja_JP: 指定查询的城市
+                  pt_BR: 指定查询的城市
+                  zh_Hans: 指定查询的城市
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: city
+                  zh_Hans: city
+                llm_description: 指定查询的城市
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 将详细的结构化地址转换为经纬度坐标。支持对地标性名胜景区、建筑物名称解析为经纬度坐标
+              tool_label: maps_geo
+              tool_name: maps_geo
+              type: mcp
+            - enabled: true
+              extra:
+                description: 一个用于获取当前时间的工具。
+              parameters: {}
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: '%Y-%m-%d %H:%M:%S'
+                form: form
+                human_description:
+                  en_US: Time format in strftime standard.
+                  ja_JP: Time format in strftime standard.
+                  pt_BR: Time format in strftime standard.
+                  zh_Hans: strftime 标准的时间格式。
+                label:
+                  en_US: Format
+                  ja_JP: Format
+                  pt_BR: Format
+                  zh_Hans: 格式
+                llm_description: null
+                max: null
+                min: null
+                name: format
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: UTC
+                form: form
+                human_description:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                label:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                llm_description: null
+                max: null
+                min: null
+                name: timezone
+                options:
+                - icon: null
+                  label:
+                    en_US: UTC
+                    ja_JP: UTC
+                    pt_BR: UTC
+                    zh_Hans: UTC
+                  value: UTC
+                - icon: null
+                  label:
+                    en_US: America/New_York
+                    ja_JP: America/New_York
+                    pt_BR: America/New_York
+                    zh_Hans: 美洲/纽约
+                  value: America/New_York
+                - icon: null
+                  label:
+                    en_US: America/Los_Angeles
+                    ja_JP: America/Los_Angeles
+                    pt_BR: America/Los_Angeles
+                    zh_Hans: 美洲/洛杉矶
+                  value: America/Los_Angeles
+                - icon: null
+                  label:
+                    en_US: America/Chicago
+                    ja_JP: America/Chicago
+                    pt_BR: America/Chicago
+                    zh_Hans: 美洲/芝加哥
+                  value: America/Chicago
+                - icon: null
+                  label:
+                    en_US: America/Sao_Paulo
+                    ja_JP: America/Sao_Paulo
+                    pt_BR: América/São Paulo
+                    zh_Hans: 美洲/圣保罗
+                  value: America/Sao_Paulo
+                - icon: null
+                  label:
+                    en_US: Asia/Shanghai
+                    ja_JP: Asia/Shanghai
+                    pt_BR: Asia/Shanghai
+                    zh_Hans: 亚洲/上海
+                  value: Asia/Shanghai
+                - icon: null
+                  label:
+                    en_US: Asia/Ho_Chi_Minh
+                    ja_JP: Asia/Ho_Chi_Minh
+                    pt_BR: Ásia/Ho Chi Minh
+                    zh_Hans: 亚洲/胡志明市
+                  value: Asia/Ho_Chi_Minh
+                - icon: null
+                  label:
+                    en_US: Asia/Tokyo
+                    ja_JP: Asia/Tokyo
+                    pt_BR: Asia/Tokyo
+                    zh_Hans: 亚洲/东京
+                  value: Asia/Tokyo
+                - icon: null
+                  label:
+                    en_US: Asia/Dubai
+                    ja_JP: Asia/Dubai
+                    pt_BR: Asia/Dubai
+                    zh_Hans: 亚洲/迪拜
+                  value: Asia/Dubai
+                - icon: null
+                  label:
+                    en_US: Asia/Kolkata
+                    ja_JP: Asia/Kolkata
+                    pt_BR: Asia/Kolkata
+                    zh_Hans: 亚洲/加尔各答
+                  value: Asia/Kolkata
+                - icon: null
+                  label:
+                    en_US: Asia/Seoul
+                    ja_JP: Asia/Seoul
+                    pt_BR: Asia/Seoul
+                    zh_Hans: 亚洲/首尔
+                  value: Asia/Seoul
+                - icon: null
+                  label:
+                    en_US: Asia/Singapore
+                    ja_JP: Asia/Singapore
+                    pt_BR: Asia/Singapore
+                    zh_Hans: 亚洲/新加坡
+                  value: Asia/Singapore
+                - icon: null
+                  label:
+                    en_US: Europe/London
+                    ja_JP: Europe/London
+                    pt_BR: Europe/London
+                    zh_Hans: 欧洲/伦敦
+                  value: Europe/London
+                - icon: null
+                  label:
+                    en_US: Europe/Berlin
+                    ja_JP: Europe/Berlin
+                    pt_BR: Europe/Berlin
+                    zh_Hans: 欧洲/柏林
+                  value: Europe/Berlin
+                - icon: null
+                  label:
+                    en_US: Europe/Moscow
+                    ja_JP: Europe/Moscow
+                    pt_BR: Europe/Moscow
+                    zh_Hans: 欧洲/莫斯科
+                  value: Europe/Moscow
+                - icon: null
+                  label:
+                    en_US: Australia/Sydney
+                    ja_JP: Australia/Sydney
+                    pt_BR: Australia/Sydney
+                    zh_Hans: 澳大利亚/悉尼
+                  value: Australia/Sydney
+                - icon: null
+                  label:
+                    en_US: Pacific/Auckland
+                    ja_JP: Pacific/Auckland
+                    pt_BR: Pacific/Auckland
+                    zh_Hans: 太平洋/奥克兰
+                  value: Pacific/Auckland
+                - icon: null
+                  label:
+                    en_US: Africa/Cairo
+                    ja_JP: Africa/Cairo
+                    pt_BR: Africa/Cairo
+                    zh_Hans: 非洲/开罗
+                  value: Africa/Cairo
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              settings:
+                format:
+                  value:
+                    type: mixed
+                    value: '%Y-%m-%d %H:%M:%S'
+                timezone:
+                  value:
+                    type: constant
+                    value: UTC
+              tool_description: 一个用于获取当前时间的工具。
+              tool_label: 获取当前时间
+              tool_name: current_time
+              type: builtin
+        agent_strategy_label: ReAct
+        agent_strategy_name: ReAct
+        agent_strategy_provider_name: langgenius/agent/agent
+        meta:
+          minimum_dify_version: 1.7.0
+          version: 0.0.2
+        plugin_unique_identifier: langgenius/agent:0.0.24@0274c08e62efaa28f6327e7bdba655e16559ec28d4f41f2fa3ef553e6327c0f6
+        selected: false
+        title: 高速路况审查
+        tool_node_version: '2'
+        type: agent
+      height: 195
+      id: '17608532059960'
+      position:
+        x: 891.520473471962
+        y: 750.4447632362412
+      positionAbsolute:
+        x: 891.520473471962
+        y: 750.4447632362412
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - t8OiIQk0bxo4j2speN5BErnauniavpspi4JtTQJEzygnc22uXVNrw4oPO6ra4Irf
+        - jDMxknrvwdy3UI/JP4w4HXncqxzHhrYLytHMnsjlVUbm9WXL1nP79KlVwlt9ohT9
+        - wr5FkCKJKmHFphuNMg7vfj70jLpRdh0OPJ/L341qoamlhvqF35guYyIZsujSvmRb
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: Qwen/Qwen3-Reranker-4B
+            provider: langgenius/siliconflow/siliconflow
+          top_k: 4
+        query_variable_selector:
+        - '1761474894623'
+        - output
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+      height: 145
+      id: '17608532131230'
+      position:
+        x: 611.2684474328485
+        y: 790.6472942361021
+      positionAbsolute:
+        x: 611.2684474328485
+        y: 790.6472942361021
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        instruction: 快速提取货物名称
+        model:
+          completion_params: {}
+          mode: chat
+          name: glm-4-flashx-250414
+          provider: langgenius/zhipuai/zhipuai
+        parameters:
+        - description: 提取货物名称
+          name: Goods
+          required: false
+          type: string
+        query:
+        - '1760843420947'
+        - Basic_info
+        reasoning_mode: prompt
+        selected: false
+        title: 货物名称
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1760853675977'
+      position:
+        x: 318.8349585451087
+        y: 510.0675448759141
+      positionAbsolute:
+        x: 318.8349585451087
+        y: 510.0675448759141
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        agent_parameters:
+          context:
+            type: variable
+            value:
+            - '1760854383572'
+            - result
+          instruction:
+            type: constant
+            value: '你是一个专业的大件运输合规性审查专家。需要对以下运输申请进行全面的合规性审查：{{#1761475030189.output#}}
+
+
+              **审查目标：**
+
+              1. 验证车辆参数在通行路线上的可行性（限高、限宽、桥梁荷载等）
+
+              2. 评估运输方案的完整性和风险点
+
+              3. 提供具体的改进建议和风险预警
+
+
+              **可用的审查工具：**
+
+              - 高德地图MCP工具（路径规划、POI搜索、距离测量等）
+
+              - 联网搜索工具（法规查询、标准验证）
+
+              - 高速交通知识库（施工、管制信息）
+
+
+              **输出要求：**
+
+              - 按审查维度分段报告
+
+              - 明确标注合规/有条件合规/不合规
+
+              - 提供具体的技术依据和法规引用
+
+              - 对高风险项给出优先处理建议
+
+              - 对无法通行的设施给予说明（限高，限重）
+
+
+              请开始执行系统性的合规性审查。'
+          model:
+            type: constant
+            value:
+              completion_params:
+                thinking: false
+                web_search: false
+              mode: chat
+              model: glm-4.5
+              model_type: llm
+              provider: langgenius/zhipuai/zhipuai
+              type: model-selector
+          query:
+            type: constant
+            value: "基于以下车辆参数进行尺寸合规性审查：\n{{#1761475030189.output#}}\n**关键参数：**\n- 车货总尺寸：长×宽×高\
+              \ = [填写具体尺寸]\n- 货物尺寸：长×宽×高 = [填写具体尺寸]\n- 轴距配置：[填写轴距]\n\n**审查要点：**\n\
+              1. **高度限制核查**\n   - 使用高德地图搜索路线上的\"隧道限高\"、\"立交桥限高\"\n   - 重点查询：[关键路段名称]的限高数据\n\
+              \   - 国家标准参考：一般高速公路限高5.0米，二级公路限高4.5米\n\n2. **宽度限制核查**  \n   - 搜索\"收费站超宽车道宽度\"\
+              \n   - 查询急弯路段的最小转弯半径要求\n   - 标准参考：标准车道宽3.75米，超宽车道通常4.5米\n\n3. **长度限制核查**\n\
+              \   - 验证最小转弯半径是否满足\n   - 检查调头路段可行性\n   - 标准参考：6轴车辆总长通常不超过25米\n\n请逐项对比并提供具体通过性分析。\n\
+              \n\n基于以下重量参数进行承重合规性审查：\n\n**关键参数：**\n- 货物质量：[填写质量]吨\n- 车货总质量：[填写质量]吨\
+              \  \n- 轴数：[填写轴数]\n- 轴荷分布：[填写分布]\n- 轮胎数：[填写数量]\n\n**审查要点：**\n1. **总重合规性**\n\
+              \   - 对照《超限运输车辆行驶公路管理规定》\n   - 6轴车辆最大允许总重：49吨（需核实最新标准）\n   - 如超限，需要查询特殊许可要求\n\
+              \n2. **轴荷分布合规性**\n   - 验证轴荷分布是否均匀\n   - 检查单轴最大荷载是否超标\n   - 标准参考：单轴限重10-13吨，双轴限重16-24吨\n\
+              \n3. **桥梁荷载能力**\n   - 搜索路线上的\"特大桥\"、\"老旧桥梁\"\n   - 查询桥梁设计荷载等级\n   -\
+              \ 重点验证：[关键桥梁名称]的通过性\n\n请提供详细的承重分析和技术计算。\n\n\n基于以下路线信息进行通行可行性审查：\n\n\
+              **运输路线：**\n[粘贴完整路线描述]\n\n**审查方法：**\n1. **路线真实性验证**\n   - 使用高德地图`maps_direction_driving_by_address`验证路线可行性\n\
+              \   - 对比申请路线与规划路线的差异\n   - 重点检查：枢纽连接关系是否正确\n\n2. **关键节点审查**\n   - 搜索收费站、检查站的具体位置和条件\n\
+              \   - 查询\"[收费站名称] 超宽车道\"可用性\n   - 验证\"[枢纽名称]\"的匝道转弯半径\n\n3. **替代路线评估**\n\
+              \   - 对高风险路段准备备用路线\n   - 评估绕行方案的可行性\n\n请输出详细的路线验证报告。\n\n基于以下时间信息进行管制合规性审查：\n\
+              \n**运输时间：**\n- 开始时间：[填写时间]\n- 结束时间：[填写时间] \n- 每日通行时段：[填写时段]\n- 禁行要求：[填写要求]\n\
+              \n**审查要点：**\n1. **时间限制合规性**\n   - 验证是否遵守\"7时至17时\"通行规定\n   - 检查法定节假日禁行要求\n\
+              \   - 评估午间疲劳时段的风险\n\n2. **施工影响评估**\n   - 查询高速知识库中相关路段的施工计划\n   - 搜索\"\
+              [高速编号] 施工 \"\n   - 评估施工对通行时间的影响\n\n3. **季节性因素**\n   - 查询运输期间的天气趋势\n\
+              \   - 评估台风季、雨季的影响\n   - 制定天气应急方案\n\n请提供时间合规性分析和风险预警。\n\n最终输出如下：\n\n\n\
+              ## 大件运输合规性审查报告\n\n### \U0001F4CA 基本参数审查\n**车辆尺寸合规性**\n- 高度审查：[结果与分析]\n\
+              - 宽度审查：[结果与分析]  \n- 长度审查：[结果与分析]\n- 结论：[合规/有条件合规/不合规]\n\n**重量与轴荷合规性**\n\
+              - 总重审查：[结果与分析]\n- 轴荷分布：[结果与分析]\n- 桥梁荷载：[结果与分析]\n- 结论：[合规/有条件合规/不合规]\n\
+              \n### \U0001F6E3️ 路线可行性审查\n**路线真实性验证**\n- 高德地图比对结果：[差异分析]\n- 关键节点验证：[收费站、枢纽等]\n\
+              - 结论：[可行/需调整/不可行]\n\n**道路条件审查**\n- 限高限制：[具体数据]\n- 限宽限制：[具体数据]\n- 施工影响：[施工信息]\n\
+              - 结论：[通过/有条件通过/不通过]\n\n### ⚠️ 风险汇总与建议\n**高风险项**\n1. [具体风险及处理建议]\n2.\
+              \ [具体风险及处理建议]\n\n**需协调事项**\n1. [需要提前协调的单位和事项]\n2. [备用方案建议]\n\n**最终审查结论**\n\
+              [综合结论与建议]\n同时将总知识库检索到的引用文件附在文末\n"
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 驾车路径规划 API 可以根据用户起终点经纬度坐标规划以小客车、轿车通勤出行的方案，并且返回通勤方案的数据。
+              parameters:
+                destination:
+                  auto: 1
+                  value: null
+                origin:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 出发点经纬度，坐标格式为：经度，纬度
+                  ja_JP: 出发点经纬度，坐标格式为：经度，纬度
+                  pt_BR: 出发点经纬度，坐标格式为：经度，纬度
+                  zh_Hans: 出发点经纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: origin
+                  ja_JP: origin
+                  pt_BR: origin
+                  zh_Hans: origin
+                llm_description: 出发点经纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: origin
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 目的地经纬度，坐标格式为：经度，纬度
+                  ja_JP: 目的地经纬度，坐标格式为：经度，纬度
+                  pt_BR: 目的地经纬度，坐标格式为：经度，纬度
+                  zh_Hans: 目的地经纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: destination
+                  ja_JP: destination
+                  pt_BR: destination
+                  zh_Hans: destination
+                llm_description: 目的地经纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: destination
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 驾车路径规划 API 可以根据用户起终点经纬度坐标规划以小客车、轿车通勤出行的方案，并且返回通勤方案的数据。
+              tool_label: maps_direction_driving
+              tool_name: maps_direction_driving
+              type: mcp
+            - enabled: true
+              extra:
+                description: 关键字搜索 API 根据用户输入的关键字进行 POI 搜索，并返回相关的信息
+              parameters:
+                city:
+                  auto: 1
+                  value: null
+                citylimit:
+                  auto: 1
+                  value: null
+                keywords:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 查询关键字
+                  ja_JP: 查询关键字
+                  pt_BR: 查询关键字
+                  zh_Hans: 查询关键字
+                label:
+                  en_US: keywords
+                  ja_JP: keywords
+                  pt_BR: keywords
+                  zh_Hans: keywords
+                llm_description: 查询关键字
+                max: null
+                min: null
+                name: keywords
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 查询城市
+                  ja_JP: 查询城市
+                  pt_BR: 查询城市
+                  zh_Hans: 查询城市
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: city
+                  zh_Hans: city
+                llm_description: 查询城市
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 是否限制城市范围内搜索，默认不限制
+                  ja_JP: 是否限制城市范围内搜索，默认不限制
+                  pt_BR: 是否限制城市范围内搜索，默认不限制
+                  zh_Hans: 是否限制城市范围内搜索，默认不限制
+                label:
+                  en_US: citylimit
+                  ja_JP: citylimit
+                  pt_BR: citylimit
+                  zh_Hans: citylimit
+                llm_description: 是否限制城市范围内搜索，默认不限制
+                max: null
+                min: null
+                name: citylimit
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: boolean
+              settings: {}
+              tool_description: 关键字搜索 API 根据用户输入的关键字进行 POI 搜索，并返回相关的信息
+              tool_label: maps_text_search
+              tool_name: maps_text_search
+              type: mcp
+            - enabled: true
+              extra:
+                description: 查询关键词搜或者周边搜获取到的POI ID的详细信息
+              parameters:
+                id:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 关键词搜或者周边搜获取到的POI ID
+                  ja_JP: 关键词搜或者周边搜获取到的POI ID
+                  pt_BR: 关键词搜或者周边搜获取到的POI ID
+                  zh_Hans: 关键词搜或者周边搜获取到的POI ID
+                label:
+                  en_US: id
+                  ja_JP: id
+                  pt_BR: id
+                  zh_Hans: id
+                llm_description: 关键词搜或者周边搜获取到的POI ID
+                max: null
+                min: null
+                name: id
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 查询关键词搜或者周边搜获取到的POI ID的详细信息
+              tool_label: maps_search_detail
+              tool_name: maps_search_detail
+              type: mcp
+            - enabled: true
+              extra:
+                description: 根据城市名称或者标准adcode查询指定城市的天气
+              parameters:
+                city:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 城市名称或者adcode
+                  ja_JP: 城市名称或者adcode
+                  pt_BR: 城市名称或者adcode
+                  zh_Hans: 城市名称或者adcode
+                label:
+                  en_US: city
+                  ja_JP: city
+                  pt_BR: city
+                  zh_Hans: city
+                llm_description: 城市名称或者adcode
+                max: null
+                min: null
+                name: city
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 根据城市名称或者标准adcode查询指定城市的天气
+              tool_label: maps_weather
+              tool_name: maps_weather
+              type: mcp
+            - enabled: true
+              extra:
+                description: 周边搜，根据用户传入关键词以及坐标location，搜索出radius半径范围的POI
+              parameters:
+                keywords:
+                  auto: 1
+                  value: null
+                location:
+                  auto: 1
+                  value: null
+                radius:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 搜索关键词
+                  ja_JP: 搜索关键词
+                  pt_BR: 搜索关键词
+                  zh_Hans: 搜索关键词
+                label:
+                  en_US: keywords
+                  ja_JP: keywords
+                  pt_BR: keywords
+                  zh_Hans: keywords
+                llm_description: 搜索关键词
+                max: null
+                min: null
+                name: keywords
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 中心点经度纬度
+                  ja_JP: 中心点经度纬度
+                  pt_BR: 中心点经度纬度
+                  zh_Hans: 中心点经度纬度
+                label:
+                  en_US: location
+                  ja_JP: location
+                  pt_BR: location
+                  zh_Hans: location
+                llm_description: 中心点经度纬度
+                max: null
+                min: null
+                name: location
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 搜索半径
+                  ja_JP: 搜索半径
+                  pt_BR: 搜索半径
+                  zh_Hans: 搜索半径
+                label:
+                  en_US: radius
+                  ja_JP: radius
+                  pt_BR: radius
+                  zh_Hans: radius
+                llm_description: 搜索半径
+                max: null
+                min: null
+                name: radius
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 周边搜，根据用户传入关键词以及坐标location，搜索出radius半径范围的POI
+              tool_label: maps_around_search
+              tool_name: maps_around_search
+              type: mcp
+            - enabled: true
+              extra:
+                description: 测量两个经纬度坐标之间的距离,支持驾车、步行以及球面距离测量
+              parameters:
+                destination:
+                  auto: 1
+                  value: null
+                origins:
+                  auto: 1
+                  value: null
+                type:
+                  auto: 1
+                  value: null
+              provider_name: amap-maps
+              provider_show_name: amap-maps
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  ja_JP: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  pt_BR: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                  zh_Hans: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                label:
+                  en_US: origins
+                  ja_JP: origins
+                  pt_BR: origins
+                  zh_Hans: origins
+                llm_description: 起点经度，纬度，可以传多个坐标，使用竖线隔离，比如120,30|120,31，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: origins
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 终点经度，纬度，坐标格式为：经度，纬度
+                  ja_JP: 终点经度，纬度，坐标格式为：经度，纬度
+                  pt_BR: 终点经度，纬度，坐标格式为：经度，纬度
+                  zh_Hans: 终点经度，纬度，坐标格式为：经度，纬度
+                label:
+                  en_US: destination
+                  ja_JP: destination
+                  pt_BR: destination
+                  zh_Hans: destination
+                llm_description: 终点经度，纬度，坐标格式为：经度，纬度
+                max: null
+                min: null
+                name: destination
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  ja_JP: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  pt_BR: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                  zh_Hans: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                label:
+                  en_US: type
+                  ja_JP: type
+                  pt_BR: type
+                  zh_Hans: type
+                llm_description: 距离测量类型,1代表驾车距离测量，0代表直线距离测量，3步行距离测量
+                max: null
+                min: null
+                name: type
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 测量两个经纬度坐标之间的距离,支持驾车、步行以及球面距离测量
+              tool_label: maps_distance
+              tool_name: maps_distance
+              type: mcp
+            - enabled: true
+              extra:
+                description: 一个用于获取当前时间的工具。
+              parameters: {}
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: '%Y-%m-%d %H:%M:%S'
+                form: form
+                human_description:
+                  en_US: Time format in strftime standard.
+                  ja_JP: Time format in strftime standard.
+                  pt_BR: Time format in strftime standard.
+                  zh_Hans: strftime 标准的时间格式。
+                label:
+                  en_US: Format
+                  ja_JP: Format
+                  pt_BR: Format
+                  zh_Hans: 格式
+                llm_description: null
+                max: null
+                min: null
+                name: format
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: UTC
+                form: form
+                human_description:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                label:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                llm_description: null
+                max: null
+                min: null
+                name: timezone
+                options:
+                - icon: null
+                  label:
+                    en_US: UTC
+                    ja_JP: UTC
+                    pt_BR: UTC
+                    zh_Hans: UTC
+                  value: UTC
+                - icon: null
+                  label:
+                    en_US: America/New_York
+                    ja_JP: America/New_York
+                    pt_BR: America/New_York
+                    zh_Hans: 美洲/纽约
+                  value: America/New_York
+                - icon: null
+                  label:
+                    en_US: America/Los_Angeles
+                    ja_JP: America/Los_Angeles
+                    pt_BR: America/Los_Angeles
+                    zh_Hans: 美洲/洛杉矶
+                  value: America/Los_Angeles
+                - icon: null
+                  label:
+                    en_US: America/Chicago
+                    ja_JP: America/Chicago
+                    pt_BR: America/Chicago
+                    zh_Hans: 美洲/芝加哥
+                  value: America/Chicago
+                - icon: null
+                  label:
+                    en_US: America/Sao_Paulo
+                    ja_JP: America/Sao_Paulo
+                    pt_BR: América/São Paulo
+                    zh_Hans: 美洲/圣保罗
+                  value: America/Sao_Paulo
+                - icon: null
+                  label:
+                    en_US: Asia/Shanghai
+                    ja_JP: Asia/Shanghai
+                    pt_BR: Asia/Shanghai
+                    zh_Hans: 亚洲/上海
+                  value: Asia/Shanghai
+                - icon: null
+                  label:
+                    en_US: Asia/Ho_Chi_Minh
+                    ja_JP: Asia/Ho_Chi_Minh
+                    pt_BR: Ásia/Ho Chi Minh
+                    zh_Hans: 亚洲/胡志明市
+                  value: Asia/Ho_Chi_Minh
+                - icon: null
+                  label:
+                    en_US: Asia/Tokyo
+                    ja_JP: Asia/Tokyo
+                    pt_BR: Asia/Tokyo
+                    zh_Hans: 亚洲/东京
+                  value: Asia/Tokyo
+                - icon: null
+                  label:
+                    en_US: Asia/Dubai
+                    ja_JP: Asia/Dubai
+                    pt_BR: Asia/Dubai
+                    zh_Hans: 亚洲/迪拜
+                  value: Asia/Dubai
+                - icon: null
+                  label:
+                    en_US: Asia/Kolkata
+                    ja_JP: Asia/Kolkata
+                    pt_BR: Asia/Kolkata
+                    zh_Hans: 亚洲/加尔各答
+                  value: Asia/Kolkata
+                - icon: null
+                  label:
+                    en_US: Asia/Seoul
+                    ja_JP: Asia/Seoul
+                    pt_BR: Asia/Seoul
+                    zh_Hans: 亚洲/首尔
+                  value: Asia/Seoul
+                - icon: null
+                  label:
+                    en_US: Asia/Singapore
+                    ja_JP: Asia/Singapore
+                    pt_BR: Asia/Singapore
+                    zh_Hans: 亚洲/新加坡
+                  value: Asia/Singapore
+                - icon: null
+                  label:
+                    en_US: Europe/London
+                    ja_JP: Europe/London
+                    pt_BR: Europe/London
+                    zh_Hans: 欧洲/伦敦
+                  value: Europe/London
+                - icon: null
+                  label:
+                    en_US: Europe/Berlin
+                    ja_JP: Europe/Berlin
+                    pt_BR: Europe/Berlin
+                    zh_Hans: 欧洲/柏林
+                  value: Europe/Berlin
+                - icon: null
+                  label:
+                    en_US: Europe/Moscow
+                    ja_JP: Europe/Moscow
+                    pt_BR: Europe/Moscow
+                    zh_Hans: 欧洲/莫斯科
+                  value: Europe/Moscow
+                - icon: null
+                  label:
+                    en_US: Australia/Sydney
+                    ja_JP: Australia/Sydney
+                    pt_BR: Australia/Sydney
+                    zh_Hans: 澳大利亚/悉尼
+                  value: Australia/Sydney
+                - icon: null
+                  label:
+                    en_US: Pacific/Auckland
+                    ja_JP: Pacific/Auckland
+                    pt_BR: Pacific/Auckland
+                    zh_Hans: 太平洋/奥克兰
+                  value: Pacific/Auckland
+                - icon: null
+                  label:
+                    en_US: Africa/Cairo
+                    ja_JP: Africa/Cairo
+                    pt_BR: Africa/Cairo
+                    zh_Hans: 非洲/开罗
+                  value: Africa/Cairo
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              settings:
+                format:
+                  value:
+                    type: mixed
+                    value: '%Y-%m-%d %H:%M:%S'
+                timezone:
+                  value:
+                    type: constant
+                    value: UTC
+              tool_description: 一个用于获取当前时间的工具。
+              tool_label: 获取当前时间
+              tool_name: current_time
+              type: builtin
+        agent_strategy_label: ReAct
+        agent_strategy_name: ReAct
+        agent_strategy_provider_name: langgenius/agent/agent
+        meta:
+          minimum_dify_version: 1.7.0
+          version: 0.0.2
+        plugin_unique_identifier: langgenius/agent:0.0.24@0274c08e62efaa28f6327e7bdba655e16559ec28d4f41f2fa3ef553e6327c0f6
+        selected: false
+        title: 关键设施审查
+        tool_node_version: '2'
+        type: agent
+      height: 195
+      id: '17608542461450'
+      position:
+        x: 1128.9179896058024
+        y: 547.456658003988
+      positionAbsolute:
+        x: 1128.9179896058024
+        y: 547.456658003988
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - gGjn5jwuA92roSsbUalgA79NUFP8xfpve/IhWpznR1fhdWbc1KPjz4OB+TwikUXh
+        - jDMxknrvwdy3UI/JP4w4HXncqxzHhrYLytHMnsjlVUbm9WXL1nP79KlVwlt9ohT9
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: Qwen/Qwen3-Reranker-0.6B
+            provider: langgenius/siliconflow/siliconflow
+          score_threshold: null
+          top_k: 4
+        query_variable_selector:
+        - '1761475030189'
+        - output
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索 2
+        type: knowledge-retrieval
+      height: 117
+      id: '1760854383572'
+      position:
+        x: 855.0590892871342
+        y: 603.1709437182736
+      positionAbsolute:
+        x: 855.0590892871342
+        y: 603.1709437182736
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1760854619000'
+          - result
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+            web_search: false
+          mode: chat
+          name: glm-4.5
+          provider: langgenius/zhipuai/zhipuai
+        prompt_template:
+        - id: 0af29d17-b309-459a-b724-08b64849c432
+          role: system
+          text: '你是一名专业的大件运输合规性审查专家，拥有丰富的公路运输安全评估经验。当前任务是基于各项分项审查结果{{#1760857068450.text#}}，整合形成一份权威、专业的最终审查报告。{{#context#}}
+
+
+            **你的专业要求：**
+
+            1. **严格参照技术规范**：必须基于知识库《公路大件运输安全通行评价技术规范》进行专业评价
+
+            2. **整合分析能力**：将分散的审查结果系统化整合，识别内在关联和潜在风险
+
+            3. **风险导向思维**：重点关注安全风险，提出切实可行的改进建议
+
+            4. **决策支持导向**：为审批决策提供明确的技术依据和结论
+
+
+            **报告编制标准：**
+
+            - 采用标准的工程技术报告格式
+
+            - 引用具体的技术规范条款
+
+            - 风险等级划分明确（高风险/中风险/低风险）
+
+            - 建议具体可操作，具有时效性
+
+
+            请开始执行最终报告的整合分析工作。'
+        - id: ebb84b68-5f18-42f6-ad8d-96fe021b747d
+          role: user
+          text: "请基于提供的表单（{{#sys.query#}}）和初步审查信息（{{#1760857068450.text#}}），编制一份精炼的《大件运输合规性审查报告》。\n\
+            \n**报告核心结构：**\n\n**一、执行摘要**\n- 总体审查结论与风险等级（高/中/低）\n- 1-2条最关键的发现与建议\n\n\
+            **二、核心合规性判定**\n请直接列出最重要的合规性审查项，并给出结论：\n- **尺寸与轴重**：是否超限？引用技术规范关键条款。\n\
+            - **关键路段**：是否存在无法通过的桥梁、弯道或设施？指明具体位置。\n- **安全风险**：通行的路线是否符合时间范围内安全？路线是否规范，符合运输条件？\n\
+            - **证件规范**：用户所提交的信息中是否符合相关要求规定？\n\n**三、审批建议与后续行动**\n- **审批决策**：\n  ✅ 建议批准\n\
+            \  ⚠️ 有条件批准（列出必须满足的**核心条件**，不超过3条）\n  ❌ 不建议批准（说明主要理由）\n- **立即行动**（运输前必须完成的事项，列出1-3项）\n\
+            \n**要求：**\n- 报告应聚焦于影响审批决策的**高风险项**和**关键不合规项**。\n- 语言精炼，结论明确，具有直接的可操作性。\n\
+            - 确保引用了《公路大件运输安全通行评价技术规范》中的核心条款。\n- 同时将总知识库检索到的所有引用文件附在文末"
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        title: 最终输出
+        type: llm
+        vision:
+          enabled: false
+      height: 117
+      id: '1760854584400'
+      position:
+        x: 1228.8347820246897
+        y: 1032.1686768846037
+      positionAbsolute:
+        x: 1228.8347820246897
+        y: 1032.1686768846037
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - gGjn5jwuA92roSsbUalgA79NUFP8xfpve/IhWpznR1fhdWbc1KPjz4OB+TwikUXh
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: Qwen/Qwen3-Reranker-4B
+            provider: langgenius/siliconflow/siliconflow
+          top_k: 4
+        query_variable_selector:
+        - '1760857068450'
+        - text
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索 3
+        type: knowledge-retrieval
+      height: 89
+      id: '1760854619000'
+      position:
+        x: 1228.8347820246897
+        y: 904.3663551706744
+      positionAbsolute:
+        x: 1228.8347820246897
+        y: 904.3663551706744
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1760854584400.text#}}'
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 102
+      id: '1760854649990'
+      position:
+        x: 1228.8347820246897
+        y: 1149.5720943202393
+      positionAbsolute:
+        x: 1228.8347820246897
+        y: 1149.5720943202393
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params: {}
+          mode: chat
+          name: qwen-turbo-latest
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 8025bf44-c66d-4be6-bcca-505a073433f3
+          role: system
+          text: '整合以下信息，不要有任何遗漏：
+
+            {{#17608542461450.text#}}{{#17608532059960.text#}}{{#1760857947223.text#}}{{#17608581185890.text#}}
+
+
+            同时将总知识库检索到的引用文件统一附在文末'
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        title: 审查信息聚合
+        type: llm
+        vision:
+          enabled: false
+      height: 117
+      id: '1760857068450'
+      position:
+        x: 1453.1204963104033
+        y: 755.5280417835519
+      positionAbsolute:
+        x: 1453.1204963104033
+        y: 755.5280417835519
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: '根据{{#1761475275314.output#}}的信息进行合规性审查
+
+              # 分类与分析指令：对牵引车或运输车辆信息、挂车信息进行合规性审查。'
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: qwen-turbo-latest
+              model_type: llm
+              provider: langgenius/tongyi/tongyi
+              type: model-selector
+          query:
+            type: constant
+            value: '{{#sys.query#}}/'
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 一个用于获取当前时间的工具。
+              parameters: {}
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: '%Y-%m-%d %H:%M:%S'
+                form: form
+                human_description:
+                  en_US: Time format in strftime standard.
+                  ja_JP: Time format in strftime standard.
+                  pt_BR: Time format in strftime standard.
+                  zh_Hans: strftime 标准的时间格式。
+                label:
+                  en_US: Format
+                  ja_JP: Format
+                  pt_BR: Format
+                  zh_Hans: 格式
+                llm_description: null
+                max: null
+                min: null
+                name: format
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: UTC
+                form: form
+                human_description:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                label:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                llm_description: null
+                max: null
+                min: null
+                name: timezone
+                options:
+                - icon: null
+                  label:
+                    en_US: UTC
+                    ja_JP: UTC
+                    pt_BR: UTC
+                    zh_Hans: UTC
+                  value: UTC
+                - icon: null
+                  label:
+                    en_US: America/New_York
+                    ja_JP: America/New_York
+                    pt_BR: America/New_York
+                    zh_Hans: 美洲/纽约
+                  value: America/New_York
+                - icon: null
+                  label:
+                    en_US: America/Los_Angeles
+                    ja_JP: America/Los_Angeles
+                    pt_BR: America/Los_Angeles
+                    zh_Hans: 美洲/洛杉矶
+                  value: America/Los_Angeles
+                - icon: null
+                  label:
+                    en_US: America/Chicago
+                    ja_JP: America/Chicago
+                    pt_BR: America/Chicago
+                    zh_Hans: 美洲/芝加哥
+                  value: America/Chicago
+                - icon: null
+                  label:
+                    en_US: America/Sao_Paulo
+                    ja_JP: America/Sao_Paulo
+                    pt_BR: América/São Paulo
+                    zh_Hans: 美洲/圣保罗
+                  value: America/Sao_Paulo
+                - icon: null
+                  label:
+                    en_US: Asia/Shanghai
+                    ja_JP: Asia/Shanghai
+                    pt_BR: Asia/Shanghai
+                    zh_Hans: 亚洲/上海
+                  value: Asia/Shanghai
+                - icon: null
+                  label:
+                    en_US: Asia/Ho_Chi_Minh
+                    ja_JP: Asia/Ho_Chi_Minh
+                    pt_BR: Ásia/Ho Chi Minh
+                    zh_Hans: 亚洲/胡志明市
+                  value: Asia/Ho_Chi_Minh
+                - icon: null
+                  label:
+                    en_US: Asia/Tokyo
+                    ja_JP: Asia/Tokyo
+                    pt_BR: Asia/Tokyo
+                    zh_Hans: 亚洲/东京
+                  value: Asia/Tokyo
+                - icon: null
+                  label:
+                    en_US: Asia/Dubai
+                    ja_JP: Asia/Dubai
+                    pt_BR: Asia/Dubai
+                    zh_Hans: 亚洲/迪拜
+                  value: Asia/Dubai
+                - icon: null
+                  label:
+                    en_US: Asia/Kolkata
+                    ja_JP: Asia/Kolkata
+                    pt_BR: Asia/Kolkata
+                    zh_Hans: 亚洲/加尔各答
+                  value: Asia/Kolkata
+                - icon: null
+                  label:
+                    en_US: Asia/Seoul
+                    ja_JP: Asia/Seoul
+                    pt_BR: Asia/Seoul
+                    zh_Hans: 亚洲/首尔
+                  value: Asia/Seoul
+                - icon: null
+                  label:
+                    en_US: Asia/Singapore
+                    ja_JP: Asia/Singapore
+                    pt_BR: Asia/Singapore
+                    zh_Hans: 亚洲/新加坡
+                  value: Asia/Singapore
+                - icon: null
+                  label:
+                    en_US: Europe/London
+                    ja_JP: Europe/London
+                    pt_BR: Europe/London
+                    zh_Hans: 欧洲/伦敦
+                  value: Europe/London
+                - icon: null
+                  label:
+                    en_US: Europe/Berlin
+                    ja_JP: Europe/Berlin
+                    pt_BR: Europe/Berlin
+                    zh_Hans: 欧洲/柏林
+                  value: Europe/Berlin
+                - icon: null
+                  label:
+                    en_US: Europe/Moscow
+                    ja_JP: Europe/Moscow
+                    pt_BR: Europe/Moscow
+                    zh_Hans: 欧洲/莫斯科
+                  value: Europe/Moscow
+                - icon: null
+                  label:
+                    en_US: Australia/Sydney
+                    ja_JP: Australia/Sydney
+                    pt_BR: Australia/Sydney
+                    zh_Hans: 澳大利亚/悉尼
+                  value: Australia/Sydney
+                - icon: null
+                  label:
+                    en_US: Pacific/Auckland
+                    ja_JP: Pacific/Auckland
+                    pt_BR: Pacific/Auckland
+                    zh_Hans: 太平洋/奥克兰
+                  value: Pacific/Auckland
+                - icon: null
+                  label:
+                    en_US: Africa/Cairo
+                    ja_JP: Africa/Cairo
+                    pt_BR: Africa/Cairo
+                    zh_Hans: 非洲/开罗
+                  value: Africa/Cairo
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              settings:
+                format:
+                  value:
+                    type: mixed
+                    value: '%Y-%m-%d %H:%M:%S'
+                timezone:
+                  value:
+                    type: constant
+                    value: UTC
+              tool_description: 一个用于获取当前时间的工具。
+              tool_label: 获取当前时间
+              tool_name: current_time
+              type: builtin
+            - enabled: true
+              extra:
+                description: 计算指定日期为星期几的工具。
+              parameters:
+                day:
+                  auto: 1
+                  value: null
+                month:
+                  auto: 1
+                  value: null
+                year:
+                  auto: 1
+                  value: null
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Year
+                  ja_JP: Year
+                  pt_BR: Year
+                  zh_Hans: 年
+                label:
+                  en_US: Year
+                  ja_JP: Year
+                  pt_BR: Year
+                  zh_Hans: 年
+                llm_description: null
+                max: null
+                min: null
+                name: year
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Month
+                  ja_JP: Month
+                  pt_BR: Month
+                  zh_Hans: 月
+                label:
+                  en_US: Month
+                  ja_JP: Month
+                  pt_BR: Month
+                  zh_Hans: 月
+                llm_description: null
+                max: null
+                min: null
+                name: month
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: day
+                  ja_JP: day
+                  pt_BR: day
+                  zh_Hans: 日
+                label:
+                  en_US: day
+                  ja_JP: day
+                  pt_BR: day
+                  zh_Hans: 日
+                llm_description: null
+                max: null
+                min: null
+                name: day
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              settings: {}
+              tool_description: 计算指定日期为星期几的工具。
+              tool_label: 星期几计算器
+              tool_name: weekday
+              type: builtin
+            - enabled: true
+              extra:
+                description: 时区转换
+              parameters:
+                current_time:
+                  auto: 1
+                  value: null
+                current_timezone:
+                  auto: 1
+                  value: null
+                target_timezone:
+                  auto: 1
+                  value: null
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: current time, such as 2024-1-1 0:0:0
+                  ja_JP: current time, such as 2024-1-1 0:0:0
+                  pt_BR: current time, such as 2024-1-1 0:0:0
+                  zh_Hans: 当前时间，比如 2024-1-1 0:0:0
+                label:
+                  en_US: current time
+                  ja_JP: current time
+                  pt_BR: current time
+                  zh_Hans: 当前时间
+                llm_description: null
+                max: null
+                min: null
+                name: current_time
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: Asia/Shanghai
+                form: llm
+                human_description:
+                  en_US: Current Timezone, such as Asia/Shanghai
+                  ja_JP: Current Timezone, such as Asia/Shanghai
+                  pt_BR: Current Timezone, such as Asia/Shanghai
+                  zh_Hans: 当前时区，比如 Asia/Shanghai
+                label:
+                  en_US: Current Timezone
+                  ja_JP: Current Timezone
+                  pt_BR: Current Timezone
+                  zh_Hans: 当前时区
+                llm_description: null
+                max: null
+                min: null
+                name: current_timezone
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: Asia/Tokyo
+                form: llm
+                human_description:
+                  en_US: Target Timezone, such as Asia/Tokyo
+                  ja_JP: Target Timezone, such as Asia/Tokyo
+                  pt_BR: Target Timezone, such as Asia/Tokyo
+                  zh_Hans: 目标时区，比如 Asia/Tokyo
+                label:
+                  en_US: Target Timezone
+                  ja_JP: Target Timezone
+                  pt_BR: Target Timezone
+                  zh_Hans: 目标时区
+                llm_description: null
+                max: null
+                min: null
+                name: target_timezone
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 时区转换
+              tool_label: 时区转换
+              tool_name: timezone_conversion
+              type: builtin
+        agent_strategy_label: ReAct
+        agent_strategy_name: ReAct
+        agent_strategy_provider_name: langgenius/agent/agent
+        meta:
+          minimum_dify_version: 1.7.0
+          version: 0.0.2
+        plugin_unique_identifier: langgenius/agent:0.0.24@0274c08e62efaa28f6327e7bdba655e16559ec28d4f41f2fa3ef553e6327c0f6
+        selected: false
+        title: 车辆信息合规性审查
+        tool_node_version: '2'
+        type: agent
+      height: 195
+      id: '1760857947223'
+      position:
+        x: 626.9231187988992
+        y: 1238.188825188188
+      positionAbsolute:
+        x: 626.9231187988992
+        y: 1238.188825188188
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: '根据{{#1761475174703.output#}}的信息进行合规性审查
+
+              对业户及经办人信息进行合规性审查。
+
+              '
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: qwen-turbo-latest
+              model_type: llm
+              provider: langgenius/tongyi/tongyi
+              type: model-selector
+          query:
+            type: constant
+            value: '{{#1761475174703.output#}}{{#sys.query#}}'
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 一个用于获取当前时间的工具。
+              parameters: {}
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: '%Y-%m-%d %H:%M:%S'
+                form: form
+                human_description:
+                  en_US: Time format in strftime standard.
+                  ja_JP: Time format in strftime standard.
+                  pt_BR: Time format in strftime standard.
+                  zh_Hans: strftime 标准的时间格式。
+                label:
+                  en_US: Format
+                  ja_JP: Format
+                  pt_BR: Format
+                  zh_Hans: 格式
+                llm_description: null
+                max: null
+                min: null
+                name: format
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: UTC
+                form: form
+                human_description:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                label:
+                  en_US: Timezone
+                  ja_JP: Timezone
+                  pt_BR: Timezone
+                  zh_Hans: 时区
+                llm_description: null
+                max: null
+                min: null
+                name: timezone
+                options:
+                - icon: null
+                  label:
+                    en_US: UTC
+                    ja_JP: UTC
+                    pt_BR: UTC
+                    zh_Hans: UTC
+                  value: UTC
+                - icon: null
+                  label:
+                    en_US: America/New_York
+                    ja_JP: America/New_York
+                    pt_BR: America/New_York
+                    zh_Hans: 美洲/纽约
+                  value: America/New_York
+                - icon: null
+                  label:
+                    en_US: America/Los_Angeles
+                    ja_JP: America/Los_Angeles
+                    pt_BR: America/Los_Angeles
+                    zh_Hans: 美洲/洛杉矶
+                  value: America/Los_Angeles
+                - icon: null
+                  label:
+                    en_US: America/Chicago
+                    ja_JP: America/Chicago
+                    pt_BR: America/Chicago
+                    zh_Hans: 美洲/芝加哥
+                  value: America/Chicago
+                - icon: null
+                  label:
+                    en_US: America/Sao_Paulo
+                    ja_JP: America/Sao_Paulo
+                    pt_BR: América/São Paulo
+                    zh_Hans: 美洲/圣保罗
+                  value: America/Sao_Paulo
+                - icon: null
+                  label:
+                    en_US: Asia/Shanghai
+                    ja_JP: Asia/Shanghai
+                    pt_BR: Asia/Shanghai
+                    zh_Hans: 亚洲/上海
+                  value: Asia/Shanghai
+                - icon: null
+                  label:
+                    en_US: Asia/Ho_Chi_Minh
+                    ja_JP: Asia/Ho_Chi_Minh
+                    pt_BR: Ásia/Ho Chi Minh
+                    zh_Hans: 亚洲/胡志明市
+                  value: Asia/Ho_Chi_Minh
+                - icon: null
+                  label:
+                    en_US: Asia/Tokyo
+                    ja_JP: Asia/Tokyo
+                    pt_BR: Asia/Tokyo
+                    zh_Hans: 亚洲/东京
+                  value: Asia/Tokyo
+                - icon: null
+                  label:
+                    en_US: Asia/Dubai
+                    ja_JP: Asia/Dubai
+                    pt_BR: Asia/Dubai
+                    zh_Hans: 亚洲/迪拜
+                  value: Asia/Dubai
+                - icon: null
+                  label:
+                    en_US: Asia/Kolkata
+                    ja_JP: Asia/Kolkata
+                    pt_BR: Asia/Kolkata
+                    zh_Hans: 亚洲/加尔各答
+                  value: Asia/Kolkata
+                - icon: null
+                  label:
+                    en_US: Asia/Seoul
+                    ja_JP: Asia/Seoul
+                    pt_BR: Asia/Seoul
+                    zh_Hans: 亚洲/首尔
+                  value: Asia/Seoul
+                - icon: null
+                  label:
+                    en_US: Asia/Singapore
+                    ja_JP: Asia/Singapore
+                    pt_BR: Asia/Singapore
+                    zh_Hans: 亚洲/新加坡
+                  value: Asia/Singapore
+                - icon: null
+                  label:
+                    en_US: Europe/London
+                    ja_JP: Europe/London
+                    pt_BR: Europe/London
+                    zh_Hans: 欧洲/伦敦
+                  value: Europe/London
+                - icon: null
+                  label:
+                    en_US: Europe/Berlin
+                    ja_JP: Europe/Berlin
+                    pt_BR: Europe/Berlin
+                    zh_Hans: 欧洲/柏林
+                  value: Europe/Berlin
+                - icon: null
+                  label:
+                    en_US: Europe/Moscow
+                    ja_JP: Europe/Moscow
+                    pt_BR: Europe/Moscow
+                    zh_Hans: 欧洲/莫斯科
+                  value: Europe/Moscow
+                - icon: null
+                  label:
+                    en_US: Australia/Sydney
+                    ja_JP: Australia/Sydney
+                    pt_BR: Australia/Sydney
+                    zh_Hans: 澳大利亚/悉尼
+                  value: Australia/Sydney
+                - icon: null
+                  label:
+                    en_US: Pacific/Auckland
+                    ja_JP: Pacific/Auckland
+                    pt_BR: Pacific/Auckland
+                    zh_Hans: 太平洋/奥克兰
+                  value: Pacific/Auckland
+                - icon: null
+                  label:
+                    en_US: Africa/Cairo
+                    ja_JP: Africa/Cairo
+                    pt_BR: Africa/Cairo
+                    zh_Hans: 非洲/开罗
+                  value: Africa/Cairo
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: select
+              settings:
+                format:
+                  value:
+                    type: mixed
+                    value: '%Y-%m-%d %H:%M:%S'
+                timezone:
+                  value:
+                    type: constant
+                    value: UTC
+              tool_description: 一个用于获取当前时间的工具。
+              tool_label: 获取当前时间
+              tool_name: current_time
+              type: builtin
+            - enabled: true
+              extra:
+                description: 计算指定日期为星期几的工具。
+              parameters:
+                day:
+                  auto: 1
+                  value: null
+                month:
+                  auto: 1
+                  value: null
+                year:
+                  auto: 1
+                  value: null
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Year
+                  ja_JP: Year
+                  pt_BR: Year
+                  zh_Hans: 年
+                label:
+                  en_US: Year
+                  ja_JP: Year
+                  pt_BR: Year
+                  zh_Hans: 年
+                llm_description: null
+                max: null
+                min: null
+                name: year
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Month
+                  ja_JP: Month
+                  pt_BR: Month
+                  zh_Hans: 月
+                label:
+                  en_US: Month
+                  ja_JP: Month
+                  pt_BR: Month
+                  zh_Hans: 月
+                llm_description: null
+                max: null
+                min: null
+                name: month
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: day
+                  ja_JP: day
+                  pt_BR: day
+                  zh_Hans: 日
+                label:
+                  en_US: day
+                  ja_JP: day
+                  pt_BR: day
+                  zh_Hans: 日
+                llm_description: null
+                max: null
+                min: null
+                name: day
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: number
+              settings: {}
+              tool_description: 计算指定日期为星期几的工具。
+              tool_label: 星期几计算器
+              tool_name: weekday
+              type: builtin
+            - enabled: true
+              extra:
+                description: 时区转换
+              parameters:
+                current_time:
+                  auto: 1
+                  value: null
+                current_timezone:
+                  auto: 1
+                  value: null
+                target_timezone:
+                  auto: 1
+                  value: null
+              provider_name: time
+              provider_show_name: time
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: current time, such as 2024-1-1 0:0:0
+                  ja_JP: current time, such as 2024-1-1 0:0:0
+                  pt_BR: current time, such as 2024-1-1 0:0:0
+                  zh_Hans: 当前时间，比如 2024-1-1 0:0:0
+                label:
+                  en_US: current time
+                  ja_JP: current time
+                  pt_BR: current time
+                  zh_Hans: 当前时间
+                llm_description: null
+                max: null
+                min: null
+                name: current_time
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: Asia/Shanghai
+                form: llm
+                human_description:
+                  en_US: Current Timezone, such as Asia/Shanghai
+                  ja_JP: Current Timezone, such as Asia/Shanghai
+                  pt_BR: Current Timezone, such as Asia/Shanghai
+                  zh_Hans: 当前时区，比如 Asia/Shanghai
+                label:
+                  en_US: Current Timezone
+                  ja_JP: Current Timezone
+                  pt_BR: Current Timezone
+                  zh_Hans: 当前时区
+                llm_description: null
+                max: null
+                min: null
+                name: current_timezone
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: Asia/Tokyo
+                form: llm
+                human_description:
+                  en_US: Target Timezone, such as Asia/Tokyo
+                  ja_JP: Target Timezone, such as Asia/Tokyo
+                  pt_BR: Target Timezone, such as Asia/Tokyo
+                  zh_Hans: 目标时区，比如 Asia/Tokyo
+                label:
+                  en_US: Target Timezone
+                  ja_JP: Target Timezone
+                  pt_BR: Target Timezone
+                  zh_Hans: 目标时区
+                llm_description: null
+                max: null
+                min: null
+                name: target_timezone
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              settings: {}
+              tool_description: 时区转换
+              tool_label: 时区转换
+              tool_name: timezone_conversion
+              type: builtin
+        agent_strategy_label: ReAct
+        agent_strategy_name: ReAct
+        agent_strategy_provider_name: langgenius/agent/agent
+        meta:
+          minimum_dify_version: 1.7.0
+          version: 0.0.2
+        plugin_unique_identifier: langgenius/agent:0.0.24@0274c08e62efaa28f6327e7bdba655e16559ec28d4f41f2fa3ef553e6327c0f6
+        selected: false
+        title: 业户及经办人合规性审查
+        tool_node_version: '2'
+        type: agent
+      height: 195
+      id: '17608581185890'
+      position:
+        x: 626.9231187988992
+        y: 1019.676500603264
+      positionAbsolute:
+        x: 626.9231187988992
+        y: 1019.676500603264
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: "{{ Time }}\r\n{{ Route }}"
+        title: 时间+路线
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1760852592238'
+          - Time
+          value_type: string
+          variable: Time
+        - value_selector:
+          - '17608434253680'
+          - Route_info
+          value_type: string
+          variable: Route
+      height: 51
+      id: '1761474894623'
+      position:
+        x: 318.8349585451087
+        y: 818.8982624260367
+      positionAbsolute:
+        x: 318.8349585451087
+        y: 818.8982624260367
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: '{{ arg2 }}'
+        title: 车辆货物、货物信息、时间路线、
+        type: template-transform
+        variables:
+        - value_selector:
+          - '17608434280500'
+          - Vehicle_and_cargo_info
+          value_type: string
+          variable: arg1
+        - value_selector:
+          - '1760853675977'
+          - Goods
+          value_type: string
+          variable: arg2
+        - value_selector:
+          - '1761474894623'
+          - output
+          value_type: string
+          variable: arg3
+      height: 51
+      id: '1761475030189'
+      position:
+        x: 593.7915481267086
+        y: 666.3727650297662
+      positionAbsolute:
+        x: 593.7915481267086
+        y: 666.3727650297662
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: "{{ arg1 }}\r\n{{ arg2 }}"
+        title: 经办人信息和业户信息
+        type: template-transform
+        variables:
+        - value_selector:
+          - '17608439352080'
+          - Contact_person_info
+          value_type: string
+          variable: arg1
+        - value_selector:
+          - '17608439030760'
+          - Business_owner_info
+          value_type: string
+          variable: arg2
+      height: 51
+      id: '1761475174703'
+      position:
+        x: 318.8349585451087
+        y: 1032.1686768846037
+      positionAbsolute:
+        x: 318.8349585451087
+        y: 1032.1686768846037
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: "{{ arg1 }}\r\n{{ arg2 }}"
+        title: 牵引车+挂车信息
+        type: template-transform
+        variables:
+        - value_selector:
+          - '17608439612060'
+          - Tractor_info
+          value_type: string
+          variable: arg1
+        - value_selector:
+          - '17608439831980'
+          - Trailer_info
+          value_type: string
+          variable: arg2
+      height: 51
+      id: '1761475275314'
+      position:
+        x: 318.8349585451087
+        y: 1238.188825188188
+      positionAbsolute:
+        x: 318.8349585451087
+        y: 1238.188825188188
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 22.491222793622796
+      y: -129.82162600022514
+      zoom: 0.513773082781395
+  rag_pipeline_variables: []

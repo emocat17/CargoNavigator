@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊车辆路线调度垂直模型 - 交互式架构 (Gemini API增强版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutral Tech -->
+    <!-- Application Structure Plan: The SPA is designed as a visual journey through the system architecture. It starts with a high-level overview, then presents the core architecture as a central, interactive diagram. Users can click on any module to get more details. This is followed by a breakdown of the three foundational pillars (Data, Intelligence, Application) using simpler visualizations like charts and flow diagrams to make complex concepts digestible. Finally, an interactive workflow simulation allows users to see the system in action, solidifying their understanding. This thematic, top-down approach is chosen over a linear report structure to enhance exploration and learning for both technical and non-technical audiences. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Overall System Architecture -> Goal: Organize/Inform -> Viz/Method: Interactive Diagram (HTML/CSS/JS) -> Interaction: Click to reveal details -> Justification: Provides a comprehensive yet non-overwhelming map of the system.
+        - Report Info: Data Layer Composition -> Goal: Inform/Compare -> Viz/Method: Donut Chart (Chart.js) -> Interaction: Hover for tooltips -> Justification: More engaging than a list for showing proportions.
+        - Report Info: Intelligent Engine Workflow -> Goal: Organize/Change -> Viz/Method: Animated Step-Flow Diagram (HTML/CSS/JS) -> Interaction: Button click triggers animation -> Justification: Visually demonstrates the dynamic decision-making process.
+        - Report Info: User-facing Applications -> Goal: Compare/Inform -> Viz/Method: Tabbed Interface (HTML/CSS/JS) -> Interaction: Click to switch views -> Justification: Efficiently presents parallel information for different user roles.
+        - Library/Method: Chart.js for the donut chart. All other visuals and interactions are built with Tailwind CSS and Vanilla JavaScript.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .bg-primary-light { background-color: #e9ecef; }
+        .bg-secondary-light { background-color: #f1f3f5; }
+        .text-primary { color: #0056b3; }
+        .text-secondary { color: #495057; }
+        .border-primary { border-color: #0056b3; }
+        .accent-color { background-color: #007bff; }
+        .accent-text { color: #ffffff; }
+        .module {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .module-content {
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .module-content.active {
+            display: block;
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .flow-step {
+            opacity: 0.3;
+            transition: opacity 0.5s ease;
+        }
+        .flow-step.active {
+            opacity: 1;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-primary">特殊车辆路线调度垂直模型</h1>
+            <nav>
+                <a href="#architecture" class="text-gray-600 hover:text-primary px-3 py-2">系统架构</a>
+                <a href="#concepts" class="text-gray-600 hover:text-primary px-3 py-2">核心理念</a>
+                <a href="#workflow" class="text-gray-600 hover:text-primary px-3 py-2">工作流模拟</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-primary-light py-20 text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">赋能超限运输的智能决策引擎</h2>
+            <p class="text-lg text-secondary max-w-3xl mx-auto">
+                一个以大型语言模型为编排核心，为超长、超重等特殊车辆运输提供智能、安全、合规路径规划的交互式系统架构。
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Architecture Section -->
+    <main id="architecture" class="container mx-auto px-6 py-16">
+        <div class="text-center mb-12">
+            <h3 class="text-3xl font-bold text-gray-800">交互式系统架构</h3>
+            <p class="text-md text-secondary mt-2">点击下方任一模块，探索其详细功能与设计理念。</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Governance Layer -->
+            <div class="lg:col-span-12 bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-500">
+                <h4 class="text-xl font-bold text-center text-gray-600 mb-4">第四部分: 系统级服务与治理</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="module bg-gray-100 p-4 rounded-lg border border-gray-200" onclick="toggleModule('gov-iam')">
+                        <h5 class="font-bold">4.1 身份、访问与权限管理</h5>
+                        <div id="gov-iam" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 标准的IAM服务，负责用户认证和授权。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>RBAC:</strong> 基于角色的访问控制（司机、规划员、合规官等）。</li>
+                                <li><strong>SSO:</strong> 支持与企业现有身份提供商集成。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-gray-100 p-4 rounded-lg border border-gray-200" onclick="toggleModule('gov-audit')">
+                        <h5 class="font-bold">4.2 合规与审计追踪引擎</h5>
+                        <div id="gov-audit" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 系统的“黑匣子”，为每次规划创建不可篡改的完整记录，对风险管理至关重要。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>不可变日志:</strong> 记录查询、上下文、算法、决策等所有信息。</li>
+                                <li><strong>可追溯性:</strong> 允许事后完整重构任何决策链条。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-gray-100 p-4 rounded-lg border border-gray-200" onclick="toggleModule('gov-mlops')">
+                        <h5 class="font-bold">4.3 模型与算法生命周期管理</h5>
+                        <div id="gov-mlops" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 一套MLOps/AIOps工具和流程，确保系统智能核心的持续迭代与优化。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>LLM微调流水线:</strong> 自动化地使用新数据再训练模型。</li>
+                                <li><strong>算法版本控制:</strong> 提供算法的中央仓库，支持A/B测试和回滚。</li>
+                                <li><strong>反馈闭环:</strong> 将真实运营反馈纳入再训练数据集中。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Layer -->
+            <div class="lg:col-span-12 bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500">
+                <h4 class="text-xl font-bold text-center text-blue-600 mb-4">第三部分: 用户应用与交互层</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="module bg-blue-50 p-4 rounded-lg border border-blue-200" onclick="toggleModule('app-driver')">
+                        <h5 class="font-bold">3.1 司机交互模块</h5>
+                        <div id="app-driver" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 司机与系统交互的主要触点，安装于移动或车载终端，强调简洁易用。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>对话式交互:</strong> 通过自然语言发起路线规划。</li>
+                                <li><strong>路线任务简报:</strong> 可视化呈现路线，高亮关键节点。</li>
+                                <li><strong>合规路径导航:</strong> 锁定已审批路线，确保合规。</li>
+                                <li><strong>在途问答:</strong> 实时查询前方路况约束。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-blue-50 p-4 rounded-lg border border-blue-200" onclick="toggleModule('app-manager')">
+                        <h5 class="font-bold">3.2 管理决策支持驾驶舱</h5>
+                        <div id="app-manager" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 面向规划员、调度员的Web应用，是系统的指挥控制中心。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>场景分析:</strong> 详尽参数规划，多方案对比。</li>
+                                <li><strong>交互式可视化:</strong> “路网运行一张图”，叠加显示各类约束。</li>
+                                <li><strong>“假设”情景规划器:</strong> 模拟调整参数，辅助决策。</li>
+                                <li><strong>合规审查工作流:</strong> 自动生成合规清单并提供LLM解释。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-blue-50 p-4 rounded-lg border border-blue-200" onclick="toggleModule('app-viz')">
+                        <h5 class="font-bold">3.3 可视化与报告服务</h5>
+                        <div id="app-viz" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 为所有前端应用生成视觉元素和文本报告的后端服务。</p>
+                             <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>地图渲染:</strong> 生成底图瓦片与动态数据层。</li>
+                                <li><strong>报告生成:</strong> 生成PDF格式的合规与存档报告。</li>
+                                <li><strong>仪表盘分析:</strong> 提供运营统计数据图表。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intelligence Layer -->
+            <div class="lg:col-span-12 bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
+                <h4 class="text-xl font-bold text-center text-green-600 mb-4">第二部分: 核心智能与编排引擎</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="module bg-green-50 p-4 rounded-lg border border-green-200" onclick="toggleModule('intel-llm')">
+                        <h5 class="font-bold">2.1 LLM智能体核心</h5>
+                        <div id="intel-llm" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 系统的中心编排器，负责理解、推理和任务分解，而非直接计算。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>自然语言理解:</strong> 解析司机与管理员的复杂请求。</li>
+                                <li><strong>意图识别:</strong> 准确提取请求中的关键参数。</li>
+                                <li><strong>工具/函数调用:</strong> 核心功能，按逻辑顺序调用下游服务（RAG、算法、可视化）。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-green-50 p-4 rounded-lg border border-green-200" onclick="toggleModule('intel-rag')">
+                        <h5 class="font-bold">2.2 RAG服务</h5>
+                         <div id="intel-rag" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> LLM与知识库的桥梁，将通用智能与领域知识结合。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>查询转换:</strong> 将LLM请求转为数据库查询指令。</li>
+                                <li><strong>混合检索:</strong> 并行查询向量与结构化数据库。</li>
+                                <li><strong>提示词注入:</strong> 将检索到的事实动态注入LLM提示词，确保决策基于事实。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-green-50 p-4 rounded-lg border border-green-200" onclick="toggleModule('intel-bus')">
+                        <h5 class="font-bold">2.3 多算法服务总线</h5>
+                        <div id="intel-bus" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> API网关，解耦推理引擎与计算引擎，实现模块化和可扩展性。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>服务发现:</strong> 感知算法套件中的可用算法。</li>
+                                <li><strong>请求路由:</strong> 将请求精确路由到合适的算法。</li>
+                                <li><strong>API版本管理:</strong> 允许算法独立更新而不影响LLM。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-green-50 p-4 rounded-lg border border-green-200" onclick="toggleModule('intel-algo')">
+                        <h5 class="font-bold">2.4 路径规划算法套件</h5>
+                        <div id="intel-algo" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 独立的计算引擎微服务集合，作为LLM的“工具箱”。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>分层式廊道搜索:</strong> 宏观层面快速确定可行廊道。</li>
+                                <li><strong>基于约束的A*:</strong> 高效的单目标（最快/最低成本）路径搜索。</li>
+                                <li><strong>多目标优化:</strong> 平衡时间、成本、风险等多个冲突目标。</li>
+                                <li><strong>车辆动力学仿真:</strong> 精确判断复杂节点的通过性。</li>
+                                <li><strong>反事实建议引擎:</strong> 在无解时提出修改参数的建议。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Layer -->
+            <div class="lg:col-span-12 bg-white p-6 rounded-xl shadow-lg border-t-4 border-purple-500">
+                 <h4 class="text-xl font-bold text-center text-purple-600 mb-4">第一部分: 基础数据与知识核心</h4>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="module bg-purple-50 p-4 rounded-lg border border-purple-200" onclick="toggleModule('data-graph')">
+                        <h5 class="font-bold">1.1 统一路网图谱</h5>
+                        <div id="data-graph" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 物理路网的数字孪生体，一个富含拓扑关系的图数据库，是路径规划的基础。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>节点:</strong> 交叉口、桥梁、隧道、收费站等，含详细属性。</li>
+                                <li><strong>边:</strong> 连接节点的道路分段，含静态（长度、等级）和动态（限速、拥堵）属性。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-purple-50 p-4 rounded-lg border border-purple-200" onclick="toggleModule('data-kb')">
+                        <h5 class="font-bold">1.2 多模态约束知识库</h5>
+                        <div id="data-kb" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> LLM的“长期记忆”，结合向量数据库和结构化数据库，为RAG提供基板。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>结构化数据:</strong> 桥梁限重、隧道净高等精确数值。</li>
+                                <li><strong>非结构化数据:</strong> 施工报告、气象预警、历史事件等文本信息。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="module bg-purple-50 p-4 rounded-lg border border-purple-200" onclick="toggleModule('data-fusion')">
+                        <h5 class="font-bold">1.3 动态数据采集与融合服务</h5>
+                        <div id="data-fusion" class="module-content text-left text-sm text-gray-600">
+                            <p><strong>描述:</strong> 核心数据管道，负责从外部来源收集、清洗、融合实时数据，保持系统“鲜活”。</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><strong>数据来源:</strong> 交通部门API、GNSS、气象服务、车辆遥测等。</li>
+                                <li><strong>功能:</strong> ETL处理、数据融合、实时警报推送。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </main>
+
+    <!-- Core Concepts Section -->
+    <section id="concepts" class="bg-secondary-light py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-gray-800">三大核心理念</h3>
+                <p class="text-md text-secondary mt-2">深入理解驱动系统运行的基础原则。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Concept 1: Data -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-xl font-bold text-purple-600 mb-4">1. 数据驱动决策</h4>
+                    <p class="text-secondary mb-4">系统决策的基石是全面、精准、实时的多维数据。我们将物理世界数字化，为智能计算提供坚实的真理之源。</p>
+                    <div class="chart-container h-64 max-h-64 w-full max-w-sm mx-auto">
+                        <canvas id="dataChart"></canvas>
+                    </div>
+                </div>
+                <!-- Concept 2: Intelligence -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-xl font-bold text-green-600 mb-4">2. 智能编排引擎</h4>
+                    <p class="text-secondary mb-4">我们不让LLM直接计算，而是发挥其理解与推理的优势，作为“指挥官”编排调用最合适的专业算法工具来解决问题。</p>
+                    <div id="flow-diagram" class="space-y-2 text-sm">
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">用户请求</div>
+                        <div class="text-center text-green-500">↓</div>
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">LLM 理解与分解</div>
+                        <div class="text-center text-green-500">↓</div>
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">RAG 检索事实</div>
+                        <div class="text-center text-green-500">↓</div>
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">LLM 选择并调用算法</div>
+                        <div class="text-center text-green-500">↓</div>
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">算法计算</div>
+                        <div class="text-center text-green-500">↓</div>
+                        <div class="flow-step p-2 bg-green-50 rounded text-center">生成解决方案</div>
+                    </div>
+                </div>
+                <!-- Concept 3: Application -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-xl font-bold text-blue-600 mb-4">3. 面向角色的应用</h4>
+                    <p class="text-secondary mb-4">为不同角色的用户提供量身定制的交互界面和功能，确保系统在实际工作流中的高效与易用。</p>
+                    <div>
+                        <div class="flex border-b border-gray-200">
+                            <button class="tab-btn flex-1 py-2 px-4 text-center font-medium text-gray-600 hover:bg-blue-100 active" onclick="switchTab(event, 'driver-tab')">司机端</button>
+                            <button class="tab-btn flex-1 py-2 px-4 text-center font-medium text-gray-600 hover:bg-blue-100" onclick="switchTab(event, 'manager-tab')">管理端</button>
+                        </div>
+                        <div id="driver-tab" class="tab-content active p-4 text-sm">
+                            <h5 class="font-bold mb-2">司机交互模块</h5>
+                            <p>聚焦在途核心需求：语音交互、清晰指引、实时问答、确保合规。</p>
+                        </div>
+                        <div id="manager-tab" class="tab-content p-4 text-sm">
+                            <h5 class="font-bold mb-2">管理决策驾驶舱</h5>
+                            <p>提供强大分析能力：多方案对比、情景模拟、交互式可视化、一键生成合规报告。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Workflow Simulation Section -->
+    <section id="workflow" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-gray-800">工作流模拟 (✨ Gemini API 增强)</h3>
+                <p class="text-md text-secondary mt-2">请在下方用自然语言描述您的运输任务，体验AI如何理解并规划路线。</p>
+            </div>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <div class="mb-4">
+                    <label for="scenario-input" class="block text-sm font-medium text-gray-700">输入您的运输需求:</label>
+                    <textarea id="scenario-input" rows="3" class="mt-1 block w-full p-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" placeholder="例如: 我要从上海运一个150米长的风力发电叶片到北京，希望路上时间越短越好。"></textarea>
+                </div>
+                <button id="simulateBtn" class="w-full accent-color accent-text font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center justify-center">
+                    <span id="simulateBtnText">开始智能规划</span>
+                    <div id="simulateBtnLoader" class="loader" style="display: none;"></div>
+                </button>
+                <div id="simulationResult" class="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200" style="display: none;">
+                    <h4 class="font-bold mb-2">规划结果:</h4>
+                    <div id="resultText" class="text-sm text-gray-700 space-y-2"></div>
+                    <button id="summarizeBtn" class="mt-4 w-full bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition duration-300 flex items-center justify-center" style="display: none;">
+                         <span id="summarizeBtnText">✨ 生成智能摘要</span>
+                         <div id="summarizeBtnLoader" class="loader" style="display: none;"></div>
+                    </button>
+                </div>
+                 <div id="summaryResult" class="mt-4 p-4 bg-green-50 rounded-md border border-green-200" style="display: none;">
+                    <h4 class="font-bold mb-2 text-green-700">智能摘要 (司机视角):</h4>
+                    <div id="summaryText" class="text-sm text-green-800"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 特殊车辆路线调度垂直模型. All Rights Reserved.</p>
+            <p class="text-sm text-gray-400 mt-2">此页面为基于技术报告生成的交互式概念演示。</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- UI Elements ---
+        const scenarioInput = document.getElementById('scenario-input');
+        const simulateBtn = document.getElementById('simulateBtn');
+        const simulateBtnText = document.getElementById('simulateBtnText');
+        const simulateBtnLoader = document.getElementById('simulateBtnLoader');
+        
+        const simulationResultDiv = document.getElementById('simulationResult');
+        const resultTextDiv = document.getElementById('resultText');
+        
+        const summarizeBtn = document.getElementById('summarizeBtn');
+        const summarizeBtnText = document.getElementById('summarizeBtnText');
+        const summarizeBtnLoader = document.getElementById('summarizeBtnLoader');
+
+        const summaryResultDiv = document.getElementById('summaryResult');
+        const summaryTextDiv = document.getElementById('summaryText');
+
+        const flowSteps = document.querySelectorAll('.flow-step');
+        let currentStep = 0;
+        let lastSimulationResult = '';
+
+        // --- Gemini API Call Function ---
+        async function callGemini(prompt) {
+            const apiKey = ""; // Canvas will provide this
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: prompt }] }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    // Handle cases where the response structure is unexpected or content is missing
+                    console.error("Unexpected API response structure:", result);
+                    return "抱歉，无法从AI获取有效回复。";
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return "抱歉，调用AI服务时出错。";
+            }
+        }
+
+        function toggleModule(id) {
+            const content = document.getElementById(id);
+            const allContents = document.querySelectorAll('.module-content');
+            
+            allContents.forEach(item => {
+                if (item.id !== id) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            content.classList.toggle('active');
+        }
+
+        // --- Chart.js ---
+        const ctx = document.getElementById('dataChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['路网几何数据', '实时交通数据', '法规与约束', '历史与气象'],
+                datasets: [{
+                    label: '数据构成',
+                    data: [40, 25, 20, 15],
+                    backgroundColor: ['rgba(156, 101, 224, 0.7)', 'rgba(101, 136, 224, 0.7)', 'rgba(224, 101, 156, 0.7)', 'rgba(101, 224, 136, 0.7)'],
+                    borderColor: ['rgba(156, 101, 224, 1)', 'rgba(101, 136, 224, 1)', 'rgba(224, 101, 156, 1)', 'rgba(101, 224, 136, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' }, title: { display: true, text: '知识库数据构成' } }
+            }
+        });
+
+        // --- Animation and UI Logic ---
+        function animateFlow() {
+            if (currentStep < flowSteps.length) {
+                flowSteps[currentStep].classList.add('active');
+                currentStep++;
+                setTimeout(animateFlow, 300);
+            }
+        }
+        
+        function switchTab(event, tabID) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabID).style.display = "block";
+            document.getElementById(tabID).classList.add("active");
+            event.currentTarget.className += " active";
+        }
+
+        function setLoadingState(button, textElement, loaderElement, isLoading) {
+            if (isLoading) {
+                textElement.style.display = 'none';
+                loaderElement.style.display = 'block';
+                button.disabled = true;
+                button.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                textElement.style.display = 'inline';
+                loaderElement.style.display = 'none';
+                button.disabled = false;
+                button.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        // --- Main Simulation Logic ---
+        simulateBtn.addEventListener('click', async () => {
+            const userInput = scenarioInput.value;
+            if (!userInput.trim()) {
+                alert("请输入运输需求！");
+                return;
+            }
+
+            setLoadingState(simulateBtn, simulateBtnText, simulateBtnLoader, true);
+            simulationResultDiv.style.display = 'block';
+            resultTextDiv.innerHTML = '<p>正在理解您的需求...</p><div class="loader"></div>';
+            summarizeBtn.style.display = 'none';
+            summaryResultDiv.style.display = 'none';
+            
+            flowSteps.forEach(step => step.classList.remove('active'));
+            currentStep = 0;
+            animateFlow();
+
+            const parsingPrompt = `从以下运输需求中提取关键参数: "${userInput}". 以JSON格式返回，包含三个键: "cargo" (货物), "priority" (优先级，例如 '时间', '成本', '安全'), 和 "weight" (重量，例如 '200t')。如果信息缺失，则返回 "未知"。`;
+            const parsedResultText = await callGemini(parsingPrompt);
+            
+            let cargo = "未知货物";
+            let priority = "均衡";
+            let weight = "未知重量";
+
+            try {
+                const parsedJson = JSON.parse(parsedResultText.replace(/```json|```/g, ''));
+                cargo = parsedJson.cargo || cargo;
+                priority = parsedJson.priority || priority;
+                weight = parsedJson.weight || weight;
+            } catch (e) {
+                console.error("Failed to parse JSON from Gemini:", e);
+                // Fallback to simple keyword matching if JSON parsing fails
+                if (userInput.includes('时间') || userInput.includes('快')) priority = '时间';
+                else if (userInput.includes('成本') || userInput.includes('省钱')) priority = '成本';
+                else if (userInput.includes('安全') || userInput.includes('风险')) priority = '安全';
+            }
+
+            // Simulate the rest of the workflow
+            let output = '';
+            if (priority.includes('时间')) {
+                output = `
+                    <p><strong>请求解析:</strong> 运输 ${cargo} (${weight})，优先级: 时间优先。</p>
+                    <p><strong>LLM分析:</strong> 识别意图为'plan_route'，参数{cargo: '${cargo}', priority: 'time'}。</p>
+                    <p><strong>RAG检索:</strong> 获取沿途所有桥梁、隧道、交叉口的几何约束与实时施工信息。</p>
+                    <p><strong>算法调用:</strong> 调用'基于约束的A*'算法，以时间为优化目标。</p>
+                    <p><strong>结果:</strong> 生成路线方案A，预计用时72小时，成本较高，已规避所有无法通过的弯道。</p>
+                `;
+            } else if (priority.includes('成本')) {
+                output = `
+                    <p><strong>请求解析:</strong> 运输 ${cargo} (${weight})，优先级: 成本优先。</p>
+                    <p><strong>LLM分析:</strong> 识别意图为'plan_route'，参数{cargo: '${cargo}', priority: 'cost'}。</p>
+                    <p><strong>RAG检索:</strong> 获取沿途所有桥梁的承重限制和收费站信息。</p>
+                    <p><strong>算法调用:</strong> 调用'多目标优化'算法，侧重成本与风险。</p>
+                    <p><strong>结果:</strong> 生成方案B，成本最低，但需绕行部分高等级公路，用时96小时。所有桥梁承重均满足要求。</p>
+                `;
+            } else { // Default to safety/balanced
+                output = `
+                    <p><strong>请求解析:</strong> 运输 ${cargo} (${weight})，优先级: 安全/均衡。</p>
+                    <p><strong>LLM分析:</strong> 识别意图为'plan_route'，参数{cargo: '${cargo}', priority: 'safety'}。</p>
+                    <p><strong>RAG检索:</strong> 获取沿途路面状况、历史事故点、恶劣天气预警。</p>
+                    <p><strong>算法调用:</strong> 调用'多目标优化'算法，风险权重最高。</p>
+                    <p><strong>结果:</strong> 生成方案C，全程行驶于路况最佳的高速公路，规避了所有颠簸路段和急转弯，用时和成本居中。</p>
+                `;
+            }
+            
+            resultTextDiv.innerHTML = output;
+            lastSimulationResult = resultTextDiv.innerText;
+            setLoadingState(simulateBtn, simulateBtnText, simulateBtnLoader, false);
+            summarizeBtn.style.display = 'flex';
+        });
+
+        // --- Summarize Logic ---
+        summarizeBtn.addEventListener('click', async () => {
+             if (!lastSimulationResult) return;
+
+             setLoadingState(summarizeBtn, summarizeBtnText, summarizeBtnLoader, true);
+             summaryResultDiv.style.display = 'block';
+             summaryTextDiv.innerHTML = '<div class="loader"></div>';
+
+             const summaryPrompt = `你是一个物流调度专家。请将以下技术性的路线规划结果，转换成一段通俗易懂、给卡车司机的中文路线摘要。摘要需要简短、清晰，重点突出路线、预计时间和关键风险。摘要应少于80个字。规划结果如下：\n\n"${lastSimulationResult}"`;
+             
+             const summary = await callGemini(summaryPrompt);
+             summaryTextDiv.innerText = summary;
+             setLoadingState(summarizeBtn, summarizeBtnText, summarizeBtnLoader, false);
+        });
+
+    </script>
+
+</body>
+</html>

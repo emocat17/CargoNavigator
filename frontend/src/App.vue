@@ -21,6 +21,7 @@
       >
         <q-tab name="planning" icon="directions" label="路径规划" />
         <q-tab name="chat" icon="smart_toy" label="智能问答" />
+        <q-tab name="tracking" icon="timeline" label="运输追踪" />
       </q-tabs>
 
       <q-separator />
@@ -42,7 +43,19 @@
         </q-tab-panel>
 
         <q-tab-panel name="chat">
-           <SmartQA />
+           <SmartQA
+            :routes="routes"
+            :selected-route-index="selectedRouteIndex"
+            :vehicle="currentVehicle"
+            @plan-route="handlePlanRoute"
+          />
+        </q-tab-panel>
+
+        <q-tab-panel name="tracking" class="q-pa-none">
+          <StatusDashboard
+            ref="statusDashboardRef"
+            @view-order="handleViewOrder"
+          />
         </q-tab-panel>
       </q-tab-panels>
     </q-drawer>
@@ -79,6 +92,20 @@
         </div>
       </div>
     </q-page-container>
+    <!-- Right Drawer for Transport Tracking -->
+    <q-drawer
+        v-model="trackingDrawerOpen"
+        side="right"
+        bordered
+        overlay
+        :width="500"
+        class="bg-white shadow-3"
+    >
+        <div class="q-pa-sm">
+          <q-btn flat round icon="close" @click="trackingDrawerOpen = false" class="float-right" />
+        </div>
+        <TransportTracker :order="trackingOrder" />
+    </q-drawer>
   </q-layout>
 </template>
 
@@ -88,6 +115,8 @@ import MapContainer from './components/MapContainer.vue'
 import RouteForm from './components/RouteForm.vue'
 import RouteResultPanel from './components/RouteResultPanel.vue'
 import SmartQA from './components/SmartQA.vue'
+import TransportTracker from './components/TransportTracker.vue'
+import StatusDashboard from './components/StatusDashboard.vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 
@@ -108,6 +137,11 @@ const selectingWaypointIndex = ref(-1)
 const routes = shallowRef([])
 const selectedRouteIndex = ref(0)
 const currentVehicle = ref(null)
+
+// Tracking state
+const trackingOrder = ref(null)
+const statusDashboardRef = ref(null)
+const trackingDrawerOpen = ref(false)
 
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value
@@ -191,7 +225,8 @@ const handlePlanRoute = async (formData) => {
   }
 
   try {
-    const response = await axios.post('http://localhost:9876/api/v1/routes/plan', {
+    const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
+    const response = await axios.post(`${API}/api/v1/routes/plan`, {
       origin: formData.origin,
       destination: formData.destination,
       // strategy: formData.strategy, // Backend ignores strategy now
@@ -251,6 +286,17 @@ const handleSelectRoute = (index) => {
     if (mapRef.value && route) {
         mapRef.value.drawPath(route.path_points, route.steps)
     }
+}
+
+const handleViewOrder = (order) => {
+  trackingOrder.value = order
+  trackingDrawerOpen.value = true
+}
+
+const handleTrackingTabActivated = () => {
+  if (statusDashboardRef.value) {
+    statusDashboardRef.value.refreshData()
+  }
 }
 </script>
 

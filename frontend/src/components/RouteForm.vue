@@ -144,6 +144,9 @@
                           </div>
                       </div>
                       <div class="col-auto">
+                          <q-btn flat round color="secondary" icon="design_services" @click="showVehicleWizard = true" class="q-mr-xs">
+                              <q-tooltip>车辆参数向导</q-tooltip>
+                          </q-btn>
                           <q-btn flat round color="primary" icon="edit_document" @click="showQualificationManager = true">
                               <q-tooltip>编辑任务详情</q-tooltip>
                           </q-btn>
@@ -192,11 +195,16 @@
     <!-- VehicleProfileManager is removed/hidden as requested -->
     <!-- <VehicleProfileManager v-model="showVehicleManager" @select="onVehicleSelect" /> -->
     
-    <QualificationManager 
-        v-model="showQualificationManager" 
+    <QualificationManager
+        v-model="showQualificationManager"
         :sync-source="{ vehicle: null, route: form }"
         :initial-data="applicationData"
         @save="onApplicationSave"
+    />
+
+    <VehicleWizard
+        v-model="showVehicleWizard"
+        @complete="onVehicleWizardComplete"
     />
   </div>
 </template>
@@ -204,7 +212,7 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue'
 import QualificationManager from './QualificationManager.vue'
-// import VehicleProfileManager from './VehicleProfileManager.vue'
+import VehicleWizard from './VehicleWizard.vue'
 
 const props = defineProps({
   loading: Boolean,
@@ -220,6 +228,7 @@ const props = defineProps({
 const emit = defineEmits(['plan-route', 'toggle-select-start', 'toggle-select-end', 'toggle-select-waypoint', 'remove-waypoint'])
 
 const showQualificationManager = ref(false)
+const showVehicleWizard = ref(false)
 const routeCount = ref(3)
 const waypoints = ref([])
 
@@ -248,6 +257,38 @@ onMounted(() => {
 
 const onApplicationSave = (data) => {
     Object.assign(applicationData, data)
+}
+
+const onVehicleWizardComplete = (vehicle) => {
+    // Populate applicationData from the wizard result
+    applicationData.total_size_arr_str = `${vehicle.length},${vehicle.width},${vehicle.height}`
+    applicationData.total_weight = vehicle.total_weight
+    applicationData.axle_count = vehicle.axle_count
+    applicationData.axis_weights_str = vehicle.axle_loads.join(',')
+    applicationData.axis_distances_str = vehicle.axle_spacings.join(',')
+
+    // Also store cargo info
+    applicationData.cargo_name = vehicle.cargo_name || ''
+    applicationData.cargo_weight = vehicle.cargo_weight || 0
+    applicationData.cargo_size_arr_str = vehicle.cargo_length
+        ? `${vehicle.cargo_length},${vehicle.cargo_width},${vehicle.cargo_height}`
+        : ''
+
+    // Also populate the QualificationManager-expected fields if they exist
+    applicationData.tractor_length = vehicle.tractor_length
+    applicationData.trailer_length = vehicle.trailer_length
+
+    // Save to localStorage immediately
+    const saved = localStorage.getItem('qualification_form_data')
+    let localData = {}
+    if (saved) {
+        try { localData = JSON.parse(saved) } catch (e) {}
+    }
+    Object.assign(localData, applicationData)
+    localStorage.setItem('qualification_form_data', JSON.stringify(localData))
+
+    // Also push cargo data into the form if it exists
+    // (used by child components)
 }
 
 const form = reactive({
@@ -298,7 +339,7 @@ const onSubmit = () => {
       const length = dims[0] || 0
       const width = dims[1] || 0
       const height = dims[2] || 0
-      
+
       payload.vehicle = {
           length: length,
           width: width,
@@ -308,7 +349,13 @@ const onSubmit = () => {
           // Default axis weight if not available
           axis_weight: 10,
           load_weights: applicationData.axis_weights_str ? parseArrayStr(applicationData.axis_weights_str).map(Number) : [],
-          axis_distances: applicationData.axis_distances_str ? parseArrayStr(applicationData.axis_distances_str).map(Number) : []
+          axis_distances: applicationData.axis_distances_str ? parseArrayStr(applicationData.axis_distances_str).map(Number) : [],
+          // Additional fields from wizard
+          tractor_length: applicationData.tractor_length || null,
+          trailer_length: applicationData.trailer_length || null,
+          cargo_name: applicationData.cargo_name || '',
+          cargo_weight: applicationData.cargo_weight || 0,
+          cargo_size: applicationData.cargo_size_arr_str || ''
       }
   } else {
       // Fallback or Alert?

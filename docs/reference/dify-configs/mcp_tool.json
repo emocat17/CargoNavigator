@@ -1,0 +1,169 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "桥梁效应计算API",
+      "version": "1.0.0"
+    },
+  "servers": [
+          {
+            "url": "http://host.docker.internal:8001",
+            "description": "默认服务器"
+          }
+        ],
+    "paths": {
+      "/calculate_bridge_effect": {
+        "post": {
+          "summary": "Api Calculate Bridge Effect",
+          "description": "计算桥梁效应比值范围的API端点\n\n参数:\n- loads_ton: 轴重吨数列表\n- spacings: 轴距列表\n- station: 桩号代码\n\n返回:\nJSON格式的计算结果",
+          "operationId": "api_calculate_bridge_effect_calculate_bridge_effect_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BridgeEffectRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/": {
+        "get": {
+          "summary": "Root",
+          "operationId": "root__get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/health": {
+        "get": {
+          "summary": "Health Check",
+          "operationId": "health_check_health_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "BridgeEffectRequest": {
+          "properties": {
+            "loads_ton": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array",
+              "title": "Loads Ton"
+            },
+            "spacings": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array",
+              "title": "Spacings"
+            },
+            "station": {
+              "type": "string",
+              "title": "Station"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loads_ton",
+            "spacings",
+            "station"
+          ],
+          "title": "BridgeEffectRequest"
+        },
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        }
+      }
+    }
+  }

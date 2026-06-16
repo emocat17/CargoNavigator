@@ -1,22 +1,9 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9876/api/v1/vehicles'
+const API = import.meta.env.VITE_API_BASE || 'http://localhost:9876'
+const URL = `${API}/api/v1/vehicles`
 
-export const getVehicleProfiles = async () => {
-    const response = await axios.get(`${API_URL}/`)
-    return response.data
-}
-
-export const createVehicleProfile = async (profile) => {
-    const response = await axios.post(`${API_URL}/`, profile)
-    return response.data
-}
-
-export const updateVehicleProfile = async (id, profile) => {
-    const response = await axios.put(`${API_URL}/${id}`, profile)
-    return response.data
-}
-
-export const deleteVehicleProfile = async (id) => {
-    await axios.delete(`${API_URL}/${id}`)
-}
+export const getVehicleProfiles = async () => (await axios.get(`${URL}/`)).data
+export const createVehicleProfile = async (p) => (await axios.post(`${URL}/`, p)).data
+export const updateVehicleProfile = async (id, p) => (await axios.put(`${URL}/${id}`, p)).data
+export const deleteVehicleProfile = async (id) => { await axios.delete(`${URL}/${id}`) }
