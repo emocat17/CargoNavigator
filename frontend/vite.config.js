@@ -7,7 +7,11 @@ import path from 'path'
 export default defineConfig({
   server: {
     port: 16789,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    hmr: {
+      host: 'localhost',
+      port: 16789,
+    },
   },
   resolve: {
     alias: {
