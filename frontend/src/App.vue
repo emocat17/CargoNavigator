@@ -22,6 +22,8 @@
         <q-tab name="planning" icon="directions" label="路径规划" />
         <q-tab name="chat" icon="smart_toy" label="智能问答" />
         <q-tab name="tracking" icon="timeline" label="运输追踪" />
+        <q-tab name="monitor" icon="monitor_heart" label="护送监控" />
+        <q-tab name="archive" icon="inventory_2" label="数字档案" />
       </q-tabs>
 
       <q-separator />
@@ -55,6 +57,19 @@
           <StatusDashboard
             ref="statusDashboardRef"
             @view-order="handleViewOrder"
+          />
+        </q-tab-panel>
+
+        <q-tab-panel name="monitor" class="q-pa-none">
+          <MonitorDashboard
+            ref="monitorDashboardRef"
+            @view-archive="handleViewArchive"
+          />
+        </q-tab-panel>
+
+        <q-tab-panel name="archive" class="q-pa-none">
+          <TransportArchive
+            ref="transportArchiveRef"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -117,6 +132,8 @@ import RouteResultPanel from './components/RouteResultPanel.vue'
 import SmartQA from './components/SmartQA.vue'
 import TransportTracker from './components/TransportTracker.vue'
 import StatusDashboard from './components/StatusDashboard.vue'
+import MonitorDashboard from './components/MonitorDashboard.vue'
+import TransportArchive from './components/TransportArchive.vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 
@@ -142,6 +159,8 @@ const currentVehicle = ref(null)
 const trackingOrder = ref(null)
 const statusDashboardRef = ref(null)
 const trackingDrawerOpen = ref(false)
+const monitorDashboardRef = ref(null)
+const transportArchiveRef = ref(null)
 
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value
@@ -297,6 +316,11 @@ const handleTrackingTabActivated = () => {
   if (statusDashboardRef.value) {
     statusDashboardRef.value.refreshData()
   }
+}
+
+function handleViewArchive(orderId) {
+  transportArchiveRef.value?.loadArchive(orderId)
+  tab.value = 'archive'
 }
 </script>
 
