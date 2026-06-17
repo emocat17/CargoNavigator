@@ -196,7 +196,7 @@ async def generate_permit(request: PermitGenerateRequest):
             "address": "XX省XX市XX区XX路XX号",
             "contact_person": "张三",
             "phone": "13800138000",
-            "id_number": "91350000XXXXXXXXXX"
+            "id_number": "请填写统一社会信用代码"
         },
         "schedule_info": {
             "departure_time": "2025年6月20日8点",

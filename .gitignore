@@ -105,3 +105,4 @@ docs/archive/**/facility_parameters/
 *.tmp
 ~$*
 page-*.txt
+*.db-journal
