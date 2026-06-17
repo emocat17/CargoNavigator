@@ -1,9 +1,12 @@
+import logging
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import RoutePlanRequest, RoutePlanResponse, RouteInfo, RouteStep, TMC
 from app.services.amap_service import AmapService
 import re
 import asyncio
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -512,8 +515,8 @@ async def plan_route(request: RoutePlanRequest):
     if request.departure_time:
         try:
             dep_time = datetime.fromisoformat(request.departure_time)
-        except:
-            pass
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Invalid departure_time format '{request.departure_time}': {e}")
             
     # Process Waypoints
     waypoints_str = None
