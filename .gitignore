@@ -74,6 +74,7 @@ frontend/.quasar/
 .env
 !.env.example
 !.env.template
+*.env.production
 
 # ============================================
 # Project: Generated / Runtime Data

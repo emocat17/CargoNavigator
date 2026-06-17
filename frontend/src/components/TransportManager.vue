@@ -176,7 +176,9 @@ function initMap() {
     transportMap = new window.AMap.Map('transport-map', { center: [118.3, 25.5], zoom: 8 })
   }
   if (window.AMap) load(); else {
-    const KEY = import.meta.env.VITE_AMAP_KEY || '0625539f7941518573845dd16fe22316'; const s = document.createElement('script'); s.src = `https://webapi.amap.com/maps?v=2.0&key=${KEY}`; s.onload = load; document.head.appendChild(s)
+    const key = import.meta.env.VITE_AMAP_KEY
+    if (!key) { console.error('[TransportManager] VITE_AMAP_KEY not set - map disabled'); return }
+    const s = document.createElement('script'); s.src = `https://webapi.amap.com/maps?v=2.0&key=${key}`; s.onload = load; document.head.appendChild(s)
   }
 }
 

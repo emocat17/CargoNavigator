@@ -144,9 +144,11 @@ function initMap() {
     })
   }
 
+  const key = import.meta.env.VITE_AMAP_KEY
+  if (!key) { console.error('[MonitorDashboard] VITE_AMAP_KEY not set - map disabled'); return }
   if (!window.AMap) {
     const script = document.createElement('script')
-    script.src = `https://webapi.amap.com/maps?v=2.0&key=${import.meta.env.VITE_AMAP_KEY || '0625539f7941518573845dd16fe22316'}`
+    script.src = `https://webapi.amap.com/maps?v=2.0&key=${key}`
     script.onload = loadAmap
     document.head.appendChild(script)
   } else {

@@ -195,7 +195,9 @@ function initMap() {
   }
   if (window.AMap) { load() } else {
     const s = document.createElement('script')
-    s.src = `https://webapi.amap.com/maps?v=2.0&key=${import.meta.env.VITE_AMAP_KEY || '0625539f7941518573845dd16fe22316'}`
+    const key = import.meta.env.VITE_AMAP_KEY
+    if (!key) { console.error('[RoutePlanner] VITE_AMAP_KEY not set - map disabled'); return }
+    s.src = `https://webapi.amap.com/maps?v=2.0&key=${key}`
     s.onload = load
     document.head.appendChild(s)
   }
