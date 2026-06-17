@@ -5,7 +5,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime, timezone, timedelta
-from typing import AsyncGenerator, Optional
+from typing import AsyncGenerator, Dict, Any, List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -23,10 +23,10 @@ def _now_utc8() -> datetime:
 class MonitorService:
     """Singleton managing active monitoring sessions."""
 
-    active_sessions: dict[str, dict] = {}
+    active_sessions: Dict[str, Dict[str, Any]] = {}
 
     @classmethod
-    async def start_monitoring(cls, order_id: str, db: Session) -> dict:
+    async def start_monitoring(cls, order_id: str, db: Session) -> Dict[str, Any]:
         if order_id in cls.active_sessions:
             raise ValueError(f"订单 {order_id} 已有活跃监控会话")
 
@@ -103,7 +103,7 @@ class MonitorService:
         yield cls._sse("done", "")
 
     @classmethod
-    async def stop_monitoring(cls, order_id: str, db: Session) -> dict:
+    async def stop_monitoring(cls, order_id: str, db: Session) -> Dict[str, Any]:
         if order_id not in cls.active_sessions:
             raise ValueError(f"订单 {order_id} 无活跃监控会话")
 
@@ -170,7 +170,7 @@ class MonitorService:
         }
 
     @classmethod
-    def get_active_sessions(cls) -> list[dict]:
+    def get_active_sessions(cls) -> List[Dict[str, str]]:
         return [{"order_id": oid, "started_at": s["started_at"].isoformat()}
                 for oid, s in cls.active_sessions.items()]
 
@@ -179,7 +179,7 @@ class MonitorService:
         return f"event: {event}\ndata: {data}\n\n"
 
     @staticmethod
-    def _extract_checkpoints(order) -> list[dict]:
+    def _extract_checkpoints(order) -> List[Dict[str, Any]]:
         checkpoints = []
         assessment = order.assessment_json or {}
         bridge_details = assessment.get("bridge_details", [])

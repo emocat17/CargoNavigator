@@ -123,9 +123,9 @@ class TrackingService:
         db: Session,
         order_id: str,
         new_status: str,
-        notes: Optional[str] = None,
+        notes: str = "",
         changed_by: str = "system",
-    ) -> Optional[StatusLog]:
+    ) -> Optional[TransportOrder]:
         """Update order status with state-machine validation and timestamps.
 
         Returns the StatusLog entry, or None if the order is not found.

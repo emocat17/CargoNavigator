@@ -13,7 +13,7 @@ and downstream LLM prompt generation.
 import logging
 import re
 from datetime import datetime
-from typing import Optional
+from typing import Dict, Any, List, Optional
 
 from app.services.bridge_service import bridge_service, _check_space_passability
 from app.services.construction_matcher import (
@@ -45,9 +45,9 @@ class RouteAssessor:
 
     @staticmethod
     def assess_route(
-        route_data: dict,
-        vehicle_info: dict,
-    ) -> dict:
+        route_data: Dict[str, Any],
+        vehicle_info: Dict[str, Any],
+    ) -> Dict[str, Any]:
         """Perform a full route assessment and return structured JSON.
 
         Args:
@@ -675,11 +675,11 @@ def _build_traffic_analysis(
 
 
 def _build_route_compatibility(
-    bridge_result: dict,
-    dimension_result: dict,
-    vehicle_info: dict,
-    route_data: dict,
-) -> dict:
+    bridge_result: Dict[str, Any],
+    dimension_result: Dict[str, Any],
+    vehicle_info: Dict[str, Any],
+    route_data: Dict[str, Any],
+) -> Dict[str, Any]:
     """Build route compatibility section (dimension_check + structural_safety)."""
     # Dimension check
     dimension_check = {
