@@ -2,9 +2,7 @@
  * Road Survey API — wraps POST /survey/generate.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /**
  * Generate a pre-trip road survey checklist.

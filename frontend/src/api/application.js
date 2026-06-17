@@ -1,7 +1,7 @@
 import axios from 'axios'
+import { BASE } from './index'
 
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const URL = `${API}/api/v1/applications`
+const URL = `${BASE}/applications`
 
 export const createApplication = async (data) => (await axios.post(`${URL}/`, data)).data
 export const getApplications = async () => (await axios.get(`${URL}/`)).data

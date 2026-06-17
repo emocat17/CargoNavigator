@@ -5,8 +5,7 @@
  * provides both a raw ReadableStream helper for components that need per-token
  * rendering, and a convenience async generator.
  */
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /**
  * Start a streaming chat and yield parsed SSE events.

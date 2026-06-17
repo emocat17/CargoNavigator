@@ -5,9 +5,7 @@
  * uses the canonical field name `total_weight`.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /**
  * Assess a single route for oversized cargo transport.

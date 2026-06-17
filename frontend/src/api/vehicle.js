@@ -1,7 +1,7 @@
 import axios from 'axios'
+import { BASE } from './index'
 
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const URL = `${API}/api/v1/vehicles`
+const URL = `${BASE}/vehicles`
 
 export const getVehicleProfiles = async () => (await axios.get(`${URL}/`)).data
 export const createVehicleProfile = async (p) => (await axios.post(`${URL}/`, p)).data

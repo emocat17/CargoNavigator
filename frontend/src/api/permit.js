@@ -2,9 +2,7 @@
  * Permit Application API — wraps POST /permit/generate, POST /permit/preview, GET /permit/export.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /**
  * Generate a complete permit application.

@@ -9,6 +9,16 @@
  * Usage:
  *   import { assessRoute, getStatistics, classifyVehicle } from '@/api'
  */
+import axios from 'axios'
+
+const API_BASE = import.meta.env.VITE_API_BASE
+
+if (!API_BASE) {
+  console.warn('[API] VITE_API_BASE not set — API calls will use relative path (requires nginx proxy)')
+}
+
+export const BASE = API_BASE ? `${API_BASE}/api/v1` : '/api/v1'
+
 export { assessRoute, compareRoutes } from './assessment'
 export { generateSurvey } from './survey'
 export { generatePermit, previewPermit, exportPermit } from './permit'

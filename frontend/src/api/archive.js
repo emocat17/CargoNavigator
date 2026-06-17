@@ -2,9 +2,7 @@
  * Archive API — wraps archive query and export endpoints.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /** Get the complete digital archive for an order. */
 export const getArchive = async (orderId) => {

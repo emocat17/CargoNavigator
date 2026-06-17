@@ -2,9 +2,7 @@
  * Monitor API — wraps monitor start / stop / sessions endpoints.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /** Start monitoring for an order. */
 export const startMonitoring = async (orderId, speed = null) => {

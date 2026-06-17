@@ -2,9 +2,7 @@
  * Transport Tracking API — wraps POST / GET / PUT /tracking/orders and /tracking/statistics.
  */
 import axios from 'axios'
-
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
-const BASE = `${API}/api/v1`
+import { BASE } from './index'
 
 /** Create a new tracking order. */
 export const createOrder = async (orderData) => {
