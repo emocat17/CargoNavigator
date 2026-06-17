@@ -91,7 +91,6 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
-import axios from 'axios'
 import { sharedStore, selectedRoute, getRoutePolyline } from '../store/index.js'
 import MonitorDashboard from './MonitorDashboard.vue'
 import { createOrder, getOrders, updateOrderStatus } from '@/api/tracking'
@@ -99,7 +98,6 @@ import { startMonitoring } from '@/api/monitor'
 
 const $q = useQuasar()
 const emit = defineEmits(['view-archive'])
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
 
 const filterStatus = ref(null)
 const statusOptions = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'PERMIT_ISSUED', 'IN_TRANSIT', 'COMPLETED'].map(s => ({ label: s, value: s }))
@@ -150,11 +148,11 @@ async function createTestOrder() {
       axis_weight: sharedStore.vehicle.axis_weight || 15,
       axis_count: sharedStore.vehicle.axis_count || 6,
     }
-    const r = await axios.post(`${API_BASE}/api/v1/tracking/orders`, {
+    const r = await createOrder({
       route_data: routeData, vehicle_info: vehicleData, assessment_data: sharedStore.assessment || {}
     })
-    if (r.data?.code === 200) {
-      const oid = r.data.data.id
+    if (r.code === 200) {
+      const oid = r.data.id
       for (const s of ['SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'PERMIT_ISSUED']) {
         try { await updateOrderStatus(oid, s) } catch { /* skip invalid transitions */ }
       }
