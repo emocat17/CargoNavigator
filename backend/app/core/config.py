@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     MAXKB_CHAT_API_URL: str = ""
     MAXKB_DATASET_ID: str = ""
     MAXKB_SESSION_TOKEN: str = ""
+    MAXKB_USERNAME: str = "admin"
+    MAXKB_PASSWORD: str = ""
 
     # Cost Estimation (均有合理默认值)
     FUEL_PRICE_PER_L: float = 7.5
