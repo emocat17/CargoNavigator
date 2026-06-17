@@ -360,7 +360,8 @@ def _calculate_permit(vehicle_info: dict) -> tuple[float, str]:
 
     try:
         compliance = regulation_kb.check_dimension_compliance(vehicle_info)
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to check dimension compliance: {e}")
         compliance = {"violations": []}
 
     fee_info = PERMIT_FEE.get(permit_class, PERMIT_FEE["I"])

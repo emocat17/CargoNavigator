@@ -78,8 +78,8 @@ class TrafficService:
         try:
             from datetime import datetime
             now_hour = datetime.now().hour
-        except Exception:
-            pass
+        except (ValueError, TypeError, OSError):
+            logger.debug("Could not determine current hour, using default")
 
         if total_delay > 30:
             departure_recommendation = "建议避开高峰时段（7:00-9:00, 17:00-19:00）出发"

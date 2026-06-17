@@ -156,7 +156,8 @@ async def agent_health():
     """Check agent service health."""
     try:
         llm_configured = bool(agent_service.llm_key)
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to check LLM configuration: {e}")
         llm_configured = False
     return {
         "status": "ok",
@@ -173,7 +174,8 @@ async def agent_debug():
     # LLM status
     try:
         llm_configured = bool(agent_service.llm_key)
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to check LLM configuration: {e}")
         llm_configured = False
 
     # Bridge DB status
@@ -195,8 +197,8 @@ async def agent_debug():
         row = q1("SELECT COUNT(*) as cnt FROM bridge_influence_lines")
         if row:
             infl_count = row["cnt"]
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Failed to count bridge influence lines: {e}")
 
     # Spider data counts
     spider_data_dir = Path(__file__).resolve().parent.parent.parent / "spider" / "data"
@@ -205,8 +207,8 @@ async def agent_debug():
     if spider_exists:
         try:
             spider_md_count = len(list(spider_data_dir.rglob("*.md")))
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Failed to count spider data files: {e}")
 
     return {
         "status": "ok",

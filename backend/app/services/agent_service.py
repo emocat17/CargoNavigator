@@ -86,7 +86,8 @@ class AgentService:
         for fp in all_files:
             try:
                 raw = fp.read_text(encoding='utf-8')
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Failed to read knowledge base file {fp.name}: {e}")
                 continue
             score = 0
             fname = fp.name
@@ -145,22 +146,22 @@ class AgentService:
                         route_data['tunnel_count'] = int(
                             re.search(r'(\d+)', line).group(1)
                         )
-                    except Exception:
-                        pass
+                    except (ValueError, AttributeError):
+                        logger.debug(f"Failed to parse tunnel count from line: {line[:80]}")
                 # Extract distance: "85.0km" or similar
                 dist_match = re.search(r'([\d.]+)\s*km', line)
                 if dist_match and 'distance' not in route_data:
                     try:
                         route_data['distance'] = int(float(dist_match.group(1)) * 1000)
-                    except Exception:
-                        pass
+                    except (ValueError, TypeError):
+                        logger.debug(f"Failed to parse distance from line: {line[:80]}")
                 # Extract duration: "约\d+分钟"
                 dur_match = re.search(r'约\s*(\d+)\s*分钟', line)
                 if dur_match and 'duration' not in route_data:
                     try:
                         route_data['duration'] = int(dur_match.group(1)) * 60
-                    except Exception:
-                        pass
+                    except (ValueError, TypeError):
+                        logger.debug(f"Failed to parse duration from line: {line[:80]}")
 
             route_data['major_roads'] = hw_codes
 
@@ -241,8 +242,8 @@ class AgentService:
                 result = bridge_service.assess_route_safety(route_info, vehicle or {})
                 if result.get('bridges_evaluated', 0) > 0:
                     bridge_text = f"【桥梁安全性评估结果】\n桥梁总数: {result.get('total_bridges_on_route', 0)}座, 风险等级: {result.get('risk_level', '未知')}\n"
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning(f"Failed to assess route safety via bridge service: {e}")
             return bridge_text, construction_text
 
     # ---- 路线规划 ----
@@ -296,7 +297,8 @@ class AgentService:
                     try:
                         processed = process_route_data(res, label, None, origin, dest)
                         all_routes.extend(processed)
-                    except Exception:
+                    except Exception as e:
+                        logger.warning(f"Failed to process route data for label '{label}': {e}")
                         continue
 
             if not all_routes:
