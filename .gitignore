@@ -4,7 +4,7 @@
 .DS_Store
 Thumbs.db
 *.log
-.playwright-mcp/*
+.playwright-mcp/
 # ============================================
 # Python
 # ============================================
@@ -83,6 +83,13 @@ frontend/.quasar/
 backend/data/_*.txt
 backend/data/_*.json
 backend/spider/data/
+
+# SQLite WAL (Write-Ahead Log) — runtime transient files
+*.db-shm
+*.db-wal
+
+# Application runtime database (schema is in schema.sql)
+backend/data/cargo_navigator.db
 
 # ============================================
 # Project: XLSX source data (migration input only, not for runtime)

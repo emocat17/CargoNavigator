@@ -1,4 +1,0 @@
-- generic [active] [ref=e1]:
-  - heading "Agent API Test" [level=2] [ref=e2]
-  - textbox "问题" [ref=e3]: 福建高速最近有什么施工路段
-  - button "发送" [ref=e4]
