@@ -37,8 +37,8 @@ class MonitorService:
         if not order:
             raise ValueError(f"订单 {order_id} 不存在")
 
-        if order.status != "PERMIT_ISSUED":
-            raise ValueError(f"只能对已发证的订单启动监控，当前状态: {order.status}")
+        if order.status not in ("PERMIT_ISSUED", "IN_TRANSIT"):
+            raise ValueError(f"只能对已发证或运输中的订单启动监控，当前状态: {order.status}")
 
         route_data = order.route_data_json or {}
         path_points = route_data.get("path_points", "")
@@ -49,10 +49,11 @@ class MonitorService:
         speed = float(route_data.get("_speed", 60)) if "_speed" in route_data else 60.0
         simulator = GPSSimulator(path_points, checkpoints, speed_kmh=speed)
 
-        TrackingService.update_status(
-            db=db, order_id=order_id, new_status="IN_TRANSIT",
-            notes="监控已启动", changed_by="monitor_service"
-        )
+        if order.status != "IN_TRANSIT":
+            TrackingService.update_status(
+                db=db, order_id=order_id, new_status="IN_TRANSIT",
+                notes="监控已启动", changed_by="monitor_service"
+            )
 
         session = {
             "simulator": simulator,
