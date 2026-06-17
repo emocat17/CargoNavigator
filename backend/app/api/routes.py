@@ -310,7 +310,7 @@ def process_route_data(amap_res: dict, strategy_label: str, departure_time: date
                             polyline=str(tmc.get("polyline", ""))
                         ))
                     except Exception as e:
-                        print(f"Error parsing TMC: {e}, Data: {tmc}")
+                        logger.warning(f"Error parsing TMC: {e}, Data: {tmc}")
             else:
                 traffic_stats["未知"] += step_distance
             
@@ -532,7 +532,7 @@ async def plan_route(request: RoutePlanRequest):
                 if coords:
                     processed_waypoints.append(f"{coords[0]},{coords[1]}")
                 else:
-                    print(f"Warning: Could not geocode waypoint '{wp}'")
+                    logger.warning(f"Could not geocode waypoint '{wp}'")
         
         if processed_waypoints:
             waypoints_str = ";".join(processed_waypoints)
@@ -554,7 +554,7 @@ async def plan_route(request: RoutePlanRequest):
     
     for i, res in enumerate(results):
         if isinstance(res, Exception):
-            print(f"Strategy {strategies[i]} failed: {res}")
+            logger.warning(f"Strategy {strategies[i]} failed: {res}")
             continue
             
         if isinstance(res, dict) and res.get("status") == "1":
@@ -569,7 +569,7 @@ async def plan_route(request: RoutePlanRequest):
                 )
                 all_routes.extend(processed_routes)
             except Exception as e:
-                print(f"Error processing strategy {strategies[i]}: {e}")
+                logger.error(f"Error processing strategy {strategies[i]}: {e}")
     
     if not all_routes:
         raise HTTPException(status_code=500, detail="所有策略规划均失败，请检查起终点或网络")

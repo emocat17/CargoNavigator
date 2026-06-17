@@ -15,7 +15,10 @@ from app.models import sql_models  # Import models to register them
 from app.models import chat_models  # Import chat models to register them for table creation
 from app.models import tracking_models  # Import tracking models for table creation
 
+import logging
 from contextlib import asynccontextmanager
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -25,9 +28,9 @@ async def lifespan(app: FastAPI):
     try:
         from app.bridge_db import init_bridge_db
         init_bridge_db()
-        print("[Main] Bridge database initialized")
+        logger.info("Bridge database initialized")
     except Exception as e:
-        print(f"[Main] Bridge DB init skipped: {e}")
+        logger.warning(f"Bridge DB init skipped: {e}")
     yield
 
 

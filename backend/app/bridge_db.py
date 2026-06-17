@@ -5,12 +5,15 @@ Handles: bridges, influence lines, junctions, highway graph, effect calculation 
 MySQL compatibility: uses standard SQL types. Swap connection string for production.
 """
 import json
+import logging
 import sqlite3
 from pathlib import Path
 from contextlib import contextmanager
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DB_PATH = DATA_DIR / "cargo_bridge.db"
+
+logger = logging.getLogger(__name__)
 
 
 def get_db_path() -> str:
@@ -28,7 +31,7 @@ def init_bridge_db():
         schema_sql = schema_path.read_text(encoding="utf-8")
         conn.executescript(schema_sql)
         conn.commit()
-        print(f"[BridgeDB] Initialized at {DB_PATH}")
+        logger.info(f"Initialized at {DB_PATH}")
     finally:
         conn.close()
 
