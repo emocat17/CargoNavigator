@@ -6,56 +6,74 @@
     <!-- ===== 左上浮动面板 ===== -->
     <div class="float-panel" :class="{ collapsed: panelCollapsed }">
       <div class="panel-header" @click="panelCollapsed = !panelCollapsed">
-        <span class="text-subtitle2 text-weight-bold">{{ panelCollapsed ? '展开' : '路线规划' }}</span>
+        <span class="text-subtitle2 text-weight-bold">
+          {{ panelCollapsed ? '展开' : (analysisMode ? '安全评估报告' : '路线规划') }}
+        </span>
         <q-btn dense flat round :icon="panelCollapsed ? 'chevron_right' : 'expand_less'" size="sm" />
       </div>
 
       <div v-show="!panelCollapsed" class="panel-body">
-        <!-- 起终点 -->
-        <q-input dense outlined v-model="form.origin" label="起点" class="q-mb-sm" />
-        <q-input dense outlined v-model="form.destination" label="终点" class="q-mb-sm" />
+        <!-- ===== 路线规划模式 ===== -->
+        <template v-if="!analysisMode">
+          <!-- 起终点 -->
+          <q-input dense outlined v-model="form.origin" label="起点" class="q-mb-sm" />
+          <q-input dense outlined v-model="form.destination" label="终点" class="q-mb-sm" />
 
-        <!-- 车辆快捷配置 -->
-        <q-expansion-item dense label="车辆配置" header-class="text-caption">
-          <div class="row q-col-gutter-xs">
-            <div class="col-6"><q-input dense outlined v-model.number="vehicle.length" label="车长(m)" /></div>
-            <div class="col-6"><q-input dense outlined v-model.number="vehicle.width" label="车宽(m)" /></div>
-            <div class="col-6"><q-input dense outlined v-model.number="vehicle.height" label="车高(m)" /></div>
-            <div class="col-6"><q-input dense outlined v-model.number="vehicle.total_weight" label="总重(t)" /></div>
+          <!-- 车辆快捷配置 -->
+          <q-expansion-item dense label="车辆配置" header-class="text-caption">
+            <div class="row q-col-gutter-xs">
+              <div class="col-6"><q-input dense outlined v-model.number="vehicle.length" label="车长(m)" /></div>
+              <div class="col-6"><q-input dense outlined v-model.number="vehicle.width" label="车宽(m)" /></div>
+              <div class="col-6"><q-input dense outlined v-model.number="vehicle.height" label="车高(m)" /></div>
+              <div class="col-6"><q-input dense outlined v-model.number="vehicle.total_weight" label="总重(t)" /></div>
+            </div>
+            <q-btn color="primary" icon="settings" label="完整配置" flat dense size="sm" class="q-mt-xs" @click="showVehicleWizard = true" />
+          </q-expansion-item>
+
+          <!-- 规划按钮 -->
+          <q-btn color="primary" icon="route" label="开始规划" class="full-width q-mt-sm" @click="doPlanRoute" :loading="planning" />
+
+          <!-- 路线结果 -->
+          <div v-if="routeResults.length > 0" class="q-mt-sm">
+            <div class="text-caption text-grey-6 q-mb-xs">共 {{ routeResults.length }} 条路线</div>
+            <q-list dense separator>
+              <q-item v-for="(r, i) in routeResults" :key="r.id" clickable :active="selectedIdx === i"
+                @click="selectRoute(i)" class="route-item" v-ripple>
+                <q-item-section>
+                  <q-item-label class="text-caption text-weight-bold">
+                    方案{{ i + 1 }} · {{ (r.distance / 1000).toFixed(0) }}km · {{ fmtDuration(r.duration) }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    ¥{{ (r.toll_cost || 0).toFixed(0) }} · {{ r.strategy || '' }}
+                    <span v-if="r.tags?.length" class="text-orange">🏷 {{ r.tags.join(',') }}</span>
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side v-if="r.score != null">
+                  <q-badge :color="scoreColor(r.score)" :label="r.score + '/10'" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+
+            <!-- 操作按钮 -->
+            <div class="row q-gutter-xs q-mt-sm">
+              <q-btn color="secondary" icon="assessment" label="评估安全" dense size="sm" @click="doAssess" :loading="assessing" />
+              <q-btn color="positive" icon="description" label="生成许可证" dense size="sm" @click="doGeneratePermit" :disable="!assessment" />
+            </div>
           </div>
-          <q-btn color="primary" icon="settings" label="完整配置" flat dense size="sm" class="q-mt-xs" @click="showVehicleWizard = true" />
-        </q-expansion-item>
+        </template>
 
-        <!-- 规划按钮 -->
-        <q-btn color="primary" icon="route" label="开始规划" class="full-width q-mt-sm" @click="doPlanRoute" :loading="planning" />
-
-        <!-- 路线结果 -->
-        <div v-if="routeResults.length > 0" class="q-mt-sm">
-          <div class="text-caption text-grey-6 q-mb-xs">共 {{ routeResults.length }} 条路线</div>
-          <q-list dense separator>
-            <q-item v-for="(r, i) in routeResults" :key="r.id" clickable :active="selectedIdx === i"
-              @click="selectRoute(i)" class="route-item" v-ripple>
-              <q-item-section>
-                <q-item-label class="text-caption text-weight-bold">
-                  方案{{ i + 1 }} · {{ (r.distance / 1000).toFixed(0) }}km · {{ fmtDuration(r.duration) }}
-                </q-item-label>
-                <q-item-label caption>
-                  ¥{{ (r.toll_cost || 0).toFixed(0) }} · {{ r.strategy || '' }}
-                  <span v-if="r.tags?.length" class="text-orange">🏷 {{ r.tags.join(',') }}</span>
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side v-if="r.score != null">
-                <q-badge :color="scoreColor(r.score)" :label="r.score + '/10'" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-
-          <!-- 操作按钮 -->
-          <div class="row q-gutter-xs q-mt-sm">
-            <q-btn color="secondary" icon="assessment" label="评估安全" dense size="sm" @click="doAssess" :loading="assessing" />
-            <q-btn color="positive" icon="description" label="生成许可证" dense size="sm" @click="doGeneratePermit" :disable="!assessment" />
+        <!-- ===== 分析报告模式 ===== -->
+        <template v-else>
+          <div class="row items-center q-mb-sm">
+            <q-btn flat dense icon="arrow_back" label="返回路线" size="sm" @click="analysisMode = false" />
+            <q-space />
+            <q-badge :color="riskBadgeColor(aa.risk_level)" :label="aa.risk_level + ' · ' + aa.score + '/10'" />
           </div>
-        </div>
+          <AssessmentResultPanel
+            :assessment="assessment"
+            :assessing="false"
+          />
+        </template>
       </div>
     </div>
 
@@ -68,7 +86,7 @@
 
     <!-- ===== 车辆配置弹窗 ===== -->
     <q-dialog v-model="showVehicleWizard" maximized>
-      <VehicleWizard @save="onVehicleSaved" @cancel="showVehicleWizard = false" />
+      <VehicleWizard @complete="onVehicleSaved" @close="showVehicleWizard = false" />
     </q-dialog>
 
     <!-- ===== 路线对比弹窗 ===== -->
@@ -100,6 +118,7 @@ import axios from 'axios'
 import { sharedStore, selectedRoute } from '../store/index.js'
 import VehicleWizard from './VehicleWizard.vue'
 import RouteCompare from './RouteCompare.vue'
+import AssessmentResultPanel from './AssessmentResultPanel.vue'
 
 const $q = useQuasar()
 const API = import.meta.env.VITE_API_BASE || 'http://localhost:19876'
@@ -114,6 +133,7 @@ const props = defineProps({
 const form = reactive({ origin: '福建省三明厦钨新能源', destination: '福建省平潭跨境电商园' })
 const vehicle = reactive({ length: 25, width: 3.5, height: 4.5, total_weight: 80, axis_weight: 15, axis_count: 6 })
 const panelCollapsed = ref(false)
+const analysisMode = ref(false)
 const planning = ref(false)
 const assessing = ref(false)
 const showVehicleWizard = ref(false)
@@ -154,6 +174,16 @@ const statusLine = computed(() => {
   return lines
 })
 
+// 评估概览（供模板简述使用）
+const aa = computed(() => {
+  const a = assessment.value
+  const d = a?.data || a || {}
+  return {
+    risk_level: d.overall_assessment?.risk_level || a?.riskLevel || '?',
+    score: d.overall_assessment?.score ?? a?.score ?? '?',
+  }
+})
+
 // ---- 地图 ----
 function initMap() {
   if (mapInstance) return
@@ -184,6 +214,7 @@ async function doPlanRoute() {
       routeResults.value = data.data.routes
       selectedIdx.value = 0
       assessment.value = null
+      analysisMode.value = false
       // 保存到全局共享状态（供运输管理/数字档案使用）
       sharedStore.routes = data.data.routes.map(r => ({...r, _origin: form.origin, _destination: form.destination}))
       sharedStore.selectedIdx = 0
@@ -246,9 +277,11 @@ async function doAssess() {
     sharedStore.assessment = data
     if (data.code === 200) {
       addBridgeMarkers(data.data)
-      $q.notify({ type: 'positive', message: `评估完成: ${data.data.overall_assessment?.risk_level || '?'} · ${data.data.overall_assessment?.score}/10` })
+      // Switch to analysis report mode
+      analysisMode.value = true
+      $q.notify({ type: 'positive', message: `评估完成: ${data.data.overall_assessment?.risk_level || '?'} · ${data.data.overall_assessment?.score}/10`, timeout: 1500 })
     }
-  } catch (e) { $q.notify({ type: 'negative', message: '评估失败' }) }
+  } catch (e) { $q.notify({ type: 'negative', message: '评估失败: ' + (e.response?.data?.detail || e.message) }) }
   assessing.value = false
 }
 
@@ -297,6 +330,7 @@ function onVehicleSaved(v) {
 
 function fmtDuration(s) { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h > 0 ? `${h}h${m}m` : `${m}min` }
 function riskColor(level) { return ({ '低': 'text-green', '中': 'text-orange', '高': 'text-red', '极高': 'text-deep-orange' })[level] || 'text-grey' }
+function riskBadgeColor(level) { return ({ '低': 'green', '中': 'orange', '高': 'red', '极高': 'deep-orange' })[level] || 'grey' }
 function scoreColor(s) { return s >= 7 ? 'green' : s >= 4 ? 'orange' : 'red' }
 
 onMounted(() => { initMap() })
@@ -311,7 +345,7 @@ onBeforeUnmount(() => {
 
 .float-panel {
   position: absolute; top: 12px; left: 12px;
-  width: 340px; max-height: calc(100% - 60px);
+  width: 380px; max-height: calc(100% - 60px);
   background: rgba(255,255,255,0.95);
   backdrop-filter: blur(12px);
   border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);

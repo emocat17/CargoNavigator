@@ -251,16 +251,28 @@ def _build_amap_route_info(route_data: dict) -> dict:
     major_roads = route_data.get("major_roads", [])
     route_description = route_data.get("route_description", "")
 
-    # If major_roads are Chinese names like "G76厦蓉高速",
-    # try to extract just the highway codes
-    if major_roads and any("高速" in r for r in major_roads):
-        codes = []
-        for r in major_roads:
-            m = re.search(r'([GS]\d{1,4})', r)
-            if m:
-                codes.append(m.group(1))
-        if codes:
-            major_roads = codes
+    # Extract all expressway codes from both major_roads and route_description
+    extracted_codes = []
+
+    # 1. Try to extract highway codes from major_roads (e.g. "G76厦蓉高速" → "G76")
+    for r in major_roads:
+        m = re.search(r'([GS]\d{1,4})', r)
+        if m:
+            extracted_codes.append(m.group(1))
+
+    # 2. Also parse route_description for expressway codes
+    #    Format: "--G3京台高速--" or "--G1517莆炎高速--"
+    #    The expressway name is between the code number and "高速"
+    if route_description:
+        for m in re.finditer(r'([GS]\d{1,4})[^\-\s]{1,8}高速', route_description):
+            code = m.group(1)
+            if code not in extracted_codes:
+                extracted_codes.append(code)
+
+    # 3. If we found expressway codes, use them as the primary major_roads
+    #    for bridge assessment (the bridge DB only covers expressways)
+    if extracted_codes:
+        major_roads = extracted_codes
 
     return {
         "route_description": route_description,
@@ -554,6 +566,7 @@ def _build_key_factors(
 
     risky_count = bridge_result.get("risky_bridges", 0)
     total_bridges = bridge_result.get("total_bridges_on_route", 0)
+    bridges_evaluated = bridge_result.get("bridges_evaluated", 0)
     route_restrictions = bridge_result.get("route_level_restrictions", {})
     reinforcement_needed = route_restrictions.get("reinforcement_needed", False)
     escort_required = route_restrictions.get("escort_required", False)
@@ -561,6 +574,8 @@ def _build_key_factors(
 
     if reinforcement_needed:
         factors.append("桥梁需要加固后方可通行")
+    elif total_bridges == 0 or bridges_evaluated == 0:
+        factors.append("桥梁数据未覆盖该路线（无法匹配到已知高速公路桥梁）")
     elif risky_count == 0 and total_bridges > 0:
         if route_max_speed and route_max_speed <= 40:
             factors.append(f"桥梁安全可控（建议限速≤{route_max_speed}km/h）")
@@ -693,7 +708,9 @@ def _build_route_compatibility(
     grades_summary = route_restrictions.get("bridge_grades_summary", {})
 
     # Determine safety assessment string
-    if reinforcement_needed:
+    if total_bridges == 0:
+        safety_assessment = "桥梁数据未覆盖（无法评估桥梁安全性）"
+    elif reinforcement_needed:
         safety_assessment = "通行风险极高（需桥梁加固）"
     elif escort_required:
         safety_assessment = f"条件通行（需护送，限速≤{route_max_speed}km/h）" if route_max_speed else "条件通行（需护送）"
@@ -717,6 +734,7 @@ def _build_route_compatibility(
         "escort_required": escort_required,
         "reinforcement_needed": reinforcement_needed,
         "bridge_grades_summary": grades_summary,
+        "bridge_details": bridge_details,
     }
 
     compliance_status = dimension_result.get("dimension_status", "未知")

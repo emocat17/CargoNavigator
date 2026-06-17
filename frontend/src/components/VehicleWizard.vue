@@ -1,9 +1,8 @@
 <template>
-  <q-dialog v-model="showDialog" persistent maximized transition-show="slide-up" transition-hide="slide-down">
-    <q-card class="bg-grey-1 vehicle-wizard">
-      <!-- Toolbar -->
-      <q-toolbar class="bg-primary text-white">
-        <q-btn flat round dense icon="close" v-close-popup />
+  <q-card class="bg-grey-1 vehicle-wizard" style="max-height: 95vh; display: flex; flex-direction: column;">
+    <!-- Toolbar -->
+    <q-toolbar class="bg-primary text-white">
+      <q-btn flat round dense icon="close" @click="emit('close')" />
         <q-toolbar-title>车辆参数配置向导</q-toolbar-title>
         <q-space />
         <q-btn
@@ -527,8 +526,7 @@
           />
         </div>
       </q-card-section>
-    </q-card>
-  </q-dialog>
+  </q-card>
 </template>
 
 <script setup>
@@ -536,17 +534,8 @@ import { ref, reactive, computed, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import AxleConfigurator from './AxleConfigurator.vue'
 
-const props = defineProps({
-  modelValue: Boolean
-})
-
-const emit = defineEmits(['update:modelValue', 'complete'])
+const emit = defineEmits(['complete', 'close'])
 const $q = useQuasar()
-
-const showDialog = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-})
 
 const step = ref(1)
 const totalSteps = 6
@@ -888,7 +877,7 @@ function finish() {
   }
 
   emit('complete', vehicle)
-  showDialog.value = false
+  emit('close')
 
   $q.notify({
     type: 'positive',
@@ -898,13 +887,6 @@ function finish() {
   })
 }
 
-// Watch dialog close
-watch(showDialog, (val) => {
-  if (val) {
-    // Reset on open
-    step.value = 1
-  }
-})
 </script>
 
 <style scoped>
