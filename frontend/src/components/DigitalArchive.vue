@@ -123,7 +123,7 @@ function initReplayMap() {
     }
   }
   if (window.AMap) load(); else {
-    const s = document.createElement('script'); s.src = 'https://webapi.amap.com/maps?v=2.0&key=0625539f7941518573845dd16fe22316'; s.onload = load; document.head.appendChild(s)
+    const KEY = import.meta.env.VITE_AMAP_KEY || '0625539f7941518573845dd16fe22316'; const s = document.createElement('script'); s.src = `https://webapi.amap.com/maps?v=2.0&key=${KEY}`; s.onload = load; document.head.appendChild(s)
   }
 }
 

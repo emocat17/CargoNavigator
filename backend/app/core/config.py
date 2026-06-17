@@ -37,7 +37,7 @@ class Settings(BaseSettings):
             self.MAXKB_BASE_URL = f"http://localhost:{self.MAXKB_PORT}"
 
     class Config:
-        env_file = "../.env"
+        env_file = ".env"  # Works from project root (Docker) or backend/ (local)
         env_file_encoding = "utf-8"
         extra = "ignore"
 

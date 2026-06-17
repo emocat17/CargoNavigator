@@ -199,7 +199,7 @@ function initReplayMap() {
 
   if (!window.AMap) {
     const script = document.createElement('script')
-    script.src = 'https://webapi.amap.com/maps?v=2.0&key=0625539f7941518573845dd16fe22316'
+    script.src = `https://webapi.amap.com/maps?v=2.0&key=${import.meta.env.VITE_AMAP_KEY || '0625539f7941518573845dd16fe22316'}`
     script.onload = loadMap
     document.head.appendChild(script)
   } else {

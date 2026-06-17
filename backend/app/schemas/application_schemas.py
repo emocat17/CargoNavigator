@@ -29,7 +29,7 @@ class ApplicationVehicle(ApplicationVehicleBase):
     application_id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Owner Schemas ---
 class ApplicationOwnerBase(BaseModel):
@@ -51,7 +51,7 @@ class ApplicationOwner(ApplicationOwnerBase):
     application_id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Cargo Schemas ---
 class ApplicationCargoBase(BaseModel):
@@ -73,7 +73,7 @@ class ApplicationCargo(ApplicationCargoBase):
     application_id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Plan Schemas ---
 class ApplicationPlanBase(BaseModel):
@@ -90,7 +90,7 @@ class ApplicationPlan(ApplicationPlanBase):
     application_id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Application Schemas ---
 class ApplicationBase(BaseModel):
@@ -119,4 +119,4 @@ class ApplicationResponse(ApplicationBase):
     transport_plan: Optional[ApplicationPlan] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
