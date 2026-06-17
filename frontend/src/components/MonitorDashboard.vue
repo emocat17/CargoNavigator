@@ -1,12 +1,12 @@
 <template>
-  <div class="q-pa-md column" style="height: calc(100vh - 120px);">
+  <div class="q-pa-md column" :style="embedded ? 'height:100%;' : 'height: calc(100vh - 120px);'">
     <!-- Control Bar -->
     <div class="row q-mb-sm q-col-gutter-sm items-center">
-      <div class="col-auto">
+      <div v-if="!embedded" class="col-auto">
         <q-select v-model="selectedOrderId" :options="orderOptions" label="选择运输单"
           style="width: 280px;" dense outlined @update:model-value="onOrderSelected" />
       </div>
-      <div class="col-auto">
+      <div v-if="!embedded" class="col-auto">
         <q-btn color="primary" icon="play_arrow" label="开始监控" @click="startMonitor"
           :disable="!selectedOrderId || isMonitoring" dense />
       </div>
@@ -91,7 +91,11 @@ import { getOrders } from '@/api/tracking'
 import { startMonitoring, getStreamUrl, stopMonitoring } from '@/api/monitor'
 
 const $q = useQuasar()
-const emit = defineEmits(['view-archive'])
+const props = defineProps({
+  embedded: Boolean,
+  orderId: [String, Number]
+})
+const emit = defineEmits(['view-archive', 'done'])
 
 const selectedOrderId = ref(null)
 const orderOptions = ref([])
@@ -107,6 +111,11 @@ onMounted(async () => {
   await loadOrders()
   await nextTick()
   initMap()
+  if (props.embedded && props.orderId) {
+    selectedOrderId.value = props.orderId
+    await nextTick()
+    await startMonitor()
+  }
 })
 
 onBeforeUnmount(() => {
@@ -198,12 +207,14 @@ function connectSSE(orderId) {
       }
     }
     isMonitoring.value = false
+    if (props.embedded) emit('done')
   }).catch((e) => {
     if (e.name !== 'AbortError') {
       console.error('SSE error:', e)
       $q.notify({ type: 'negative', message: 'SSE连接断开' })
     }
     isMonitoring.value = false
+    if (props.embedded) emit('done')
   })
 }
 
@@ -237,6 +248,7 @@ function handleSSEEvent(eventType, data) {
     case 'done':
       isMonitoring.value = false
       $q.notify({ type: 'positive', message: '监控已完成' })
+      emit('done')
       break
   }
 }
@@ -272,6 +284,7 @@ async function stopMonitor() {
         message: `已归档: ${res.data.gps_points_saved}GPS点, ${res.data.checkpoints_saved}检查点`
       })
       emit('view-archive', selectedOrderId.value)
+      emit('done')
     }
   } catch (e) {
     $q.notify({ type: 'negative', message: e.response?.data?.detail || '停止失败' })

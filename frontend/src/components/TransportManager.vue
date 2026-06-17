@@ -42,61 +42,60 @@
       </div>
 
       <template v-else>
-        <!-- 详情卡片 -->
-        <div class="q-pa-sm bg-white" style="border-bottom:1px solid #e2e8f0;">
-          <div class="row items-center">
-            <span class="text-h6">{{ selectedOrder.order_number }}</span>
-            <q-badge :color="statusColor(selectedOrder.status)" :label="selectedOrder.status" class="q-ml-sm" />
-            <q-space />
-            <!-- 操作按钮 -->
-            <template v-if="selectedOrder.status === 'PERMIT_ISSUED'">
-              <q-btn color="positive" icon="play_arrow" label="开始运输" dense size="sm" @click="startTransport" :loading="actionLoading" />
-            </template>
-            <template v-if="selectedOrder.status === 'IN_TRANSIT' && !isMonitoring">
-              <q-btn color="primary" icon="monitor_heart" label="启动监控" dense size="sm" @click="startMonitor" />
-            </template>
-            <template v-if="isMonitoring">
-              <q-btn color="red" icon="stop" label="停止监控" dense size="sm" @click="stopMonitor" />
-            </template>
-            <template v-if="selectedOrder.status === 'COMPLETED'">
-              <q-btn color="secondary" icon="archive" label="查看档案" dense size="sm" @click="$emit('view-archive', selectedOrder.id)" />
-            </template>
-          </div>
-          <!-- 状态时间线 -->
-          <div class="row q-gutter-xs q-mt-xs text-caption">
-            <span v-for="(s, i) in statusTimeline" :key="i" :class="s.done ? 'text-green' : 'text-grey-4'">
-              {{ s.label }} {{ i < statusTimeline.length - 1 ? '→' : '' }}
-            </span>
-          </div>
+        <!-- Monitoring mode: full-screen MonitorDashboard -->
+        <div v-if="monitoringMode" class="col column" style="flex:1;">
+          <MonitorDashboard
+            embedded
+            :order-id="selectedOrder.id"
+            @done="onMonitorDone"
+          />
         </div>
 
-        <!-- 地图/监控区域 -->
-        <div class="col" style="flex:1; position:relative;">
-          <div id="transport-map" style="width:100%;height:100%;"></div>
-
-          <!-- 监控信息覆盖 -->
-          <div v-if="isMonitoring && currentGps" class="monitor-overlay">
-            <q-card flat class="q-pa-xs" style="background:rgba(0,0,0,0.75);color:#fff;">
-              <div class="text-caption">📍 {{ currentGps.lon }}, {{ currentGps.lat }} | 🏃 {{ currentGps.speed }}km/h | 🎯 剩余{{ currentGps.distance_remaining }}km</div>
-              <div class="row q-gutter-xs q-mt-xs text-caption">
-                <span class="text-green">✅ 检查点: {{ checkpoints.length }}</span>
-                <span class="text-orange">⚠ 告警: {{ alerts.length }}</span>
-              </div>
-            </q-card>
+        <!-- Normal mode: detail card + small map -->
+        <template v-else>
+          <!-- Detail card -->
+          <div class="q-pa-sm bg-white" style="border-bottom:1px solid #e2e8f0;">
+            <div class="row items-center">
+              <span class="text-h6">{{ selectedOrder.order_number }}</span>
+              <q-badge :color="statusColor(selectedOrder.status)" :label="selectedOrder.status" class="q-ml-sm" />
+              <q-space />
+              <!-- Action buttons -->
+              <template v-if="selectedOrder.status === 'PERMIT_ISSUED'">
+                <q-btn color="positive" icon="play_arrow" label="开始运输" dense size="sm" @click="startTransport" :loading="actionLoading" />
+              </template>
+              <template v-if="selectedOrder.status === 'IN_TRANSIT' && !monitoringMode">
+                <q-btn color="primary" icon="monitor_heart" label="启动监控" dense size="sm" @click="startMonitor" />
+              </template>
+              <template v-if="selectedOrder.status === 'COMPLETED'">
+                <q-btn color="secondary" icon="archive" label="查看档案" dense size="sm" @click="$emit('view-archive', selectedOrder.id)" />
+              </template>
+            </div>
+            <!-- Status timeline -->
+            <div class="row q-gutter-xs q-mt-xs text-caption">
+              <span v-for="(s, i) in statusTimeline" :key="i" :class="s.done ? 'text-green' : 'text-grey-4'">
+                {{ s.label }} {{ i < statusTimeline.length - 1 ? '→' : '' }}
+              </span>
+            </div>
           </div>
-        </div>
+
+          <!-- Map area -->
+          <div class="col" style="flex:1; position:relative;">
+            <div id="transport-map" style="width:100%;height:100%;"></div>
+          </div>
+        </template>
       </template>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 import { sharedStore, selectedRoute, getRoutePolyline } from '../store/index.js'
-import { getOrders, updateOrderStatus } from '@/api/tracking'
-import { startMonitoring, getStreamUrl, stopMonitoring } from '@/api/monitor'
+import MonitorDashboard from './MonitorDashboard.vue'
+import { createOrder, getOrders, updateOrderStatus } from '@/api/tracking'
+import { startMonitoring } from '@/api/monitor'
 
 const $q = useQuasar()
 const emit = defineEmits(['view-archive'])
@@ -107,14 +106,9 @@ const statusOptions = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'PERMIT
 const orders = ref([])
 const selectedOrder = ref(null)
 const actionLoading = ref(false)
-const isMonitoring = ref(false)
-const currentGps = ref(null)
-const checkpoints = ref([])
-const alerts = ref([])
+const monitoringMode = ref(false)
 let transportMap = null
-let vehicleMarker = null
 let routeLine = null
-let abortCtrl = null
 
 const filteredOrders = computed(() => {
   if (!filterStatus.value) return orders.value
@@ -204,61 +198,27 @@ async function startTransport() {
 
 async function startMonitor() {
   if (!selectedOrder.value) return
-  try {
-    const r = await startMonitoring(selectedOrder.value.id)
-    if (r.code === 200) {
-      isMonitoring.value = true; alerts.value = []; checkpoints.value = []
-      connectSSE(selectedOrder.value.id)
-    }
-  } catch (e) { $q.notify({ type: 'negative', message: e.response?.data?.detail || '启动失败' }) }
+  monitoringMode.value = true
+  $q.notify({ type: 'info', message: '正在连接监控...' })
 }
 
-function connectSSE(orderId) {
-  if (abortCtrl) abortCtrl.abort(); abortCtrl = new AbortController()
-  fetch(getStreamUrl(orderId), { signal: abortCtrl.signal }).then(async resp => {
-    const reader = resp.body.getReader(); const decoder = new TextDecoder(); let buf = ''
-    while (true) {
-      const { done, value } = await reader.read(); if (done) break
-      buf += decoder.decode(value, { stream: true })
-      for (const frame of buf.split('\n\n')) {
-        if (!frame.trim()) continue
-        const lines = frame.split('\n'); let et = '', d = ''
-        for (const l of lines) { if (l.startsWith('event: ')) et = l.slice(7).trim(); else if (l.startsWith('data: ')) d = l.slice(6) }
-        try { d = JSON.parse(d) } catch { /* raw string */ }
-        if (et === 'gps') { currentGps.value = d; updateVehicleMarker(d) }
-        else if (et === 'checkpoint') checkpoints.value.push({ ...d, passed: true })
-        else if (et === 'alert') alerts.value.unshift(d)
-        else if (et === 'done') { isMonitoring.value = false; selectedOrder.value.status = 'COMPLETED'; $q.notify({ type: 'positive', message: '监控完成' }) }
-      }
-      buf = ''
-      await nextTick()
-    }
-  }).catch(e => { if (e.name !== 'AbortError') console.error('SSE:', e); isMonitoring.value = false })
-}
-
-function updateVehicleMarker(pos) {
-  if (!transportMap) return
-  const lnglat = [pos.lon, pos.lat]
-  if (vehicleMarker) vehicleMarker.setPosition(lnglat)
-  else { vehicleMarker = new window.AMap.Marker({ position: lnglat, icon: new window.AMap.Icon({ size: new window.AMap.Size(32, 32), image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png', imageSize: new window.AMap.Size(32, 32) }) }); vehicleMarker.setMap(transportMap) }
-  transportMap.setCenter(lnglat)
-}
-
-async function stopMonitor() {
-  if (!selectedOrder.value) return
-  try { if (abortCtrl) { abortCtrl.abort(); abortCtrl = null }; const r = await stopMonitoring(selectedOrder.value.id); isMonitoring.value = false; selectedOrder.value.status = 'COMPLETED'; $q.notify({ type: 'positive', message: `归档: ${r.data?.gps_points_saved || 0} GPS点` }) } catch (e) { $q.notify({ type: 'negative', message: '停止失败' }) }
+function onMonitorDone() {
+  monitoringMode.value = false
+  if (selectedOrder.value) {
+    selectedOrder.value.status = 'COMPLETED'
+  }
+  loadOrders()
 }
 
 function statusColor(s) { return ({ DRAFT: 'grey', SUBMITTED: 'blue', UNDER_REVIEW: 'orange', APPROVED: 'green', PERMIT_ISSUED: 'teal', IN_TRANSIT: 'primary', COMPLETED: 'green', REJECTED: 'red', CANCELLED: 'grey' })[s] || 'grey' }
 function fmtDate(d) { if (!d) return ''; return new Date(d).toLocaleDateString('zh-CN') }
 
 onMounted(() => { loadOrders() })
-onBeforeUnmount(() => { if (abortCtrl) abortCtrl.abort(); if (transportMap) transportMap.destroy() })
+onBeforeUnmount(() => { if (transportMap) transportMap.destroy() })
 </script>
 
 <style scoped>
 .tm-root { width: 100%; height: 100%; }
 .tm-sidebar { width: 320px; height: 100%; border-right: 1px solid #e2e8f0; background: #fff; }
 #transport-map { width: 100%; height: 100%; }
-.monitor-overlay { position: absolute; top: 8px; left: 8px; right: 8px; z-index: 100; }
 </style>
