@@ -303,6 +303,7 @@ watch(showDialog, (val) => {
                 Object.assign(formData, parsed)
                 if (parsed.id) currentAppId.value = parsed.id
             } catch (e) {
+                $q.notify({ type: 'warning', message: '加载本地缓存失败，将使用默认值' })
                 console.error('Failed to load saved data', e)
             }
         }
@@ -347,6 +348,7 @@ const transformToPayload = (data) => {
         try {
             return new Date(dateStr).toISOString()
         } catch (e) {
+            $q.notify({ type: 'warning', message: '日期解析失败，请检查输入格式' })
             console.error("Date parse error", e)
             return null
         }
@@ -429,6 +431,7 @@ const saveData = async () => {
             $q.notify({ color: 'positive', message: '已创建云端数据', icon: 'cloud_upload' })
         }
     } catch (e) {
+        $q.notify({ type: 'negative', message: '保存失败，请检查网络后重试' })
         console.error('Failed to save to cloud', e)
         $q.notify({ color: 'warning', message: '云端同步失败，仅保存本地', icon: 'cloud_off' })
     }

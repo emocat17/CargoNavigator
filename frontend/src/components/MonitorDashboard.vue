@@ -132,6 +132,7 @@ async function loadOrders() {
         .map(o => ({ label: `${o.order_number} (${o.status})`, value: o.id }))
     }
   } catch (e) {
+    $q.notify({ type: 'negative', message: '加载订单列表失败，请刷新重试' })
     console.error('Failed to load orders:', e)
   }
 }
@@ -212,6 +213,7 @@ function connectSSE(orderId) {
     if (props.embedded) emit('done')
   }).catch((e) => {
     if (e.name !== 'AbortError') {
+      $q.notify({ type: 'warning', message: '监控连接中断，正在重连...' })
       console.error('SSE error:', e)
       $q.notify({ type: 'negative', message: 'SSE连接断开' })
     }
@@ -242,7 +244,6 @@ function handleSSEEvent(eventType, data) {
       }
       break
     case 'status':
-      console.log('Monitor:', data.message)
       break
     case 'error':
       $q.notify({ type: 'negative', message: data.message || '监控错误' })

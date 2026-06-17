@@ -69,7 +69,8 @@ const digitalArchiveRef = ref(null)
 
 // 路线规划结果回调
 function handlePlanRoute(payload) {
-  console.log('[App] Plan route:', payload)
+
+
 }
 
 // 从运输管理跳转到档案
