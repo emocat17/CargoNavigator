@@ -125,7 +125,7 @@
               <line :x1="60 + lengthPx + 20" y1="30" :x2="60 + lengthPx + 20" y2="130" stroke="#2e7d32" stroke-width="1.5" />
               <line :x1="60 + lengthPx + 17" y1="30" :x2="60 + lengthPx + 23" y2="30" stroke="#2e7d32" stroke-width="1.5" />
               <line :x1="60 + lengthPx + 17" y1="130" :x2="60 + lengthPx + 23" y2="130" stroke="#2e7d32" stroke-width="1.5" />
-              <text :x="60 + lengthPx + 40" y="84" text-anchor="middle" font-size="12" fill="#2e7d32" font-weight="bold" transform="rotate(-90, 60+lengthPx+40, 84)">宽度 {{ wizard.width || '?' }}m</text>
+              <text :x="60 + lengthPx + 40" y="84" text-anchor="middle" font-size="12" fill="#2e7d32" font-weight="bold" :transform="`rotate(-90, ${60 + lengthPx + 40}, 84)`">宽度 {{ wizard.width || '?' }}m</text>
             </svg>
           </div>
 

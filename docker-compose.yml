@@ -45,6 +45,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - PYTHONUNBUFFERED=1
+      # Docker 内部网络: MaxKB 容器名 cargo-maxkb 端口 8080
+      - MAXKB_BASE_URL=http://cargo-maxkb:8080
     networks:
       - cargo-net
     healthcheck:
