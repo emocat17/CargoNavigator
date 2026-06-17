@@ -3,13 +3,15 @@
 # Stage 1: Python 依赖
 FROM python:3.12-slim AS deps
 WORKDIR /app
+ARG PIP_INDEX=https://mirrors.aliyun.com/pypi/simple/
+ARG PIP_EXTRA_INDEX=https://pypi.org/simple
 RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources \
     && apt-get update \
     && apt-get install -y --no-install-recommends gcc gfortran libopenblas-dev \
     && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --user --no-cache-dir -r requirements.txt \
-    -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+    -i ${PIP_INDEX} --extra-index-url ${PIP_EXTRA_INDEX} --trusted-host mirrors.aliyun.com
 
 # Stage 2: Runtime
 FROM python:3.12-slim

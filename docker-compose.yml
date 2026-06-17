@@ -30,6 +30,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
+      args:
+        PIP_INDEX: "${PIP_INDEX:-https://mirrors.aliyun.com/pypi/simple/}"
+        PIP_EXTRA_INDEX: "${PIP_EXTRA_INDEX:-https://pypi.org/simple}"
     container_name: cargo-backend
     restart: unless-stopped
     ports:
@@ -62,6 +65,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
+      args:
+        NPM_REGISTRY: "${NPM_REGISTRY:-https://registry.npmmirror.com}"
     container_name: cargo-frontend
     restart: unless-stopped
     ports:

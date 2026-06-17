@@ -2,12 +2,11 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# npm 国内镜像加速
-RUN npm config set registry https://registry.npmmirror.com
+ARG NPM_REGISTRY=https://registry.npmmirror.com
 
 # node_modules 先装好（不挂载，避免跨平台问题）
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --registry=${NPM_REGISTRY}
 
 EXPOSE 16789
 
